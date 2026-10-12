@@ -1,0 +1,13 @@
+name = "pingw220-visitor-api"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+
+[vars]
+# Pages allowed to record visits and read stats (comma-separated, no trailing slash).
+ALLOWED_ORIGINS = "https://pingw220.github.io,http://localhost:4321"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "visitor-map"
+# Paste the id printed by `npx wrangler d1 create visitor-map`.
+database_id = "REPLACE_WITH_DATABASE_ID"

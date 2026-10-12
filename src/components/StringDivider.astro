@@ -1,0 +1,31 @@
+---
+/**
+ * Decorative section divider: four "strings" where the middle string is plucked
+ * into a single sine period. A subtle cello / music-tech motif. Purely visual.
+ */
+---
+
+<div class="my-2 flex justify-center" aria-hidden="true">
+  <svg viewBox="0 0 600 40" class="h-8 w-full max-w-lg text-border" fill="none" preserveAspectRatio="xMidYMid meet">
+    <!-- three still strings -->
+    <line x1="0" y1="10" x2="600" y2="10" stroke="currentColor" stroke-width="1" opacity="0.6"></line>
+    <line x1="0" y1="30" x2="600" y2="30" stroke="currentColor" stroke-width="1" opacity="0.6"></line>
+    <!-- plucked string: flat, then one sine period, then flat -->
+    <path
+      d="M0 20 L220 20 C250 20 250 8 280 20 C310 32 310 20 340 20 L600 20"
+      stroke="url(#string-grad)"
+      stroke-width="1.6"
+      stroke-linecap="round"
+    ></path>
+    <!-- bridge dots -->
+    <circle cx="220" cy="20" r="2" fill="var(--color-accent-violet)"></circle>
+    <circle cx="340" cy="20" r="2" fill="var(--color-accent-blue)"></circle>
+    <defs>
+      <linearGradient id="string-grad" x1="0" y1="0" x2="600" y2="0" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="var(--color-border)"></stop>
+        <stop offset="0.5" stop-color="var(--color-accent-violet)"></stop>
+        <stop offset="1" stop-color="var(--color-border)"></stop>
+      </linearGradient>
+    </defs>
+  </svg>
+</div>

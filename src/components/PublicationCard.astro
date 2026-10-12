@@ -1,0 +1,140 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Tag from './Tag.astro';
+import { SITE } from '../config/site';
+
+interface Props {
+  publication: CollectionEntry<'publications'>;
+}
+
+const { publication } = Astro.props;
+const { title, authors, venue, year, status, abstract, tags, links, bibtex } = publication.data;
+
+const statusStyles: Record<typeof status, string> = {
+  published: 'border-accent-gold/40 text-accent-gold',
+  accepted: 'border-accent-blue/40 text-accent-blue',
+  preprint: 'border-accent-violet/40 text-accent-violet',
+  'under-review': 'border-border text-muted',
+  'in-progress': 'border-border text-muted',
+};
+
+const statusLabels: Record<typeof status, string> = {
+  published: 'Published',
+  accepted: 'Accepted',
+  preprint: 'Preprint',
+  'under-review': 'Under review',
+  'in-progress': 'In progress',
+};
+
+const linkEntries = [
+  { label: 'PDF', href: links.paper },
+  { label: 'Code', href: links.code },
+  { label: 'Demo', href: links.demo },
+  { label: 'Project', href: links.project },
+].filter((l): l is { label: string; href: string } => Boolean(l.href));
+
+const titleHref = links.paper ?? links.project;
+---
+
+<article
+  class="card-hover relative rounded-lg border border-border border-l-2 border-l-accent-violet/60 bg-card/70 p-5 pl-6 sm:p-6 sm:pl-7"
+  data-filter-item
+  data-tags={tags.join('|')}
+  data-year={String(year)}
+  data-status={status}
+>
+  <div class="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
+    <h3 class="max-w-2xl text-base font-semibold leading-snug text-foreground sm:text-lg">
+      {
+        titleHref ? (
+          <a href={titleHref} class="transition-colors hover:text-accent-violet">
+            {title}
+          </a>
+        ) : (
+          title
+        )
+      }
+    </h3>
+    <span
+      class:list={[
+        'shrink-0 rounded border px-2 py-0.5 font-mono text-[0.65rem] uppercase tracking-wider',
+        statusStyles[status],
+      ]}
+    >
+      {statusLabels[status]}
+    </span>
+  </div>
+
+  <p class="mt-2 text-sm leading-relaxed text-muted">
+    {
+      authors.map((author, i) => (
+        <>
+          <span class:list={[(author === SITE.name || author === SITE.nameRomanized) && 'font-semibold text-foreground']}>{author}</span>
+          {i < authors.length - 1 && ', '}
+        </>
+      ))
+    }
+  </p>
+
+  <p class="mt-1 text-sm text-muted">
+    <span class="italic text-foreground/90">{venue}</span>
+    <span class="font-mono"> · {year}</span>
+  </p>
+
+  <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+    {
+      linkEntries.map(({ label, href }) => (
+        <a
+          href={href}
+          class="font-medium text-accent-blue underline-offset-4 transition-colors hover:text-foreground hover:underline"
+        >
+          {label}
+          {href.startsWith('http') ? ' ↗' : ''}
+        </a>
+      ))
+    }
+  </div>
+
+  <div class="mt-4 flex flex-wrap items-center gap-4">
+    <details class="group min-w-0 flex-1">
+      <summary
+        class="inline-flex cursor-pointer select-none items-center gap-1 text-xs font-medium uppercase tracking-wider text-muted transition-colors hover:text-accent-violet"
+      >
+        Abstract
+        <span class="inline-block transition-transform group-open:rotate-90" aria-hidden="true">›</span>
+      </summary>
+      <p class="mt-2 text-sm leading-relaxed text-muted">{abstract}</p>
+    </details>
+  </div>
+
+  {
+    bibtex && (
+      <details class="group mt-2">
+        <summary class="inline-flex cursor-pointer select-none items-center gap-1 text-xs font-medium uppercase tracking-wider text-muted transition-colors hover:text-accent-violet">
+          BibTeX
+          <span class="inline-block transition-transform group-open:rotate-90" aria-hidden="true">
+            ›
+          </span>
+        </summary>
+        <pre
+          class="mt-2 overflow-x-auto rounded-lg border border-border bg-background p-4 font-mono text-xs leading-relaxed text-muted"
+          tabindex="0"
+        >
+          <code>{bibtex.trim()}</code>
+        </pre>
+      </details>
+    )
+  }
+
+  {
+    tags.length > 0 && (
+      <ul class="mt-4 flex flex-wrap gap-2" aria-label="Topics">
+        {tags.map((tag) => (
+          <li>
+            <Tag label={tag} />
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</article>

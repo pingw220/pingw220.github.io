@@ -1,0 +1,48 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PublicationCard from '../../components/PublicationCard.astro';
+import FilterBar from '../../components/FilterBar';
+import { SITE } from '../../config/site';
+
+const publications = (await getCollection('publications')).sort((a, b) => b.data.year - a.data.year);
+
+const tags = [...new Set(publications.flatMap((p) => p.data.tags))].sort();
+const years = [...new Set(publications.map((p) => String(p.data.year)))].sort().reverse();
+const statuses = [...new Set(publications.map((p) => p.data.status))];
+
+const filterGroups = [
+  { key: 'tags', label: 'Topic', options: tags },
+  { key: 'year', label: 'Year', options: years },
+  { key: 'status', label: 'Status', options: statuses },
+];
+---
+
+<BaseLayout
+  title="Publications"
+  description="Publications by Peter Wang on automatic music transcription, music information retrieval, generation, and evaluation."
+>
+  <div class="mx-auto max-w-3xl px-5 py-16">
+    <header class="border-b border-border pb-6">
+      <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Publications</h1>
+      <p class="mt-3 leading-relaxed text-muted">
+        Peer-reviewed papers, preprints, and work in progress in music AI and MIR. Author names are listed as
+        published; <span class="font-medium text-foreground">{SITE.name}</span> is shown in bold. Expand any
+        entry for its abstract and a copy-ready BibTeX citation.
+      </p>
+      <p class="mt-3 font-mono text-xs text-muted">
+        {publications.length} ent{publications.length === 1 ? 'ry' : 'ries'} · updated {
+          new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+        }
+      </p>
+    </header>
+
+    <div class="mt-8">
+      <FilterBar client:load groups={filterGroups} targetSelector="#publication-list" />
+    </div>
+
+    <div id="publication-list" class="space-y-4">
+      {publications.map((publication) => <PublicationCard {publication} />)}
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,130 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+@theme {
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+
+  /* Core palette — deep navy / indigo base with violet + electric-blue accents */
+  --color-background: oklch(0.15 0.035 280);
+  --color-surface: oklch(0.19 0.04 282);
+  --color-foreground: oklch(0.94 0.012 280);
+  --color-muted: oklch(0.72 0.03 285);
+  --color-card: oklch(0.21 0.045 283);
+  --color-border: oklch(0.32 0.05 285);
+
+  /* Accents: violet (primary), electric blue, warm gold */
+  --color-accent-violet: oklch(0.7 0.16 293);
+  --color-accent-blue: oklch(0.74 0.14 245);
+  --color-accent-gold: oklch(0.84 0.11 85);
+}
+
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  /* Layers: faint musical-staff manuscript texture (scrolls with the page),
+     then two indigo/blue stage-spotlight glows anchored to the viewport. */
+  background-image:
+    url('/images/backgrounds/staff-pattern.svg'),
+    radial-gradient(60rem 40rem at 15% -10%, color-mix(in oklch, var(--color-accent-violet) 16%, transparent), transparent 60%),
+    radial-gradient(50rem 40rem at 100% 0%, color-mix(in oklch, var(--color-accent-blue) 12%, transparent), transparent 55%);
+  background-position: center top, 15% -10%, 100% 0%;
+  background-size: 520px 260px, auto, auto;
+  background-repeat: repeat, no-repeat, no-repeat;
+  background-attachment: scroll, fixed, fixed;
+}
+
+::selection {
+  background-color: color-mix(in oklch, var(--color-accent-violet) 35%, transparent);
+}
+
+/* Visible, consistent focus states for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--color-accent-violet);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* Subtle piano-roll grid backdrop, used behind the hero */
+.piano-roll-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in oklch, var(--color-border) 50%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklch, var(--color-border) 32%, transparent) 1px, transparent 1px);
+  background-size: 48px 16px;
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 25%, black 20%, transparent 75%);
+}
+
+/* Five-line staff texture, used as a subtle section separator */
+.staff-lines {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    color-mix(in oklch, var(--color-border) 60%, transparent) 0,
+    color-mix(in oklch, var(--color-border) 60%, transparent) 1px,
+    transparent 1px,
+    transparent 7px
+  );
+}
+
+/* Shared card hover treatment */
+.card-hover {
+  transition:
+    border-color 200ms ease,
+    transform 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.card-hover:hover {
+  border-color: color-mix(in oklch, var(--color-accent-violet) 50%, var(--color-border));
+  transform: translateY(-2px);
+  box-shadow: 0 10px 34px -14px color-mix(in oklch, var(--color-accent-violet) 40%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-hover,
+  .card-hover:hover {
+    transform: none;
+    transition: border-color 200ms ease;
+  }
+}
+
+/* Gradient hairline used to accent section headings and dividers */
+.accent-rule {
+  background: linear-gradient(
+    to right,
+    var(--color-accent-violet),
+    var(--color-accent-blue),
+    transparent
+  );
+}
+
+/* Prose tweaks for MDX content on dark background */
+.prose-site {
+  --tw-prose-body: var(--color-foreground);
+  --tw-prose-headings: var(--color-foreground);
+  --tw-prose-links: var(--color-accent-blue);
+  --tw-prose-bold: var(--color-foreground);
+  --tw-prose-counters: var(--color-muted);
+  --tw-prose-bullets: color-mix(in oklch, var(--color-accent-violet) 60%, var(--color-muted));
+  --tw-prose-hr: var(--color-border);
+  --tw-prose-quotes: var(--color-muted);
+  --tw-prose-quote-borders: var(--color-accent-violet);
+  --tw-prose-captions: var(--color-muted);
+  --tw-prose-code: var(--color-accent-gold);
+  --tw-prose-pre-code: var(--color-foreground);
+  --tw-prose-pre-bg: var(--color-surface);
+  --tw-prose-th-borders: var(--color-border);
+  --tw-prose-td-borders: var(--color-border);
+}

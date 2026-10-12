@@ -1,0 +1,263 @@
+---
+import { SITE } from '../config/site';
+import { VISITORS } from '../config/visitors';
+
+// With a live API the browser fetches real data; otherwise it renders the sample data.
+const sample = SITE.visitorApi ? undefined : JSON.stringify(VISITORS);
+---
+
+<section
+  aria-labelledby="global-reach"
+  class="reach rounded-2xl border border-border bg-card/60 p-6 sm:p-8"
+  data-sample={sample}
+>
+  <p class="mb-2 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-accent-violet">
+    <span class="accent-rule inline-block h-px w-6" aria-hidden="true"></span>
+    Global reach
+  </p>
+  <h2 id="global-reach" class="text-2xl font-semibold tracking-tight">Where readers visit from</h2>
+  <p class="reach-summary mt-2 min-h-[1.5em] max-w-2xl text-sm leading-relaxed text-muted" aria-live="polite">
+    Loading visitor data…
+  </p>
+
+  <!-- Interactive map (Leaflet, initialised client-side when scrolled into view) -->
+  <div class="relative mt-6 overflow-hidden rounded-xl border border-border">
+    <div class="reach-map h-72 w-full sm:h-96" role="img" aria-label="World map of where visitors come from"></div>
+    <div
+      class="pointer-events-none absolute bottom-8 right-3 z-[1000] rounded-md border border-border bg-background/90 px-3 py-2.5 text-xs text-foreground backdrop-blur"
+    >
+      <p class="mb-1.5 font-semibold">Visit density</p>
+      <ul class="space-y-1">
+        <li class="flex items-center gap-2"><span class="reach-swatch reach-low h-1.5 w-1.5"></span>Low</li>
+        <li class="flex items-center gap-2"><span class="reach-swatch reach-mid h-2 w-2"></span>Medium</li>
+        <li class="flex items-center gap-2"><span class="reach-swatch reach-high h-2.5 w-2.5"></span>High</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Rankings -->
+  <button
+    type="button"
+    class="reach-toggle mt-5 inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 font-mono text-xs uppercase tracking-[0.15em] text-foreground transition-colors hover:border-accent-violet hover:text-accent-violet"
+    aria-expanded="false"
+    aria-controls="reach-stats"
+  >
+    <span class="reach-toggle-label">Show statistics</span>
+    <svg class="h-3 w-3 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  </button>
+
+  <div id="reach-stats" class="mt-4 grid gap-4 sm:grid-cols-2" hidden>
+    <div class="rounded-lg border border-border bg-background/40 p-5">
+      <h3 class="mb-3 font-mono text-xs uppercase tracking-[0.15em] text-foreground">Top countries</h3>
+      <ol class="reach-countries space-y-2 text-sm"></ol>
+    </div>
+    <div class="rounded-lg border border-border bg-background/40 p-5">
+      <h3 class="mb-3 font-mono text-xs uppercase tracking-[0.15em] text-foreground">Top cities</h3>
+      <ol class="reach-cities space-y-2 text-sm"></ol>
+    </div>
+  </div>
+
+  <!-- Privacy note -->
+  <p class="mt-6 flex items-start gap-2 text-xs leading-relaxed text-muted">
+    <svg class="mt-0.5 h-4 w-4 shrink-0 text-accent-blue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+      <path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke-linejoin="round"></path>
+    </svg>
+    <span>
+      Privacy-friendly: only city-level totals are stored — no cookies, no IP addresses, and no cross-site tracking.{' '}
+      {sample && <span class="text-muted/80">Figures shown are sample data until the visitor API is connected.</span>}
+    </span>
+  </p>
+</section>
+
+<script>
+  import 'leaflet/dist/leaflet.css';
+  import { recordVisit, type VisitStats } from '../scripts/visits';
+
+  type City = VisitStats['cities'][number];
+
+  const TOP_N = 10;
+  // Esri's dark gray basemap: free for low-traffic use with attribution, no API key.
+  const TILES = 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}';
+
+  // City names come from the API, so build DOM nodes rather than HTML strings.
+  function el<K extends keyof HTMLElementTagNameMap>(tag: K, className: string, text?: string) {
+    const node = document.createElement(tag);
+    node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
+  function renderRanking(list: Element, rows: [string, number][]) {
+    if (rows.length === 0) return list.replaceChildren(el('li', 'text-muted', 'No visits yet.'));
+    list.replaceChildren(
+      ...rows.map(([name, visits], i) => {
+        const li = el('li', 'flex items-baseline justify-between gap-4');
+        li.append(el('span', 'truncate text-muted', `${i + 1}. ${name}`), el('span', 'font-mono text-foreground', String(visits)));
+        return li;
+      }),
+    );
+  }
+
+  function renderStats(root: HTMLElement, { since, cities }: VisitStats) {
+    const total = cities.reduce((sum, c) => sum + c.visits, 0);
+    const byCountry = new Map<string, number>();
+    for (const c of cities) byCountry.set(c.country, (byCountry.get(c.country) ?? 0) + c.visits);
+
+    const sinceText = since
+      ? ` (since ${new Date(since).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' })})`
+      : '';
+    root.querySelector('.reach-summary')!.replaceChildren(
+      el('strong', 'text-foreground', total.toLocaleString()),
+      ` visitor${total === 1 ? '' : 's'} from `,
+      el('strong', 'text-foreground', String(byCountry.size)),
+      ` ${byCountry.size === 1 ? 'country has' : 'countries have'} visited this site${sinceText}.`,
+    );
+
+    renderRanking(root.querySelector('.reach-countries')!, [...byCountry].sort((a, b) => b[1] - a[1]).slice(0, TOP_N));
+    renderRanking(
+      root.querySelector('.reach-cities')!,
+      [...cities]
+        .sort((a, b) => b.visits - a.visits)
+        .slice(0, TOP_N)
+        .map((c) => [`${c.city}, ${c.country}`, c.visits]),
+    );
+  }
+
+  async function renderMap(mapEl: HTMLElement, cities: City[]) {
+    const L = (await import('leaflet')).default;
+    const max = Math.max(1, ...cities.map((c) => c.visits));
+
+    const map = L.map(mapEl, {
+      worldCopyJump: true,
+      scrollWheelZoom: false, // don't hijack page scrolling
+      minZoom: 0,
+      maxZoom: 8,
+      zoomSnap: 0.25,
+    });
+    L.tileLayer(TILES, { attribution: '© <a href="https://www.esri.com/">Esri</a>', maxZoom: 16 }).addTo(map);
+
+    // Frame the populated world; fractional zoom lets it fill narrow screens too.
+    const frame = () =>
+      map.fitBounds([
+        [-40, -140],
+        [65, 150],
+      ]);
+    frame();
+    let resizeTimer: number | undefined;
+    new ResizeObserver(() => {
+      clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => {
+        map.invalidateSize();
+        frame();
+      }, 150);
+    }).observe(mapEl);
+
+    // Draw small bubbles last so they sit on top of big ones.
+    for (const c of [...cities].sort((a, b) => b.visits - a.visits)) {
+      const share = c.visits / max;
+      const level = share > 0.5 ? 'high' : share > 0.2 ? 'mid' : 'low';
+      const tip = el('span', '');
+      tip.append(el('strong', '', c.city), `, ${c.country}`, el('br', ''), `${c.visits} visit${c.visits === 1 ? '' : 's'}`);
+      L.circleMarker([c.lat, c.lon], { radius: 5 + 13 * Math.sqrt(share), className: `reach-dot reach-${level}` })
+        .bindTooltip(tip, { direction: 'top' })
+        .addTo(map);
+    }
+  }
+
+  function setupToggle(root: HTMLElement) {
+    const btn = root.querySelector<HTMLButtonElement>('.reach-toggle')!;
+    const panel = root.querySelector<HTMLElement>('#reach-stats')!;
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') !== 'true';
+      btn.setAttribute('aria-expanded', String(open));
+      panel.hidden = !open;
+      btn.querySelector('.reach-toggle-label')!.textContent = open ? 'Hide statistics' : 'Show statistics';
+      btn.querySelector('svg')!.classList.toggle('rotate-180', open);
+    });
+  }
+
+  async function init(root: HTMLElement) {
+    setupToggle(root);
+
+    const stats: VisitStats | null = root.dataset.sample ? JSON.parse(root.dataset.sample) : await recordVisit();
+    if (!stats) {
+      root.querySelector('.reach-summary')!.textContent = 'Visitor data is unavailable right now.';
+      return;
+    }
+    renderStats(root, stats);
+
+    // Leaflet and the map tiles load only once the map is about to scroll into view.
+    const mapEl = root.querySelector<HTMLElement>('.reach-map')!;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          io.disconnect();
+          renderMap(mapEl, stats.cities);
+        }
+      },
+      { rootMargin: '200px' },
+    );
+    io.observe(mapEl);
+  }
+
+  document.querySelectorAll<HTMLElement>('section.reach').forEach(init);
+</script>
+
+<style is:global>
+  /* Leaflet builds these elements at runtime, so the styles must be global. */
+  .reach {
+    --reach-low: color-mix(in oklch, var(--color-accent-gold) 35%, oklch(0.55 0 0));
+    --reach-mid: color-mix(in oklch, var(--color-accent-gold) 65%, oklch(0.55 0 0));
+    --reach-high: var(--color-accent-gold);
+  }
+  /* `.reach` prefix: Leaflet's own stylesheet may load later, so out-specify it. */
+  .reach .reach-map {
+    font-family: var(--font-sans);
+    background: #222225; /* Esri dark-gray ocean, so any gap is invisible */
+  }
+  /* Fractional zoom leaves hairline seams between tiles: overlap them by half a
+     pixel, with normal blending so the overlap doesn't render brighter. */
+  .reach .reach-map img.leaflet-tile {
+    width: 256.5px !important;
+    height: 256.5px !important;
+    mix-blend-mode: normal;
+  }
+  .reach-swatch {
+    display: inline-block;
+    border-radius: 9999px;
+  }
+  .reach-swatch.reach-low { background: var(--reach-low); }
+  .reach-swatch.reach-mid { background: var(--reach-mid); }
+  .reach-swatch.reach-high { background: var(--reach-high); }
+
+  .reach-dot {
+    stroke-width: 2;
+    fill-opacity: 0.45;
+    stroke-opacity: 0.9;
+    transition: fill-opacity 150ms;
+  }
+  .reach-dot:hover { fill-opacity: 0.8; }
+  .reach-dot.reach-low { fill: var(--reach-low); stroke: var(--reach-low); }
+  .reach-dot.reach-mid { fill: var(--reach-mid); stroke: var(--reach-mid); }
+  .reach-dot.reach-high { fill: var(--reach-high); stroke: var(--reach-high); }
+
+  .reach-map .leaflet-tooltip {
+    background: var(--color-surface);
+    color: var(--color-foreground);
+    border: 1px solid var(--color-border);
+    box-shadow: none;
+  }
+  .reach-map .leaflet-tooltip-top::before { border-top-color: var(--color-border); }
+  .reach-map .leaflet-control-attribution {
+    background: color-mix(in oklch, var(--color-background) 85%, transparent);
+    color: var(--color-muted);
+  }
+  .reach-map .leaflet-control-attribution a { color: var(--color-accent-blue); }
+  .reach-map .leaflet-bar a {
+    background: var(--color-surface);
+    color: var(--color-foreground);
+    border-color: var(--color-border);
+  }
+</style>

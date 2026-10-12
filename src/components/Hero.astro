@@ -1,0 +1,74 @@
+---
+import AnimatedWaveform from './AnimatedWaveform';
+import Button from './Button.astro';
+import { SITE } from '../config/site';
+
+const focusAreas = [
+  'Automatic Music Transcription',
+  'Music Information Retrieval',
+  'Music Generation',
+  'Evaluation',
+  'LLMs for Music',
+];
+---
+
+<section class="relative overflow-hidden border-b border-border/60">
+  <div class="piano-roll-grid absolute inset-0" aria-hidden="true"></div>
+  <AnimatedWaveform client:idle />
+
+  <!-- Faint violin monogram watermark -->
+  <img
+    src="/images/branding/logo-mark-512.png"
+    alt=""
+    aria-hidden="true"
+    class="pointer-events-none absolute -right-10 top-1/2 hidden w-[26rem] -translate-y-1/2 opacity-[0.06] md:block"
+  />
+
+  <div
+    class="absolute inset-0 bg-gradient-to-b from-background/10 via-transparent to-background"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="relative mx-auto max-w-5xl px-5 py-24 sm:py-32">
+    <p class="mb-4 flex items-center gap-2 font-mono text-sm tracking-wide text-accent-violet">
+      <span class="accent-rule inline-block h-px w-8" aria-hidden="true"></span>
+      {SITE.role}
+    </p>
+
+    <h1 class="text-4xl font-bold leading-[1.05] tracking-tight sm:text-6xl">
+      {SITE.name}
+    </h1>
+    <p class="mt-2 text-lg text-muted">
+      <span lang="zh-Hans" class="text-foreground">{SITE.nameZh}</span>
+      <span class="mx-1.5 text-border">·</span>
+      {SITE.nameRomanized}
+    </p>
+
+    <p class="mt-5 max-w-2xl text-xl font-medium leading-snug text-foreground sm:text-2xl">
+      {SITE.oneLiner}
+    </p>
+    <p class="mt-4 max-w-2xl text-base leading-relaxed text-muted">
+      {SITE.valueProp}
+    </p>
+
+    <ul class="mt-7 flex flex-wrap gap-2" aria-label="Focus areas">
+      {
+        focusAreas.map((area) => (
+          <li class="rounded-full border border-border bg-background/50 px-3 py-1 font-mono text-xs text-muted backdrop-blur">
+            {area}
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="mt-9 flex flex-wrap items-center gap-3">
+      <Button href="/publications">Publications</Button>
+      <Button href="/projects" variant="secondary">Projects</Button>
+      <Button href="/demos" variant="secondary">Demos</Button>
+      <Button href={SITE.cv} variant="ghost">Download CV ↓</Button>
+      <Button href={SITE.social.github} variant="ghost" external>GitHub ↗</Button>
+      <Button href={SITE.social.scholar} variant="ghost" external>Google Scholar ↗</Button>
+    </div>
+  </div>
+</section>

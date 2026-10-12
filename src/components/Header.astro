@@ -1,0 +1,127 @@
+---
+import { NAV_LINKS, SITE } from '../config/site';
+
+const currentPath = Astro.url.pathname;
+const isActive = (href: string) => currentPath === href || currentPath.startsWith(`${href}/`);
+---
+
+<header
+  class="sticky top-0 z-50 border-b border-border/70 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/55"
+>
+  <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-5 py-3">
+    <a
+      href="/"
+      class="group flex items-center gap-2.5 font-semibold tracking-tight text-foreground transition-colors hover:text-accent-violet"
+    >
+      <img src="/images/branding/logo-mark.png" alt="" width="32" height="32" class="h-8 w-8" />
+      <span>{SITE.name}</span>
+    </a>
+
+    <!-- Desktop nav -->
+    <nav aria-label="Main navigation" class="hidden md:block">
+      <ul class="flex items-center gap-x-1 text-sm">
+        {
+          NAV_LINKS.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                aria-current={isActive(link.href) ? 'page' : undefined}
+                class:list={[
+                  'rounded-md px-2.5 py-1.5 transition-colors',
+                  isActive(link.href)
+                    ? 'text-accent-violet'
+                    : 'text-muted hover:bg-card hover:text-foreground',
+                ]}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <!-- Mobile menu toggle -->
+    <button
+      type="button"
+      id="menu-toggle"
+      class="inline-flex items-center justify-center rounded-md p-2 text-foreground transition-colors hover:bg-card md:hidden"
+      aria-label="Open menu"
+      aria-controls="mobile-nav"
+      aria-expanded="false"
+    >
+      <svg class="menu-open h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <line x1="3" y1="6" x2="21" y2="6" stroke-linecap="round"></line>
+        <line x1="3" y1="12" x2="21" y2="12" stroke-linecap="round"></line>
+        <line x1="3" y1="18" x2="21" y2="18" stroke-linecap="round"></line>
+      </svg>
+      <svg class="menu-close hidden h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <line x1="6" y1="6" x2="18" y2="18" stroke-linecap="round"></line>
+        <line x1="18" y1="6" x2="6" y2="18" stroke-linecap="round"></line>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile nav panel -->
+  <nav
+    id="mobile-nav"
+    aria-label="Mobile navigation"
+    hidden
+    class="border-t border-border/70 bg-background/95 md:hidden"
+  >
+    <ul class="mx-auto flex max-w-5xl flex-col px-3 py-2">
+      {
+        NAV_LINKS.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              aria-current={isActive(link.href) ? 'page' : undefined}
+              class:list={[
+                'block rounded-md px-3 py-2.5 text-base transition-colors',
+                isActive(link.href)
+                  ? 'bg-card text-accent-violet'
+                  : 'text-muted hover:bg-card hover:text-foreground',
+              ]}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.getElementById('menu-toggle');
+  const panel = document.getElementById('mobile-nav');
+  const openIcon = toggle?.querySelector('.menu-open');
+  const closeIcon = toggle?.querySelector('.menu-close');
+
+  function setOpen(open: boolean) {
+    if (!toggle || !panel) return;
+    panel.hidden = !open;
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    openIcon?.classList.toggle('hidden', open);
+    closeIcon?.classList.toggle('hidden', !open);
+  }
+
+  toggle?.addEventListener('click', () => {
+    setOpen(panel?.hidden === true);
+  });
+
+  // Close on Escape, and when a link is chosen or the viewport grows to desktop.
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !panel?.hidden) {
+      setOpen(false);
+      (toggle as HTMLElement | null)?.focus();
+    }
+  });
+  panel?.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('a')) setOpen(false);
+  });
+  window.matchMedia('(min-width: 768px)').addEventListener('change', (e) => {
+    if (e.matches) setOpen(false);
+  });
+</script>

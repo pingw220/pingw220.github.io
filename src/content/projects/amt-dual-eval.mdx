@@ -1,0 +1,41 @@
+---
+title: 'Dual Evaluation for Music Transcription'
+subtitle: 'Judging transcriptions as notation and as playback'
+description: 'Transcribed sheet music is both read and played, so we evaluate it on both counts: notation similarity to a reference score, and playback similarity to the original performance, validated with a 100+ participant listening study.'
+role: 'Lead author'
+year: 2026
+status: 'active'
+category: 'research'
+tags: ['amt', 'evaluation', 'mir']
+links:
+  paper: 'https://arxiv.org/abs/2608.04511'
+featured: true
+---
+
+## Motivation
+
+Automatic music transcription (AMT) outputs sheet music, and sheet music serves two purposes:
+musicians **read** it, and it can be **played back**. A transcription can look like a clean,
+faithful score yet sound unlike the performance, or sound right yet be painful to read. A single
+metric cannot capture both.
+
+## Approach
+
+We evaluate transcriptions along two complementary dimensions:
+
+- **Notation similarity** to a reference score, using metrics from the optical music recognition
+  literature.
+- **Playback similarity** to the original performance. We compared a wide range of candidate
+  methods against a listening study with over 100 participants and 230 piano recordings, covering
+  23 works, 30 performers, and six composers.
+
+## Findings
+
+- The playback metric that agrees best with human judgments, **CLEWS**, is also the cheapest to run.
+- Across **24 pipelines** (eight audio-to-MIDI models × three MIDI-to-score converters), the two
+  dimensions favor different systems. The MIDI-to-score converter largely determines which
+  objective a pipeline does well on.
+- **Rubato**, a new end-to-end system, substantially improves notation similarity while staying
+  competitive on playback similarity.
+
+Read the [paper on arXiv](https://arxiv.org/abs/2608.04511).

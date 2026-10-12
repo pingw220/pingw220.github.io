@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../config/site';
+
+const channels = [
+  {
+    label: 'Email',
+    value: SITE.email,
+    href: `mailto:${SITE.email}`,
+    note: 'Best way to reach me — I read everything.',
+  },
+  {
+    label: 'GitHub',
+    value: 'Code, experiments, and open-source work',
+    href: SITE.social.github,
+    note: 'Most of my research code lives here.',
+  },
+  {
+    label: 'Google Scholar',
+    value: 'Publications and citations',
+    href: SITE.social.scholar,
+    note: 'Profile link is a placeholder for now.',
+  },
+  {
+    label: 'LinkedIn',
+    value: 'Professional background',
+    href: SITE.social.linkedin,
+    note: 'Profile link is a placeholder for now.',
+  },
+];
+---
+
+<BaseLayout title="Contact" description="Get in touch with Peter Wang about music AI research, collaborations, and opportunities.">
+  <div class="mx-auto max-w-3xl px-5 py-16">
+    <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Contact</h1>
+    <p class="mt-4 max-w-2xl leading-relaxed text-muted">
+      I'm always happy to talk about music AI — especially transcription, evaluation, and generation. If you're
+      working on something in this space, considering a collaboration, or hiring for research roles, get in
+      touch.
+    </p>
+
+    <ul class="mt-10 space-y-4">
+      {
+        channels.map((channel) => (
+          <li>
+            <a
+              href={channel.href}
+              class="card-hover block rounded-xl border border-border bg-card p-5"
+              {...channel.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
+            >
+              <div class="flex items-baseline justify-between gap-4">
+                <span class="font-semibold text-accent-violet">{channel.label}</span>
+                <span class="text-sm text-muted">{channel.value}</span>
+              </div>
+              <p class="mt-1 text-sm text-muted">{channel.note}</p>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <section class="mt-14 rounded-xl border border-accent-violet/30 bg-card p-6" aria-labelledby="collaboration">
+      <h2 id="collaboration" class="text-lg font-semibold text-accent-violet">Open to collaboration</h2>
+      <p class="mt-2 text-sm leading-relaxed text-muted">
+        I'm particularly interested in collaborations on transcription evaluation benchmarks, lead sheet
+        transcription datasets, and human studies for music generation quality. If any of that overlaps with
+        your work, I'd love to hear from you.
+      </p>
+    </section>
+  </div>
+</BaseLayout>
