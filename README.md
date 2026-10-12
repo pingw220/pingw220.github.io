@@ -27,6 +27,7 @@ npm run check      # astro check (TypeScript + template diagnostics)
 | --- | --- |
 | `src/config/site.ts` | Name, role, email, profile links (Scholar / GitHub / LinkedIn), advisor URLs — edit this first |
 | `src/config/news.ts` | News items on the home page (newest first) |
+| `src/config/music.ts` | Performance videos on the Music page (YouTube ids, titles, dates) |
 | `src/config/cv.ts` | Education, experience, interests, and skills on the About page — keep in sync with the CV PDF |
 | `src/content/` | Publications and projects (MDX); posts and demos collections are empty for now |
 | `src/content.config.ts` | Zod schemas for the content collections |
@@ -37,8 +38,8 @@ npm run check      # astro check (TypeScript + template diagnostics)
 | `public/images/og-default.png` | Social share image |
 | `visitor-api/` | Cloudflare Worker behind the Global Reach map |
 
-**Hiding a link:** set any URL in `SITE.social` to `''` and it disappears from the home page,
-About page, contact page, and footer.
+**Hiding a link:** set any URL in `SITE.social` to `''` and it disappears from the home
+and About pages and the footer.
 
 **Light / dark mode:** follows the visitor's system setting until they use the toggle in the header;
 the choice is saved in their browser. Light-theme colors are in `src/styles/global.css`.

@@ -42,7 +42,7 @@ export const LINKS = {
   allenSchool: 'https://www.cs.washington.edu/',
 } as const;
 
-/** Profile links shown as the row of pills on the home page and in the footer / contact page. */
+/** Profile links shown as the row of pills on the home page, About page, and footer. */
 export const PROFILE_LINKS = [
   { label: 'Google Scholar', short: 'Scholar', href: SITE.social.scholar, icon: 'scholar' },
   { label: 'GitHub', short: 'GitHub', href: SITE.social.github, icon: 'github' },
@@ -58,5 +58,5 @@ export const NAV_LINKS = [
   { href: '/publications', label: 'Publications' },
   { href: '/projects', label: 'Projects' },
   { href: '/posts', label: 'Posts' },
-  { href: '/contact', label: 'Contact' },
+  { href: '/music', label: 'Music' },
 ] as const;
