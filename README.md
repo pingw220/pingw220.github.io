@@ -38,7 +38,10 @@ npm run check      # astro check (TypeScript + template diagnostics)
 | `visitor-api/` | Cloudflare Worker behind the Global Reach map |
 
 **Hiding a link:** set any URL in `SITE.social` to `''` and it disappears from the home page,
-About page, contact page, and footer. LinkedIn is empty until you add your URL.
+About page, contact page, and footer.
+
+**Light / dark mode:** follows the visitor's system setting until they use the toggle in the header;
+the choice is saved in their browser. Light-theme colors are in `src/styles/global.css`.
 
 ## Personal assets & branding
 
@@ -163,7 +166,3 @@ builds and publishes on every push to `main`.
 
 `site` in `astro.config.mjs` is already set to `https://pingw220.github.io` for canonical URLs,
 the sitemap, and RSS.
-
-## Still to fill in
-
-- `src/config/site.ts` — `SITE.social.linkedin` is empty (the LinkedIn link is hidden until set)

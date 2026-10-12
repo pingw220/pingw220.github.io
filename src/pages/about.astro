@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Button from '../components/Button.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import ProfileLinks from '../components/ProfileLinks.astro';
 import { LINKS, SITE } from '../config/site';
@@ -36,7 +35,7 @@ const sections: { id: string; title: string; entries: Entry[] }[] = [
       />
       <div>
         <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">About</h1>
-        <p class="mt-2 font-mono text-sm text-muted">// {SITE.role}</p>
+        <p class="mt-2 text-muted">{SITE.role}</p>
         <div class="rich mt-5 space-y-4 leading-relaxed text-foreground/85">
           <p>
             I'm {SITE.name} (<span lang="zh">{SITE.nameZh}</span>), an undergraduate studying computer science at
@@ -127,10 +126,5 @@ const sections: { id: string; title: string; entries: Entry[] }[] = [
       </dl>
     </section>
 
-    <!-- CV -->
-    <section class="mt-14 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border bg-card/60 p-6" aria-label="Download CV">
-      <p class="text-sm text-muted">The full version, with coursework and details, is in my CV.</p>
-      <Button href={SITE.cv}>Download CV (PDF)</Button>
-    </section>
   </div>
 </BaseLayout>

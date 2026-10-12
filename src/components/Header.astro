@@ -13,10 +13,12 @@ const isActive = (href: string) => currentPath === href || currentPath.startsWit
       href="/"
       class="group flex items-center gap-2.5 font-semibold tracking-tight text-foreground transition-colors hover:text-accent-violet"
     >
-      <img src="/images/branding/logo-mark.png" alt="" width="32" height="32" class="h-8 w-8" />
+      <img src="/images/branding/logo-mark.png" alt="" width="32" height="32" class="only-dark h-8 w-8" />
+      <img src="/images/branding/logo-mark-dark.png" alt="" width="32" height="32" class="only-light h-8 w-8" />
       <span>{SITE.name}</span>
     </a>
 
+    <div class="flex items-center gap-1">
     <!-- Desktop nav -->
     <nav aria-label="Main navigation" class="hidden md:block">
       <ul class="flex items-center gap-x-1 text-sm">
@@ -41,6 +43,24 @@ const isActive = (href: string) => currentPath === href || currentPath.startsWit
       </ul>
     </nav>
 
+    <!-- Light / dark toggle -->
+    <button
+      type="button"
+      id="theme-toggle"
+      class="ml-1 inline-flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted transition-colors hover:border-accent-violet/60 hover:text-foreground"
+      aria-label="Switch to light mode"
+    >
+      <!-- Sun (shown in dark mode) -->
+      <svg class="only-dark h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="4"></circle>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+      </svg>
+      <!-- Moon (shown in light mode) -->
+      <svg class="only-light h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+      </svg>
+    </button>
+
     <!-- Mobile menu toggle -->
     <button
       type="button"
@@ -60,6 +80,7 @@ const isActive = (href: string) => currentPath === href || currentPath.startsWit
         <line x1="18" y1="6" x2="6" y2="18" stroke-linecap="round"></line>
       </svg>
     </button>
+    </div>
   </div>
 
   <!-- Mobile nav panel -->
@@ -93,6 +114,23 @@ const isActive = (href: string) => currentPath === href || currentPath.startsWit
 </header>
 
 <script>
+  // Theme toggle: the initial theme is applied by the inline script in BaseLayout.
+  const themeToggle = document.getElementById('theme-toggle');
+  const syncThemeLabel = () => {
+    const light = document.documentElement.dataset.theme === 'light';
+    themeToggle?.setAttribute('aria-label', light ? 'Switch to dark mode' : 'Switch to light mode');
+  };
+  syncThemeLabel();
+  themeToggle?.addEventListener('click', () => {
+    const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+    document.documentElement.dataset.theme = next;
+    try {
+      localStorage.setItem('theme', next);
+    } catch {}
+    syncThemeLabel();
+    window.dispatchEvent(new CustomEvent('themechange', { detail: next }));
+  });
+
   const toggle = document.getElementById('menu-toggle');
   const panel = document.getElementById('mobile-nav');
   const openIcon = toggle?.querySelector('.menu-open');

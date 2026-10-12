@@ -25,7 +25,7 @@ const projects = (await getCollection('projects', ({ data }) => data.featured))
           {SITE.name}
           <span lang="zh" class="ml-2 align-baseline text-2xl font-normal text-muted sm:text-3xl">{SITE.nameZh}</span>
         </h1>
-        <p class="mt-3 font-mono text-sm text-muted">// {SITE.role}</p>
+        <p class="mt-3 text-lg text-muted">{SITE.role}</p>
 
         <div class="rich mt-7 space-y-4 leading-relaxed text-foreground/85">
           <p>

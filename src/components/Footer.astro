@@ -1,62 +1,13 @@
 ---
-import { NAV_LINKS, PROFILE_LINKS, SITE } from '../config/site';
+import ProfileLinks from './ProfileLinks.astro';
+import { SITE } from '../config/site';
 
 const year = new Date().getFullYear();
-
-const socialLinks = PROFILE_LINKS.map(({ label, href }) => ({ label, href, external: href.startsWith('http') }));
 ---
 
 <footer class="mt-24 border-t border-border/70 bg-surface/40">
-  <div class="mx-auto max-w-5xl px-5 py-12">
-    <div class="grid gap-10 sm:grid-cols-[1.5fr_1fr_1fr]">
-      <div>
-        <a href="/" class="flex items-center gap-2.5 font-semibold tracking-tight text-foreground">
-          <img src="/images/branding/logo-mark.png" alt="" width="32" height="32" class="h-8 w-8" />
-          {SITE.name}
-        </a>
-        <p class="mt-3 max-w-xs text-sm leading-relaxed text-muted">
-          {SITE.role}. {SITE.tagline}.
-        </p>
-      </div>
-
-      <nav aria-label="Footer navigation">
-        <h2 class="font-mono text-xs uppercase tracking-wider text-muted">Explore</h2>
-        <ul class="mt-3 space-y-2 text-sm">
-          {
-            NAV_LINKS.map((link) => (
-              <li>
-                <a class="text-muted transition-colors hover:text-accent-violet" href={link.href}>
-                  {link.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
-
-      <div>
-        <h2 class="font-mono text-xs uppercase tracking-wider text-muted">Connect</h2>
-        <ul class="mt-3 space-y-2 text-sm">
-          {
-            socialLinks.map((link) => (
-              <li>
-                <a
-                  class="text-muted transition-colors hover:text-accent-violet"
-                  href={link.href}
-                  {...link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    </div>
-
-    <div class="mt-10 flex flex-col items-start justify-between gap-3 border-t border-border/60 pt-6 text-xs text-muted sm:flex-row sm:items-center">
-      <p>© {year} {SITE.name}</p>
-      <p>No cookies. The visitor map stores only city-level totals.</p>
-    </div>
+  <div class="mx-auto flex max-w-5xl flex-col gap-5 px-5 py-8 sm:flex-row sm:items-center sm:justify-between">
+    <p class="text-sm text-muted">© {year} {SITE.name}</p>
+    <ProfileLinks />
   </div>
 </footer>

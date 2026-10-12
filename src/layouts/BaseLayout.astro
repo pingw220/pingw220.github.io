@@ -20,7 +20,21 @@ const { title, description, type, person } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#0b0a1f" />
+    <meta name="theme-color" content="#0b0a1f" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f9f9fc" media="(prefers-color-scheme: light)" />
+    <script is:inline>
+      // Apply the saved theme (or the system preference) before first paint.
+      (() => {
+        let theme;
+        try {
+          theme = localStorage.getItem('theme');
+        } catch {}
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="/favicon-192.png" sizes="192x192" />

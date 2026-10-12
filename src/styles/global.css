@@ -19,9 +19,38 @@
   --color-accent-gold: oklch(0.84 0.11 85);
 }
 
+/* Light theme: same accents, deepened for contrast on a paper-white background.
+   The theme is set on <html data-theme> by the inline script in BaseLayout. */
+:root[data-theme='light'] {
+  --color-background: oklch(0.985 0.004 285);
+  --color-surface: oklch(0.965 0.008 285);
+  --color-foreground: oklch(0.24 0.04 282);
+  --color-muted: oklch(0.47 0.035 285);
+  --color-card: oklch(1 0 0);
+  --color-border: oklch(0.88 0.015 285);
+
+  --color-accent-violet: oklch(0.5 0.19 293);
+  --color-accent-blue: oklch(0.5 0.15 250);
+  --color-accent-gold: oklch(0.62 0.13 70);
+}
+
 html {
   color-scheme: dark;
   scroll-behavior: smooth;
+}
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+/* Swap artwork that only reads on one background (e.g. the white logo). */
+.only-light {
+  display: none;
+}
+:root[data-theme='light'] .only-light {
+  display: revert;
+}
+:root[data-theme='light'] .only-dark {
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

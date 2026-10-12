@@ -21,7 +21,7 @@ export const SITE = {
   social: {
     scholar: 'https://scholar.google.com/citations?user=cICbXioAAAAJ',
     github: 'https://github.com/pingw220',
-    linkedin: '', // TODO: add your LinkedIn profile URL
+    linkedin: 'https://www.linkedin.com/in/pingw220/',
   },
 
   /**
@@ -57,5 +57,6 @@ export const NAV_LINKS = [
   { href: '/about', label: 'About' },
   { href: '/publications', label: 'Publications' },
   { href: '/projects', label: 'Projects' },
+  { href: '/posts', label: 'Posts' },
   { href: '/contact', label: 'Contact' },
 ] as const;
