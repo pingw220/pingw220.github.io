@@ -25,11 +25,9 @@ npm run check      # astro check (TypeScript + template diagnostics)
 
 | Path | Purpose |
 | --- | --- |
-| `src/config/site.ts` | Name, role, email, profile links (Scholar / GitHub / LinkedIn), advisor URLs — edit this first |
-| `src/config/news.ts` | News items on the home page (newest first) |
-| `src/config/music.ts` | Performance videos on the Music page (YouTube ids, titles, dates) |
-| `src/config/cv.ts` | Education, experience, interests, and skills on the About page — keep in sync with the CV PDF |
-| `src/content/` | Publications and projects (MDX, projects in `en/` and `zh/`); posts and demos are empty for now |
+| `src/data/*.json` | Profile, bio, news, CV, and music — edit from /admin |
+| `src/config/site.ts` | Technical settings (share image, visitor API) |
+| `src/content/` | Posts, publications, and projects (Markdown; projects in `en/` and `zh/`) |
 | `src/content.config.ts` | Zod schemas for the content collections |
 | `src/components/` | Astro components + the `FilterBar` React island |
 | `src/styles/global.css` | Tailwind v4 theme tokens (colors, fonts) and global styles |
@@ -44,15 +42,48 @@ and About pages and the footer.
 **Light / dark mode:** follows the visitor's system setting until they use the toggle in the header;
 the choice is saved in their browser. Light-theme colors are in `src/styles/global.css`.
 
+## Editing the site from the browser (/admin)
+
+Go to **https://pingw220.github.io/admin** to edit everything without touching code. Saving
+commits to this GitHub repo, and the site rebuilds automatically (about 1–2 minutes).
+
+**First time:** click **Sign In Using Access Token**, follow the link to GitHub, and create a
+*fine-grained* token for the `pingw220/pingw220.github.io` repository with
+**Contents: Read and write**. Paste it in; the browser remembers it.
+
+| In the admin | What it edits | Stored in |
+| --- | --- | --- |
+| Posts | Blog posts | `src/content/posts/*.md` |
+| Publications | Papers on the Research page | `src/content/publications/*.md` |
+| Projects | Project pages (English + 中文) | `src/content/projects/{en,zh}/*.md` |
+| Profile & pages → Profile & bio | Name, role, bio, links, photo, CV PDF | `src/data/profile.json` |
+| Profile & pages → News | Home-page news | `src/data/news.json` |
+| Profile & pages → About page (CV) | Interests, education, experience, skills | `src/data/cv.json` |
+| Profile & pages → Music | Performance videos | `src/data/music.json` |
+
+**Writing posts** (Markdown):
+
+- Math: `$E = mc^2$` inline, `$$ … $$` on its own lines for display equations (KaTeX).
+- Code: fenced blocks with a language, e.g. ```` ```python ````; colors follow light/dark mode.
+- Images: the Image block (uploads go to `public/media/uploads/`).
+- Audio / video files: the Audio or Video block, or `![caption](/media/uploads/file.mp3)`.
+- YouTube: the YouTube block, or paste a YouTube link on its own line.
+
+Keep uploads small (a few MB; GitHub rejects files over 100 MB). For long videos, upload to
+YouTube and embed the link instead.
+
+The admin configuration is `public/admin/config.yml`; the embeds are handled by
+`src/lib/rehype-media.mjs`.
+
 ## Two languages (English / 中文)
 
 English is the default at `/`; Traditional Chinese lives at `/zh/` (e.g. `/zh/about`). The 中文 / EN
 button in the header switches to the same page in the other language.
 
 - **UI text** (menus, headings, labels): `src/i18n/index.ts`, one entry per language.
-- **Your content** in `src/config/` (`site.ts`, `news.ts`, `cv.ts`, `music.ts`): bilingual fields are
-  written as `{ en: '…', zh: '…' }`; a plain string is used for both languages.
-- **Projects:** `src/content/projects/en/<slug>.mdx` and `src/content/projects/zh/<slug>.mdx` — give
+- **Your content** (`src/data/*.json`, edited from /admin): bilingual fields have an `en` and a
+  `zh` version.
+- **Projects:** `src/content/projects/en/<slug>.md` and `src/content/projects/zh/<slug>.md` — give
   both files the same name. Paper titles, abstracts, and BibTeX stay in English.
 - **Pages:** each page's markup is in `src/views/`; `src/pages/` and `src/pages/zh/` just render it.
 
@@ -80,90 +111,12 @@ is counted at most once per day and no IP addresses are stored.
 
 ## Adding content
 
-### Add a publication
+The easiest way is the admin page (see above). To edit files directly instead, copy an existing file
+in the same folder and change it — the frontmatter fields are defined in `src/content.config.ts`:
 
-Create `src/content/publications/my-paper.mdx`:
-
-```mdx
----
-title: 'Paper Title'
-authors: ['Ping Wang', 'Co Author']
-venue: 'ISMIR 2026'
-year: 2026
-status: 'published' # published | accepted | preprint | under-review | in-progress
-abstract: 'One-paragraph abstract shown on the card.'
-tags: ['amt', 'evaluation']
-links:
-  paper: 'https://...'
-  code: 'https://...'
-bibtex: |
-  @inproceedings{...}
-featured: true # shows on the home page
----
-
-Optional extra notes (not currently rendered — publications display as cards).
-```
-
-### Add a project
-
-Create `src/content/projects/my-project.mdx`. The filename becomes the URL slug
-(`/projects/my-project`):
-
-```mdx
----
-title: 'Project Name'
-subtitle: 'One-line subtitle'
-description: 'Card description.'
-role: 'Lead developer'
-year: 2026
-status: 'active' # active | completed | paused | archived
-category: 'research' # research | engineering | experiment
-tags: ['amt']
-links:
-  github: 'https://...'
-featured: true
----
-
-Full project write-up in MDX — rendered on the detail page.
-```
-
-### Add a post
-
-Create `src/content/posts/my-post.mdx` (`/posts/my-post`):
-
-```mdx
----
-title: 'Post Title'
-description: 'Shown in lists and meta tags.'
-date: 2026-07-01
-tags: ['mir']
-draft: false # true hides it from the site and RSS
----
-
-Post body in MDX.
-```
-
-### Add a demo
-
-Create `src/content/demos/my-demo.mdx` (`/demos/my-demo`). Put media files in `public/media/`:
-
-```mdx
----
-title: 'Demo Name'
-subtitle: 'One-liner'
-description: 'Card description.'
-tags: ['transcription']
-media:
-  - kind: 'audio' # audio | image | midi
-    src: '/media/example.wav'
-    label: 'Input audio'
-links:
-  project: '/projects/my-project'
-featured: false
----
-
-Explanation of the demo.
-```
+- Post: `src/content/posts/<slug>.md` → `/posts/<slug>`
+- Publication: `src/content/publications/<slug>.md`
+- Project: `src/content/projects/en/<slug>.md` and `src/content/projects/zh/<slug>.md` → `/projects/<slug>`
 
 ## Deploying to GitHub Pages
 

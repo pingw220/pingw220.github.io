@@ -1,0 +1,34 @@
+{
+  "name": "Ping Wang",
+  "nameZh": "王平",
+  "role": {
+    "en": "Undergraduate Researcher · University of Washington",
+    "zh": "華盛頓大學 · 大學部學生研究員"
+  },
+  "tagline": {
+    "en": "Post-training · Multimodal Learning · AI for Music",
+    "zh": "後訓練 · 多模態學習 · 音樂 AI"
+  },
+  "description": {
+    "en": "Ping Wang is an undergraduate researcher at the University of Washington working on post-training, multimodal learning, and AI for music. Advised by Prof. Noah A. Smith (UW) and Prof. Yi-Hsuan Yang (NTU).",
+    "zh": "王平是華盛頓大學的大學部學生研究員，研究方向為後訓練（post-training）、多模態學習與音樂 AI，由 Noah A. Smith 教授（華盛頓大學）與楊奕軒教授（臺灣大學）指導。"
+  },
+  "email": "pingw220@gmail.com",
+  "portrait": "/images/profile/ping-wang.jpg",
+  "cv": "/cv/ping-wang-cv.pdf",
+  "social": {
+    "scholar": "https://scholar.google.com/citations?user=cICbXioAAAAJ",
+    "github": "https://github.com/pingw220",
+    "linkedin": "https://www.linkedin.com/in/pingw220/"
+  },
+  "bio": {
+    "home": {
+      "en": "I am an undergraduate in the [Paul G. Allen School of Computer Science & Engineering](https://www.cs.washington.edu/) at the University of Washington, where I am advised by Prof. [Noah A. Smith](https://homes.cs.washington.edu/~nasmith/) in [Noah’s ARK](https://noahs-ark.github.io/). Since May 2026, I have also been a student researcher in the [Music and AI Lab](https://affige.github.io/lab.html) at National Taiwan University, advised by Prof. [Yi-Hsuan Yang](https://affige.github.io/).\n\nMy research interests are in post-training and multimodal learning, with a focus on AI for music. I study how to post-train generative models with better reward signals, how to turn audio into sheet music people can read and play, and how to evaluate these systems in ways that match human judgment. I am also interested in audio representation learning, symbolic music modeling, and music information retrieval.\n\nI'm always happy to chat about research, music, or possible collaborations. The best way to reach me is by email at [pingw220@gmail.com](mailto:pingw220@gmail.com).",
+      "zh": "我是華盛頓大學 [Paul G. Allen 電腦科學與工程學院](https://www.cs.washington.edu/)的大學部學生，在 [Noah’s ARK](https://noahs-ark.github.io/) 由 [Noah A. Smith](https://homes.cs.washington.edu/~nasmith/) 教授指導。自 2026 年 5 月起，我也在臺灣大學 [Music and AI Lab](https://affige.github.io/lab.html) 擔任學生研究員，由[楊奕軒](https://affige.github.io/)教授指導。\n\n我的研究興趣是後訓練（post-training）與多模態學習，並專注於音樂 AI。我研究如何用更好的獎勵訊號對生成模型進行後訓練、如何把音訊轉成人們能閱讀與演奏的樂譜，以及如何用符合人類判斷的方式評估這些系統。我也對音訊表徵學習、符號音樂建模與音樂資訊檢索有興趣。\n\n歡迎找我聊研究、音樂或合作機會。最好的聯絡方式是寄信到 [pingw220@gmail.com](mailto:pingw220@gmail.com)。"
+    },
+    "about": {
+      "en": "I'm Ping Wang (王平), an undergraduate studying computer science at the [Paul G. Allen School](https://www.cs.washington.edu/), University of Washington. I do research in AI for music with Prof. [Noah A. Smith](https://homes.cs.washington.edu/~nasmith/) at UW and, since May 2026, with Prof. [Yi-Hsuan Yang](https://affige.github.io/) in the [Music and AI Lab](https://affige.github.io/lab.html) at National Taiwan University.\n\nI am interested in post-training and multimodal learning, especially for music. I post-train text-to-music models with rubric-based rewards, build systems that transcribe songs into lead sheets, and design evaluations of music transcription that reflect how people actually read and hear the results.",
+      "zh": "我是王平（Ping Wang），在華盛頓大學 [Paul G. Allen 電腦科學與工程學院](https://www.cs.washington.edu/)就讀資訊工程。我在華盛頓大學與 [Noah A. Smith](https://homes.cs.washington.edu/~nasmith/) 教授進行音樂 AI 研究，並自 2026 年 5 月起，在臺灣大學 [Music and AI Lab](https://affige.github.io/lab.html) 與[楊奕軒](https://affige.github.io/)教授一起研究。\n\n我對後訓練與多模態學習有興趣，特別是在音樂上的應用。我用評分標準（rubric）獎勵對文字生成音樂模型進行後訓練、打造把歌曲轉成主旋律譜的系統，並設計能反映人們實際如何閱讀與聆聽結果的自動採譜評估方法。"
+    }
+  }
+}

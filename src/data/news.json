@@ -1,0 +1,56 @@
+{
+  "items": [
+    {
+      "date": "2026.10",
+      "en": "New preprint: [Rubric-Based Optimization for Text-to-Music Generation](https://arxiv.org/abs/2610.03589), using audio-language-model rubrics as rewards to post-train music generators.",
+      "zh": "新預印本：[Rubric-Based Optimization for Text-to-Music Generation](https://arxiv.org/abs/2610.03589)，以音訊語言模型的評分標準（rubric）作為獎勵訊號，對音樂生成模型進行後訓練。",
+      "links": [
+        {
+          "label": {
+            "en": "paper",
+            "zh": "論文"
+          },
+          "href": "https://arxiv.org/abs/2610.03589"
+        }
+      ]
+    },
+    {
+      "date": "2026.08",
+      "en": "Open-sourced [SheetSage-Pro](/projects/sheetsage-pro), which turns a song into an editable lead sheet: melody, chords, structure, and aligned lyrics.",
+      "zh": "開源 [SheetSage-Pro](/projects/sheetsage-pro)：把一首歌轉成可編輯的主旋律譜（lead sheet），包含旋律、和弦、段落結構與對齊的歌詞。",
+      "links": [
+        {
+          "label": {
+            "en": "code",
+            "zh": "程式碼"
+          },
+          "href": "https://github.com/pingw220/sheetsage-pro"
+        }
+      ]
+    },
+    {
+      "date": "2026.08",
+      "en": "New preprint: [A Dual Evaluation for Music Transcription](https://arxiv.org/abs/2608.04511), judging transcriptions both as notation and as playback, validated with a listening study of 100+ participants.",
+      "zh": "新預印本：[A Dual Evaluation for Music Transcription](https://arxiv.org/abs/2608.04511)，從「樂譜」與「播放」兩個面向評估自動採譜結果，並以超過 100 位受試者的聽測實驗驗證。",
+      "links": [
+        {
+          "label": {
+            "en": "paper",
+            "zh": "論文"
+          },
+          "href": "https://arxiv.org/abs/2608.04511"
+        }
+      ]
+    },
+    {
+      "date": "2026.05",
+      "en": "Joined the [Music and AI Lab](https://affige.github.io/lab.html) at National Taiwan University as a student researcher with Prof. [Yi-Hsuan Yang](https://affige.github.io/).",
+      "zh": "加入臺灣大學 [Music and AI Lab](https://affige.github.io/lab.html)，擔任學生研究員，由[楊奕軒](https://affige.github.io/)教授指導。"
+    },
+    {
+      "date": "2025.08",
+      "en": "Joined [Noah’s ARK](https://noahs-ark.github.io/) at the University of Washington as a student researcher with Prof. [Noah A. Smith](https://homes.cs.washington.edu/~nasmith/).",
+      "zh": "加入華盛頓大學 [Noah’s ARK](https://noahs-ark.github.io/)，擔任學生研究員，由 [Noah A. Smith](https://homes.cs.washington.edu/~nasmith/) 教授指導。"
+    }
+  ]
+}

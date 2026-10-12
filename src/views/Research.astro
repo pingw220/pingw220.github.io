@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import PublicationCard from '../components/PublicationCard.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { SITE } from '../config/site';
+import { getLang, t } from '../i18n';
+import { getResearch } from '../i18n/research';
+
+const lang = getLang(Astro.url);
+const ui = t(lang);
+const { papers, projects } = await getResearch(lang);
+
+const description =
+  lang === 'zh'
+    ? '王平的論文與專案：後訓練、多模態學習與音樂 AI，包括自動採譜與其評估。'
+    : 'Papers and projects by Ping Wang in post-training, multimodal learning, and AI for music, including music transcription and its evaluation.';
+---
+
+<BaseLayout title={ui['research.title']} {description}>
+  <div class="mx-auto max-w-4xl px-5 py-14 sm:py-20">
+    <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{ui['research.title']}</h1>
+    <p class="mt-3 max-w-2xl leading-relaxed text-muted">{ui['research.intro']}</p>
+
+    <section class="mt-12" aria-labelledby="papers">
+      <SectionHeading id="papers" title={ui['research.papers']} />
+      <p class="-mt-3 mb-6 text-sm leading-relaxed text-muted">
+        <span class="font-medium text-foreground">{SITE.name}</span>
+        {' '}{ui['research.papersNote']}{' '}
+        <a href={SITE.social.scholar} class="text-accent-blue underline underline-offset-4 hover:text-foreground">Google Scholar</a>{lang === 'zh' ? '。' : '.'}
+      </p>
+      <div class="space-y-4">
+        {papers.map((publication) => <PublicationCard {publication} />)}
+      </div>
+    </section>
+
+    {
+      projects.length > 0 && (
+        <section class="mt-16" aria-labelledby="other-projects">
+          <SectionHeading id="other-projects" title={ui['research.otherProjects']} />
+          <div class="grid gap-5 sm:grid-cols-2">
+            {projects.map((project) => <ProjectCard {project} />)}
+          </div>
+        </section>
+      )
+    }
+  </div>
+</BaseLayout>

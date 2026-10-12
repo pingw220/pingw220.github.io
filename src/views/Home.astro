@@ -1,24 +1,22 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import PublicationItem from '../components/PublicationItem.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import ProfileLinks from '../components/ProfileLinks.astro';
 import GlobalReach from '../components/GlobalReach.astro';
-import { LINKS, SITE } from '../config/site';
+import { SITE } from '../config/site';
+import { renderMarkdown } from '../i18n/markdown';
 import { NEWS } from '../config/news';
 import { getLang, localizePath, t, tr } from '../i18n';
-import { getProjects } from '../i18n/content';
+import { getResearch } from '../i18n/research';
 
 const lang = getLang(Astro.url);
 const ui = t(lang);
 
-const publications = (await getCollection('publications')).sort((a, b) => b.data.year - a.data.year);
-const projects = (await getProjects(lang, (p) => p.data.featured)).slice(0, 4);
+const { papers, projects: allProjects } = await getResearch(lang);
+const projects = allProjects.filter((p) => p.data.featured).slice(0, 4);
 
-// News HTML is written with English site paths; point them at this language.
-const localizeHtml = (html: string) => html.replace(/href="(\/[^"]*)"/g, (_, path) => `href="${localizePath(path, lang)}"`);
 
 const portrait = { src: SITE.portrait, alt: `${ui.portrait} ${SITE.name}`.replace('： ', '：') };
 ---
@@ -47,42 +45,7 @@ const portrait = { src: SITE.portrait, alt: `${ui.portrait} ${SITE.name}`.replac
         </div>
 
         <div class="rich mt-7 space-y-4 leading-relaxed text-foreground/85">
-          {
-            lang === 'zh' ? (
-              <>
-                <p>
-                  我是華盛頓大學 <a href={LINKS.allenSchool}>Paul G. Allen 電腦科學與工程學院</a>的大學部學生，在 <a href={LINKS.noahsArk}>Noah’s ARK</a> 由 <a href={LINKS.noahSmith}>Noah A. Smith</a> 教授指導。自 2026 年 5 月起，我也在臺灣大學 <a href={LINKS.ntuMusicAi}>Music and AI Lab</a> 擔任學生研究員，由<a href={LINKS.yiHsuanYang}>楊奕軒</a>教授指導。
-                </p>
-                <p>
-                  我的研究興趣是後訓練（post-training）與多模態學習，並專注於音樂 AI。我研究如何用更好的獎勵訊號對生成模型進行後訓練、如何把音訊轉成人們能閱讀與演奏的樂譜，以及如何用符合人類判斷的方式評估這些系統。我也對音訊表徵學習、符號音樂建模與音樂資訊檢索有興趣。
-                </p>
-                <p>
-                  歡迎找我聊研究、音樂或合作機會。最好的聯絡方式是寄信到<a href={`mailto:${SITE.email}`}>{SITE.email}</a>。
-                </p>
-              </>
-            ) : (
-              <>
-                <p>
-                  I am an undergraduate in the <a href={LINKS.allenSchool}>Paul G. Allen School of Computer Science &
-                  Engineering</a> at the University of Washington, where I am advised by Prof.{' '}
-                  <a href={LINKS.noahSmith}>Noah A. Smith</a> in <a href={LINKS.noahsArk}>Noah’s ARK</a>. Since May
-                  2026, I have also been a student researcher in the <a href={LINKS.ntuMusicAi}>Music and AI Lab</a> at
-                  National Taiwan University, advised by Prof. <a href={LINKS.yiHsuanYang}>Yi-Hsuan Yang</a>.
-                </p>
-                <p>
-                  My research interests are in post-training and multimodal learning, with a focus on AI for music. I
-                  study how to post-train generative models with better reward signals, how to turn audio into sheet
-                  music people can read and play, and how to evaluate these systems in ways that match human judgment.
-                  I am also interested in audio representation learning, symbolic music modeling, and music information
-                  retrieval.
-                </p>
-                <p>
-                  I'm always happy to chat about research, music, or possible collaborations. The best way to reach me
-                  is by email at <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
-                </p>
-              </>
-            )
-          }
+          <Fragment set:html={renderMarkdown(SITE.bio.home[lang], lang)} />
         </div>
 
         <ProfileLinks class="mt-7" />
@@ -106,7 +69,7 @@ const portrait = { src: SITE.portrait, alt: `${ui.portrait} ${SITE.name}`.replac
             <li class="grid gap-1 px-5 py-3.5 sm:grid-cols-[5rem_1fr] sm:gap-4">
               <span class="pt-0.5 font-mono text-xs text-muted">{item.date}</span>
               <p class="text-sm leading-relaxed text-foreground/85">
-                <Fragment set:html={localizeHtml(item.html[lang])} />
+                <Fragment set:html={renderMarkdown(item[lang], lang, { inline: true })} />
                 {item.links?.map((link) => (
                   <>
                     {' '}[<a href={link.href}>{tr(link.label, lang)}</a>]
@@ -119,30 +82,24 @@ const portrait = { src: SITE.portrait, alt: `${ui.portrait} ${SITE.name}`.replac
       </ul>
     </section>
 
-    <!-- Publications -->
-    <section aria-labelledby="publications">
+    <!-- Research: papers, then projects that aren't papers -->
+    <section aria-labelledby="research">
       <SectionHeading
-        id="publications"
-        title={ui['home.publications']}
-        href={localizePath('/publications', lang)}
-        linkLabel={ui['home.allPublications']}
+        id="research"
+        title={ui['home.research']}
+        href={localizePath('/research', lang)}
+        linkLabel={ui['home.allResearch']}
       />
       <div class="space-y-6">
-        {publications.map((publication) => <PublicationItem {publication} />)}
+        {papers.map((publication) => <PublicationItem {publication} />)}
       </div>
-    </section>
-
-    <!-- Projects -->
-    <section aria-labelledby="projects">
-      <SectionHeading
-        id="projects"
-        title={ui['home.projects']}
-        href={localizePath('/projects', lang)}
-        linkLabel={ui['home.allProjects']}
-      />
-      <div class="grid gap-5 sm:grid-cols-2">
-        {projects.map((project) => <ProjectCard {project} />)}
-      </div>
+      {
+        projects.length > 0 && (
+          <div class="mt-8 grid gap-5 sm:grid-cols-2">
+            {projects.map((project) => <ProjectCard {project} />)}
+          </div>
+        )
+      }
     </section>
 
     <GlobalReach />

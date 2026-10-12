@@ -1,5 +1,6 @@
 ---
 import { render, type CollectionEntry } from 'astro:content';
+import 'katex/dist/katex.min.css';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Tag from '../components/Tag.astro';
 import { formatDate, getLang, localizePath, t } from '../i18n';
@@ -50,7 +51,7 @@ const { Content } = await render(post);
 
     {cover && <img src={cover} alt="" class="mt-10 w-full rounded-xl border border-border" />}
 
-    <div class="prose prose-invert prose-site mt-10 max-w-none">
+    <div class="prose prose-site mt-10 max-w-none">
       <Content />
     </div>
   </article>

@@ -1,5 +1,6 @@
 ---
 import { render } from 'astro:content';
+import 'katex/dist/katex.min.css';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Button from '../components/Button.astro';
 import Tag from '../components/Tag.astro';
@@ -26,8 +27,8 @@ const linkEntries = [
 
 <BaseLayout {title} {description} type="article">
   <article class="mx-auto max-w-3xl px-5 py-16">
-    <a href={localizePath('/projects', lang)} class="text-sm text-muted transition-colors hover:text-accent-violet">
-      {ui['projects.all']}
+    <a href={localizePath('/research', lang)} class="text-sm text-muted transition-colors hover:text-accent-violet">
+      {ui['research.allResearch']}
     </a>
 
     <header class="mt-6">
@@ -72,7 +73,7 @@ const linkEntries = [
 
     {cover && <img src={cover} alt="" class="mt-10 w-full rounded-xl border border-border" />}
 
-    <div class="prose prose-invert prose-site mt-10 max-w-none">
+    <div class="prose prose-site mt-10 max-w-none">
       <Content />
     </div>
   </article>

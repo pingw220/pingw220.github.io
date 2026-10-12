@@ -1,51 +1,29 @@
 import type { Text } from '../i18n';
 
 /**
- * Central site configuration.
- * Update social links, email, images, and the site URL here — every page reads from this file.
+ * Central site configuration. Your profile (name, role, bio, links, photo, CV) lives in
+ * src/data/profile.json so it can be edited from the admin page (/admin); the
+ * technical settings below stay here.
  */
-export const SITE = {
-  name: 'Ping Wang',
-  nameZh: '王平',
-  title: 'Ping Wang 王平',
-  description: {
-    en: 'Ping Wang is an undergraduate researcher at the University of Washington working on post-training, multimodal learning, and AI for music. Advised by Prof. Noah A. Smith (UW) and Prof. Yi-Hsuan Yang (NTU).',
-    zh: '王平是華盛頓大學的大學部學生研究員，研究方向為後訓練（post-training）、多模態學習與音樂 AI，由 Noah A. Smith 教授（華盛頓大學）與楊奕軒教授（臺灣大學）指導。',
-  } as Text,
-  role: { en: 'Undergraduate Researcher · University of Washington', zh: '華盛頓大學 · 大學部學生研究員' } as Text,
-  tagline: { en: 'Post-training · Multimodal Learning · AI for Music', zh: '後訓練 · 多模態學習 · 音樂 AI' } as Text,
-  email: 'pingw220@gmail.com',
-  cv: '/cv/ping-wang-cv.pdf',
+import profile from '../data/profile.json';
 
-  /** Portrait shown on the home intro and About page (head-and-shoulders square crop). */
-  portrait: '/images/profile/ping-wang.jpg',
+export const SITE = {
+  ...profile,
+  title: `${profile.name} ${profile.nameZh}`,
+  description: profile.description as Text,
+  role: profile.role as Text,
+  tagline: profile.tagline as Text,
+  bio: profile.bio as { home: { en: string; zh: string }; about: { en: string; zh: string } },
+
   /** Square image shown when the site is shared in chats and social posts. */
   ogImage: '/images/og-logo.png',
 
-  /** Leave a URL empty ('') to hide that link everywhere on the site. */
-  social: {
-    scholar: 'https://scholar.google.com/citations?user=cICbXioAAAAJ',
-    github: 'https://github.com/pingw220',
-    linkedin: 'https://www.linkedin.com/in/pingw220/',
-  },
-
   /**
-   * Global Reach visitor map. Set this to the URL of the Cloudflare Worker in
-   * `visitor-api/` (see its README) to show live visits. While it is empty, the
-   * map shows the sample data in `src/config/visitors.ts`.
+   * Global Reach visitor map: URL of the Cloudflare Worker in `visitor-api/`.
+   * While it is empty, the map shows the sample data in `src/config/visitors.ts`.
    */
   visitorApi: 'https://pingw220-visitor-api.pingw220.workers.dev' as string,
-} as const;
-
-/** People and places linked from the bio, About page, and project pages. */
-export const LINKS = {
-  noahSmith: 'https://homes.cs.washington.edu/~nasmith/',
-  yiHsuanYang: 'https://affige.github.io/',
-  noahsArk: 'https://noahs-ark.github.io/',
-  ntuMusicAi: 'https://affige.github.io/lab.html',
-  ubicomp: 'https://ubicomplab.cs.washington.edu/',
-  allenSchool: 'https://www.cs.washington.edu/',
-} as const;
+};
 
 /** Profile links shown as the row of pills on the home page, About page, and footer. */
 export const PROFILE_LINKS = [
@@ -66,8 +44,7 @@ export type IconName = 'scholar' | 'github' | 'linkedin' | 'email' | 'cv';
 /** Header navigation. `href` is the English path; it is localized when rendered. */
 export const NAV_LINKS = [
   { href: '/about', key: 'nav.about' },
-  { href: '/publications', key: 'nav.publications' },
-  { href: '/projects', key: 'nav.projects' },
+  { href: '/research', key: 'nav.research' },
   { href: '/posts', key: 'nav.posts' },
   { href: '/music', key: 'nav.music' },
 ] as const;

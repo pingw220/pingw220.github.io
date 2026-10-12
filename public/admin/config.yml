@@ -1,0 +1,489 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms@0.221.8/schema/sveltia-cms.json
+#
+# Admin page (https://pingw220.github.io/admin) — Sveltia CMS.
+# Saving commits to the GitHub repo; GitHub Actions then rebuilds the site (~1–2 min).
+# Sign in with "Sign In with Token" using a fine-grained GitHub token that has
+# Contents: Read and write on pingw220/pingw220.github.io.
+
+backend:
+  name: github
+  repo: pingw220/pingw220.github.io
+  branch: main
+
+site_url: https://pingw220.github.io
+display_url: https://pingw220.github.io
+logo_url: /images/branding/logo-mark-512.png
+
+# Files uploaded from the editor (images, audio, video) go here and are served from /media/uploads.
+media_folder: /public/media/uploads
+public_folder: /media/uploads
+
+# Projects are written in both languages: src/content/projects/en/<slug>.md and zh/<slug>.md.
+i18n:
+  structure: multiple_folders
+  locales: [en, zh]
+  default_locale: en
+
+collections:
+  # ────────────────────────────── Posts ──────────────────────────────
+  - name: posts
+    label: Posts
+    label_singular: Post
+    description: >-
+      Write in Markdown. Math: $inline$ or $$display$$ (LaTeX). Code: fenced ``` blocks with a language.
+      Media: use the Image, Audio, Video, or YouTube blocks in the editor.
+    folder: /src/content/posts
+    create: true
+    extension: md
+    format: frontmatter
+    slug: '{{slug}}'
+    summary: '{{title}} · {{date}}'
+    sortable_fields: [date, title]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - name: description
+        label: Description
+        widget: text
+        hint: One or two sentences, shown in the posts list and link previews.
+      - { name: date, label: Date, widget: datetime, time_format: false, format: YYYY-MM-DD }
+      - { name: updated, label: Updated, widget: datetime, time_format: false, format: YYYY-MM-DD, required: false }
+      - { name: tags, label: Tags, widget: list, required: false, default: [], hint: 'Used by the topic filter, e.g. latex, music, notes' }
+      - { name: draft, label: Draft (hidden from the site), widget: boolean, default: false, required: false }
+      - { name: cover, label: Cover image, widget: image, required: false }
+      - { name: body, label: Body, widget: richtext }
+
+  # ─────────────────────────── Publications ───────────────────────────
+  - name: publications
+    label: Publications
+    label_singular: Publication
+    description: Papers shown under Research. Paper titles, abstracts, and BibTeX are shown as written (English).
+    folder: /src/content/publications
+    create: true
+    extension: md
+    format: frontmatter
+    slug: '{{slug}}'
+    summary: '{{title}} ({{year}})'
+    sortable_fields: [year, title]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: authors, label: Authors, widget: list, hint: 'One name per item, in published order. "Ping Wang" is shown in bold.' }
+      - { name: venue, label: Venue, widget: string, hint: 'e.g. arXiv preprint arXiv:2610.03589, or ISMIR 2026' }
+      - { name: year, label: Year, widget: number, value_type: int }
+      - name: status
+        label: Status
+        widget: select
+        options: [published, accepted, preprint, under-review, in-progress]
+      - { name: abstract, label: Abstract, widget: text }
+      - { name: tags, label: Tags, widget: list, required: false, default: [] }
+      - name: links
+        label: Links
+        widget: object
+        required: false
+        fields:
+          - { name: paper, label: Paper (PDF or arXiv URL), widget: string, required: false }
+          - { name: code, label: Code URL, widget: string, required: false }
+          - { name: demo, label: Demo URL, widget: string, required: false }
+          - { name: project, label: Project page, widget: string, required: false, hint: 'e.g. /projects/amt-dual-eval — the project is then shown with this paper instead of separately' }
+      - { name: bibtex, label: BibTeX, widget: text, required: false }
+      - { name: featured, label: Featured, widget: boolean, default: false, required: false }
+      - { name: body, label: Notes (optional), widget: richtext, required: false }
+
+  # ───────────────────────────── Projects ─────────────────────────────
+  - name: projects
+    label: Projects
+    label_singular: Project
+    description: >-
+      Project pages in English and Chinese. Projects linked from a publication appear with that paper;
+      the others are listed under Research → Projects.
+    folder: /src/content/projects
+    i18n: true
+    create: true
+    extension: md
+    format: frontmatter
+    slug: '{{slug}}'
+    summary: '{{title}} ({{year}})'
+    sortable_fields: [year, title]
+    fields:
+      - { name: title, label: Title, widget: string, i18n: true }
+      - { name: subtitle, label: Subtitle, widget: string, required: false, i18n: true }
+      - { name: description, label: Description, widget: text, i18n: true }
+      - { name: role, label: Role, widget: string, required: false, i18n: true }
+      - { name: year, label: Year, widget: number, value_type: int, i18n: duplicate }
+      - { name: status, label: Status, widget: select, options: [active, completed, paused, archived], i18n: duplicate }
+      - { name: category, label: Category, widget: select, options: [research, engineering, experiment], i18n: duplicate }
+      - { name: tags, label: Tags, widget: list, required: false, default: [], i18n: duplicate }
+      - name: links
+        label: Links
+        widget: object
+        required: false
+        i18n: duplicate
+        fields:
+          - { name: github, label: GitHub URL, widget: string, required: false }
+          - { name: paper, label: Paper URL, widget: string, required: false }
+          - { name: demo, label: Demo URL, widget: string, required: false }
+          - { name: report, label: Report URL, widget: string, required: false }
+      - { name: featured, label: Featured on the home page, widget: boolean, default: false, required: false, i18n: duplicate }
+      - { name: cover, label: Cover image, widget: image, required: false, i18n: duplicate }
+      - { name: body, label: Body, widget: richtext, i18n: true }
+
+  # ───────────────────────── Profile & pages ─────────────────────────
+  - name: settings
+    label: Profile & pages
+    editor:
+      preview: false
+    files:
+      - name: profile
+        label: Profile & bio
+        file: /src/data/profile.json
+        fields:
+          - { name: name, label: Name, widget: string }
+          - { name: nameZh, label: Chinese name, widget: string }
+          - name: role
+            label: Role (under your name)
+            widget: object
+            fields:
+              - { name: en, label: English, widget: string }
+              - { name: zh, label: 中文, widget: string }
+          - name: tagline
+            label: Tagline
+            widget: object
+            fields:
+              - { name: en, label: English, widget: string }
+              - { name: zh, label: 中文, widget: string }
+          - name: description
+            label: Search / link-preview description
+            widget: object
+            fields:
+              - { name: en, label: English, widget: text }
+              - { name: zh, label: 中文, widget: text }
+          - { name: email, label: Email, widget: string }
+          - name: portrait
+            label: Profile photo (square works best)
+            widget: image
+            media_folder: /public/images/profile
+            public_folder: /images/profile
+          - name: cv
+            label: CV (PDF)
+            widget: file
+            media_folder: /public/cv
+            public_folder: /cv
+          - name: social
+            label: Profile links (leave empty to hide)
+            widget: object
+            fields:
+              - { name: scholar, label: Google Scholar, widget: string, required: false }
+              - { name: github, label: GitHub, widget: string, required: false }
+              - { name: linkedin, label: LinkedIn, widget: string, required: false }
+          - name: bio
+            label: Bio
+            widget: object
+            fields:
+              - name: home
+                label: Home page intro
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: richtext }
+                  - { name: zh, label: 中文, widget: richtext }
+              - name: about
+                label: About page intro
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: richtext }
+                  - { name: zh, label: 中文, widget: richtext }
+
+      - name: news
+        label: News
+        file: /src/data/news.json
+        fields:
+          - name: items
+            label: News items (newest first)
+            label_singular: News item
+            widget: list
+            summary: '{{fields.date}} — {{fields.en}}'
+            fields:
+              - { name: date, label: 'Date (YYYY.MM)', widget: string, pattern: ['^\d{4}\.\d{2}$', 'Use YYYY.MM, e.g. 2026.10'] }
+              - { name: en, label: English (Markdown), widget: text, hint: 'Links: [text](https://…) or [text](/projects/…)' }
+              - { name: zh, label: 中文 (Markdown), widget: text }
+              - name: links
+                label: Extra links shown as [label]
+                widget: list
+                required: false
+                fields:
+                  - name: label
+                    label: Label
+                    widget: object
+                    fields:
+                      - { name: en, label: English, widget: string }
+                      - { name: zh, label: 中文, widget: string }
+                  - { name: href, label: URL, widget: string }
+
+      - name: cv
+        label: About page (CV)
+        file: /src/data/cv.json
+        fields:
+          - name: interests
+            label: Research interests
+            label_singular: Interest
+            widget: list
+            summary: '{{fields.en}}'
+            fields:
+              - { name: en, label: English, widget: string }
+              - { name: zh, label: 中文, widget: string }
+          - name: education
+            label: Education
+            label_singular: Entry
+            widget: list
+            summary: '{{fields.org.en}}'
+            fields:
+              - name: org
+                label: Organization
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - { name: orgHref, label: Organization link, widget: string, required: false }
+              - name: place
+                label: Place
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - name: title
+                label: Title / degree
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - name: advisor
+                label: Advisor
+                widget: object
+                required: false
+                fields:
+                  - name: name
+                    label: Name
+                    widget: object
+                    fields:
+                      - { name: en, label: English, widget: string }
+                      - { name: zh, label: 中文, widget: string }
+                  - { name: href, label: Advisor link, widget: string }
+              - name: dates
+                label: Dates
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - name: points
+                label: Highlights
+                label_singular: Highlight
+                widget: list
+                required: false
+                summary: '{{fields.title.en}}'
+                fields:
+                  - name: title
+                    label: Title
+                    widget: object
+                    fields:
+                      - { name: en, label: English, widget: string }
+                      - { name: zh, label: 中文, widget: string }
+                  - name: text
+                    label: Text
+                    widget: object
+                    fields:
+                      - { name: en, label: English, widget: text }
+                      - { name: zh, label: 中文, widget: text }
+                  - { name: href, label: Link (e.g. /projects/sheetsage-pro), widget: string, required: false }
+          - name: research
+            label: Research experience
+            label_singular: Entry
+            widget: list
+            summary: '{{fields.org.en}}'
+            fields:
+              - name: org
+                label: Organization
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - { name: orgHref, label: Organization link, widget: string, required: false }
+              - name: place
+                label: Place
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - name: title
+                label: Title / degree
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - name: advisor
+                label: Advisor
+                widget: object
+                required: false
+                fields:
+                  - name: name
+                    label: Name
+                    widget: object
+                    fields:
+                      - { name: en, label: English, widget: string }
+                      - { name: zh, label: 中文, widget: string }
+                  - { name: href, label: Advisor link, widget: string }
+              - name: dates
+                label: Dates
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - name: points
+                label: Highlights
+                label_singular: Highlight
+                widget: list
+                required: false
+                summary: '{{fields.title.en}}'
+                fields:
+                  - name: title
+                    label: Title
+                    widget: object
+                    fields:
+                      - { name: en, label: English, widget: string }
+                      - { name: zh, label: 中文, widget: string }
+                  - name: text
+                    label: Text
+                    widget: object
+                    fields:
+                      - { name: en, label: English, widget: text }
+                      - { name: zh, label: 中文, widget: text }
+                  - { name: href, label: Link (e.g. /projects/sheetsage-pro), widget: string, required: false }
+          - name: industry
+            label: Industry experience
+            label_singular: Entry
+            widget: list
+            summary: '{{fields.org.en}}'
+            fields:
+              - name: org
+                label: Organization
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - { name: orgHref, label: Organization link, widget: string, required: false }
+              - name: place
+                label: Place
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - name: title
+                label: Title / degree
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - name: advisor
+                label: Advisor
+                widget: object
+                required: false
+                fields:
+                  - name: name
+                    label: Name
+                    widget: object
+                    fields:
+                      - { name: en, label: English, widget: string }
+                      - { name: zh, label: 中文, widget: string }
+                  - { name: href, label: Advisor link, widget: string }
+              - name: dates
+                label: Dates
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - name: points
+                label: Highlights
+                label_singular: Highlight
+                widget: list
+                required: false
+                summary: '{{fields.title.en}}'
+                fields:
+                  - name: title
+                    label: Title
+                    widget: object
+                    fields:
+                      - { name: en, label: English, widget: string }
+                      - { name: zh, label: 中文, widget: string }
+                  - name: text
+                    label: Text
+                    widget: object
+                    fields:
+                      - { name: en, label: English, widget: text }
+                      - { name: zh, label: 中文, widget: text }
+                  - { name: href, label: Link (e.g. /projects/sheetsage-pro), widget: string, required: false }
+          - name: skills
+            label: Skills
+            label_singular: Skill group
+            widget: list
+            summary: '{{fields.area.en}}'
+            fields:
+              - name: area
+                label: Area
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - name: items
+                label: Skills
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: text }
+                  - { name: zh, label: 中文, widget: text }
+
+      - name: music
+        label: Music
+        file: /src/data/music.json
+        fields:
+          - name: sections
+            label: Sections
+            label_singular: Section
+            widget: list
+            summary: '{{fields.title.en}}'
+            fields:
+              - name: title
+                label: Section title
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - name: description
+                label: Section description
+                widget: object
+                required: false
+                fields:
+                  - { name: en, label: English, widget: string, required: false }
+                  - { name: zh, label: 中文, widget: string, required: false }
+              - name: performances
+                label: Videos (newest first)
+                label_singular: Video
+                widget: list
+                summary: '{{fields.title.en}}'
+                fields:
+                  - { name: id, label: YouTube video ID, widget: string, hint: 'The part after youtu.be/ or watch?v=, e.g. AgizJ1VHcAQ' }
+                  - name: title
+                    label: Title
+                    widget: object
+                    fields:
+                      - { name: en, label: English, widget: string }
+                      - { name: zh, label: 中文, widget: string }
+                  - name: detail
+                    label: Detail (event, ensemble, conductor…)
+                    widget: object
+                    fields:
+                      - { name: en, label: English, widget: string }
+                      - { name: zh, label: 中文, widget: string }
+                  - { name: date, label: 'Date (YYYY-MM-DD, optional)', widget: string, required: false }
+                  - name: award
+                    label: Award (only if verified)
+                    widget: object
+                    required: false
+                    fields:
+                      - { name: en, label: English, widget: string, required: false }
+                      - { name: zh, label: 中文, widget: string, required: false }

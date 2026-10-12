@@ -2,7 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import ProfileLinks from '../components/ProfileLinks.astro';
-import { LINKS, SITE } from '../config/site';
+import { SITE } from '../config/site';
+import { renderMarkdown } from '../i18n/markdown';
 import {
   EDUCATION,
   INDUSTRY_EXPERIENCE,
@@ -43,34 +44,7 @@ const description =
         <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{ui['about.title']}</h1>
         <p class="mt-2 text-muted">{tr(SITE.role, lang)}</p>
         <div class="rich mt-5 space-y-4 leading-relaxed text-foreground/85">
-          {
-            lang === 'zh' ? (
-              <>
-                <p>
-                  我是王平（{SITE.name}），在華盛頓大學 <a href={LINKS.allenSchool}>Paul G. Allen 電腦科學與工程學院</a>就讀資訊工程。我在華盛頓大學與 <a href={LINKS.noahSmith}>Noah A. Smith</a> 教授進行音樂 AI 研究，並自 2026 年 5 月起，在臺灣大學 <a href={LINKS.ntuMusicAi}>Music and AI Lab</a> 與<a href={LINKS.yiHsuanYang}>楊奕軒</a>教授一起研究。
-                </p>
-                <p>
-                  我對後訓練與多模態學習有興趣，特別是在音樂上的應用。我用評分標準（rubric）獎勵對文字生成音樂模型進行後訓練、打造把歌曲轉成主旋律譜的系統，並設計能反映人們實際如何閱讀與聆聽結果的自動採譜評估方法。
-                </p>
-              </>
-            ) : (
-              <>
-                <p>
-                  I'm {SITE.name} (<span lang="zh">{SITE.nameZh}</span>), an undergraduate studying computer science at
-                  the <a href={LINKS.allenSchool}>Paul G. Allen School</a>, University of Washington. I do research in
-                  AI for music with Prof. <a href={LINKS.noahSmith}>Noah A. Smith</a> at UW and, since May 2026, with
-                  Prof. <a href={LINKS.yiHsuanYang}>Yi-Hsuan Yang</a> in the{' '}
-                  <a href={LINKS.ntuMusicAi}>Music and AI Lab</a> at National Taiwan University.
-                </p>
-                <p>
-                  I am interested in post-training and multimodal learning, especially for music. I post-train
-                  text-to-music models with rubric-based rewards, build systems that transcribe songs into lead sheets,
-                  and design evaluations of music transcription that reflect how people actually read and hear the
-                  results.
-                </p>
-              </>
-            )
-          }
+          <Fragment set:html={renderMarkdown(SITE.bio.about[lang], lang)} />
         </div>
         <ProfileLinks class="mt-6" />
       </div>
@@ -105,7 +79,7 @@ const description =
                 <div class="flex flex-wrap items-baseline justify-between gap-x-4 text-sm">
                   <p class="italic text-foreground/80">
                     {tr(entry.title, lang)}
-                    {entry.advisor && (
+                    {entry.advisor && tr(entry.advisor.name, lang) && (
                       <>
                         {' '}— {ui['about.advisor']}
                         {lang === 'zh' ? '：' : ': '}
@@ -115,7 +89,7 @@ const description =
                   </p>
                   <span class="font-mono text-xs text-muted">{tr(entry.dates, lang)}</span>
                 </div>
-                {entry.points && (
+                {entry.points && entry.points.length > 0 && (
                   <ul class="mt-3 space-y-2 border-l border-border pl-4 text-sm leading-relaxed text-muted">
                     {entry.points.map((point) => (
                       <li>
