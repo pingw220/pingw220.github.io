@@ -19,7 +19,8 @@ const sample = SITE.visitorApi ? undefined : JSON.stringify(VISITORS);
   </p>
 
   <!-- Interactive map (Leaflet, initialised client-side when scrolled into view) -->
-  <div class="relative mt-6 overflow-hidden rounded-xl border border-border">
+  <!-- `isolate` keeps Leaflet’s internal z-indexes (400–1000) from rising above the sticky header. -->
+  <div class="relative isolate mt-6 overflow-hidden rounded-xl border border-border">
     <div class="reach-map h-72 w-full sm:h-96" role="img" aria-label="World map of where visitors come from"></div>
     <div
       class="pointer-events-none absolute bottom-8 right-3 z-[1000] rounded-md border border-border bg-background/90 px-3 py-2.5 text-xs text-foreground backdrop-blur"

@@ -16,5 +16,8 @@ export default defineConfig({
     // The visitor-api Worker is deployed separately; its local D1 database
     // changes on every visit, which would otherwise trigger reload loops.
     server: { watch: { ignored: ['**/visitor-api/**'] } },
+    // Leaflet is only imported dynamically, so pre-bundle it at startup; otherwise the
+    // first dev page load fails with "Outdated Optimize Dep" while Vite re-bundles it.
+    optimizeDeps: { include: ['leaflet'] },
   },
 });
