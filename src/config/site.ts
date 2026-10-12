@@ -32,7 +32,7 @@ export const SITE = {
    * `visitor-api/` (see its README) to show live visits. While it is empty, the
    * map shows the sample data in `src/config/visitors.ts`.
    */
-  visitorApi: '' as string, // e.g. 'https://pingw220-visitor-api.<subdomain>.workers.dev'
+  visitorApi: 'https://pingw220-visitor-api.pingw220.workers.dev' as string,
 } as const;
 
 export const NAV_LINKS = [

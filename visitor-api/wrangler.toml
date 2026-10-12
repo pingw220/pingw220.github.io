@@ -9,5 +9,4 @@ ALLOWED_ORIGINS = "https://pingw220.github.io,http://localhost:4321"
 [[d1_databases]]
 binding = "DB"
 database_name = "visitor-map"
-# Paste the id printed by `npx wrangler d1 create visitor-map`.
-database_id = "REPLACE_WITH_DATABASE_ID"
+database_id = "d586a0ac-b258-4c82-aabf-b7f8f317aac0"
