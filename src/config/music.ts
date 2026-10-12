@@ -3,257 +3,262 @@
  * `id` is the YouTube video id (the part after youtu.be/ or watch?v=).
  * `date` is the performance date from the video title, when it has one.
  */
+import type { Text } from '../i18n';
+
 export interface Performance {
   id: string;
-  title: string;
-  detail: string;
+  title: Text;
+  detail: Text;
   date?: string; // 'YYYY-MM-DD'
-  award?: string;
+  award?: Text;
 }
 
 export interface MusicSection {
-  title: string;
-  description?: string;
+  title: Text;
+  description?: Text;
   performances: Performance[];
 }
 
 export const MUSIC_SECTIONS: MusicSection[] = [
   {
-    title: 'Cello solo',
+    title: { en: 'Cello solo', zh: '大提琴獨奏' },
     performances: [
       {
         id: 'AgizJ1VHcAQ',
-        title: 'Ave Maria (J.S. Bach / Gounod)',
-        detail: 'Cello: Ping Wang · Piano: Guang Yang',
+        title: { en: 'Ave Maria (J.S. Bach / Gounod)', zh: '聖母頌（巴哈／古諾）' },
+        detail: { en: 'Cello: Ping Wang · Piano: Guang Yang', zh: '大提琴：王平 · 鋼琴：Guang Yang' },
       },
       {
         id: 'yhQ20vhg5fg',
-        title: 'Cello Solo, Senior High School',
-        detail: 'National Student Competition of Music',
+        title: { en: 'Cello Solo, Senior High School', zh: '大提琴獨奏（高中 B 組）' },
+        detail: { en: 'National Student Competition of Music', zh: '全國學生音樂比賽' },
         date: '2022-03-20',
       },
       {
         id: '4Za3gSi1_kY',
-        title: 'Cello Solo (chosen piece)',
-        detail: 'National Student Competition of Music',
+        title: { en: 'Cello Solo (chosen piece)', zh: '大提琴獨奏（自選曲）' },
+        detail: { en: 'National Student Competition of Music', zh: '全國學生音樂比賽' },
         date: '2022-03-20',
       },
       {
         id: 'i4_G3LoFnMA',
-        title: 'A Thousand Years (Christina Perri)',
-        detail: 'Cello remix by Ping Wang',
+        title: { en: 'A Thousand Years (Christina Perri)', zh: '〈千年之戀〉（Christina Perri）' },
+        detail: { en: 'Cello remix by Ping Wang', zh: '王平大提琴混音版本' },
         date: '2021-06-30',
       },
       {
         id: '-PN8xdWQdKM',
-        title: 'Cello Solo (chosen piece)',
-        detail: 'National Student Competition of Music',
+        title: { en: 'Cello Solo (chosen piece)', zh: '大提琴獨奏（自選曲）' },
+        detail: { en: 'National Student Competition of Music', zh: '全國學生音樂比賽' },
         date: '2020-03-27',
       },
       {
         id: 'WRSC-dy1oj0',
-        title: 'Haydn: Cello Concerto No. 1 in C major, I.',
-        detail: 'Hsing-Long Elementary School graduation concert',
+        title: { en: 'Haydn: Cello Concerto No. 1 in C major, I.', zh: '海頓：C 大調第一號大提琴協奏曲，第一樂章' },
+        detail: { en: 'Hsing-Long Elementary School graduation concert', zh: '興隆國小第一屆畢業音樂會' },
         date: '2017-06-10',
       },
       {
         id: 'ehTPZCobCMM',
-        title: 'Cello Solo, age 11',
-        detail: 'National Student Competition of Music',
+        title: { en: 'Cello Solo, age 11', zh: '大提琴獨奏（11 歲）' },
+        detail: { en: 'National Student Competition of Music', zh: '全國學生音樂比賽' },
         date: '2016-03-16',
       },
     ],
   },
   {
-    title: 'Chamber music',
+    title: { en: 'Chamber music', zh: '室內樂' },
     performances: [
       {
         id: 'HQPN_eh8qvQ',
-        title: 'Piano Trio',
-        detail: 'National Student Competition of Music, Senior High School',
+        title: { en: 'Piano Trio', zh: '鋼琴三重奏' },
+        detail: { en: 'National Student Competition of Music, Senior High School', zh: '全國學生音樂比賽 · 高中組' },
       },
       {
         id: 'IquJVmuy5e0',
-        title: 'A Dandelion’s Promise (Jay Chou)',
-        detail: 'With William Han and Allison Wang',
+        title: { en: 'A Dandelion’s Promise (Jay Chou)', zh: '〈蒲公英的約定〉（周杰倫）' },
+        detail: { en: 'With William Han and Allison Wang', zh: '與 William Han、Allison Wang 合奏' },
       },
       {
         id: '98n8q_BbJ0c',
-        title: 'In Your Presence (Stream of Praise)',
-        detail: 'With Allison Wang',
+        title: { en: 'In Your Presence (Stream of Praise)', zh: '〈在祢同在裡〉（讚美之泉）' },
+        detail: { en: 'With Allison Wang', zh: '與 Allison Wang 合奏' },
         date: '2021-07-14',
       },
       {
         id: '9-ANdbmj-Qc',
-        title: 'Piano Trio (chosen piece)',
-        detail: 'National Student Competition of Music, Senior High School',
+        title: { en: 'Piano Trio (chosen piece)', zh: '鋼琴三重奏（自選曲）' },
+        detail: { en: 'National Student Competition of Music, Senior High School', zh: '全國學生音樂比賽 · 高中組' },
         date: '2020-12-03',
       },
       {
         id: 'MWImklLDgws',
-        title: 'Piano Trio (compulsory piece)',
-        detail: 'National Student Competition of Music, Senior High School',
+        title: { en: 'Piano Trio (compulsory piece)', zh: '鋼琴三重奏（指定曲）' },
+        detail: { en: 'National Student Competition of Music, Senior High School', zh: '全國學生音樂比賽 · 高中組' },
         date: '2020-12-03',
       },
       {
         id: 'pU_Oeg8WFM0',
-        title: 'Piano Quintet',
-        detail: 'National Student Competition of Music, Hsinchu County Chenggong Junior High School',
+        title: { en: 'Piano Quintet', zh: '鋼琴五重奏' },
+        detail: { en: 'National Student Competition of Music, Hsinchu County Chenggong Junior High School', zh: '全國學生音樂比賽 · 新竹縣立成功國中' },
         date: '2019-03-15',
-        award: 'National 3rd place',
+        award: { en: 'National 3rd place', zh: '全國第三名' },
       },
     ],
   },
   {
-    title: 'UW Campus Philharmonia Orchestras',
-    description: 'Cello in the University of Washington Campus Philharmonia Orchestras, 2023–present.',
+    title: { en: 'UW Campus Philharmonia Orchestras', zh: '華盛頓大學 Campus Philharmonia Orchestras' },
+    description: {
+      en: 'Cello in the University of Washington Campus Philharmonia Orchestras, 2023–present.',
+      zh: '2023 年至今在華盛頓大學 Campus Philharmonia Orchestras 擔任大提琴手。',
+    },
     performances: [
       {
         id: 'svMwTcC9u6Y',
-        title: 'Elgar: Pomp and Circumstance March No. 1 in D',
-        detail: 'Combined orchestras · Zach Banks, conductor',
+        title: { en: 'Elgar: Pomp and Circumstance March No. 1 in D', zh: '艾爾加：《威風凜凜進行曲》第一號' },
+        detail: { en: 'Combined orchestras · Zach Banks, conductor', zh: '聯合樂團 · 指揮：Zach Banks' },
         date: '2026-05-30',
       },
       {
         id: 'zExqGtxWDns',
-        title: 'de Falla: El Amor Brujo — Ritual Fire Dance',
-        detail: 'Section B · Zach Banks, conductor',
+        title: { en: 'de Falla: El Amor Brujo — Ritual Fire Dance', zh: '法雅：《愛情魔法師》——〈火祭舞〉' },
+        detail: { en: 'Section B · Zach Banks, conductor', zh: 'B 團 · 指揮：Zach Banks' },
         date: '2026-05-30',
       },
       {
         id: 'yXiPCGbRrpU',
-        title: 'Grieg: Sigurd Jorsalfar, Op. 56 — Triumphal March',
-        detail: 'Combined orchestras · Zach Banks, conductor',
+        title: { en: 'Grieg: Sigurd Jorsalfar, Op. 56 — Triumphal March', zh: '葛利格：《十字軍西古爾》——〈凱旋進行曲〉' },
+        detail: { en: 'Combined orchestras · Zach Banks, conductor', zh: '聯合樂團 · 指揮：Zach Banks' },
         date: '2026-05-30',
       },
       {
         id: 'v__x9Bf7I9A',
-        title: 'Grieg: Peer Gynt Suite No. 1 — Morning Mood',
-        detail: 'Section B · Zach Banks, conductor',
+        title: { en: 'Grieg: Peer Gynt Suite No. 1 — Morning Mood', zh: '葛利格：《皮爾金》第一號組曲——〈晨歌〉' },
+        detail: { en: 'Section B · Zach Banks, conductor', zh: 'B 團 · 指揮：Zach Banks' },
         date: '2026-05-30',
       },
       {
         id: 'Ypn5z6zaxXM',
-        title: 'Massenet: Le Cid — Selections',
-        detail: 'Combined orchestras · Robert Stahly, conductor',
+        title: { en: 'Massenet: Le Cid — Selections', zh: '馬斯奈：《熙德》選曲' },
+        detail: { en: 'Combined orchestras · Robert Stahly, conductor', zh: '聯合樂團 · 指揮：Robert Stahly' },
         date: '2026-05-30',
       },
       {
         id: '-kMPfAosbrU',
-        title: 'Mozart: Overture to Idomeneo, K. 366',
-        detail: 'Section B · Zach Banks, conductor',
+        title: { en: 'Mozart: Overture to Idomeneo, K. 366', zh: '莫札特：《伊多美紐》序曲，K. 366' },
+        detail: { en: 'Section B · Zach Banks, conductor', zh: 'B 團 · 指揮：Zach Banks' },
         date: '2026-03-07',
       },
       {
         id: 'WuBZlAA3zKY',
-        title: 'Tchaikovsky: Suite No. 4 in G major, Op. 61 “Mozartiana”',
-        detail: 'Section B · Zach Banks, conductor',
+        title: { en: 'Tchaikovsky: Suite No. 4 in G major, Op. 61 “Mozartiana”', zh: '柴可夫斯基：第四號組曲《莫札特風》，作品 61' },
+        detail: { en: 'Section B · Zach Banks, conductor', zh: 'B 團 · 指揮：Zach Banks' },
         date: '2026-03-07',
       },
       {
         id: 'fGcNDosgpWo',
-        title: 'Bizet: L’Arlésienne Suite No. 2',
-        detail: 'Section B · Zach Banks, conductor',
+        title: { en: 'Bizet: L’Arlésienne Suite No. 2', zh: '比才：《阿萊城姑娘》第二號組曲' },
+        detail: { en: 'Section B · Zach Banks, conductor', zh: 'B 團 · 指揮：Zach Banks' },
         date: '2025-11-22',
       },
       {
         id: 'XPBUfekAnf4',
-        title: 'Fauré: Masques et Bergamasques',
-        detail: 'Section B · Zach Banks, conductor',
+        title: { en: 'Fauré: Masques et Bergamasques', zh: '佛瑞：《假面舞與貝加摩舞》' },
+        detail: { en: 'Section B · Zach Banks, conductor', zh: 'B 團 · 指揮：Zach Banks' },
         date: '2025-11-22',
       },
       {
         id: 'NF0Smo3uVrU',
-        title: 'Brahms: Hungarian Dance No. 1 in G minor',
-        detail: 'Combined orchestras · Robert Stahly, conductor',
+        title: { en: 'Brahms: Hungarian Dance No. 1 in G minor', zh: '布拉姆斯：G 小調第一號匈牙利舞曲' },
+        detail: { en: 'Combined orchestras · Robert Stahly, conductor', zh: '聯合樂團 · 指揮：Robert Stahly' },
         date: '2025-05-31',
       },
       {
         id: 'NlIuUuq4jBg',
-        title: 'Brahms: Hungarian Dance No. 5 in G minor',
-        detail: 'Combined orchestras · Ryan Farris, conductor',
+        title: { en: 'Brahms: Hungarian Dance No. 5 in G minor', zh: '布拉姆斯：G 小調第五號匈牙利舞曲' },
+        detail: { en: 'Combined orchestras · Ryan Farris, conductor', zh: '聯合樂團 · 指揮：Ryan Farris' },
         date: '2025-05-31',
       },
       {
         id: 'OBjifdTHRFI',
-        title: 'Johann Strauss II: Die Fledermaus Overture',
-        detail: 'Section A · Ryan Farris, conductor',
+        title: { en: 'Johann Strauss II: Die Fledermaus Overture', zh: '小約翰．史特勞斯：《蝙蝠》序曲' },
+        detail: { en: 'Section A · Ryan Farris, conductor', zh: 'A 團 · 指揮：Ryan Farris' },
         date: '2025-05-31',
       },
       {
         id: 'MxcTHHL55qM',
-        title: 'Tchaikovsky: Capriccio Italien, Op. 45',
-        detail: 'Combined orchestras · Ryan Farris, conductor',
+        title: { en: 'Tchaikovsky: Capriccio Italien, Op. 45', zh: '柴可夫斯基：《義大利隨想曲》，作品 45' },
+        detail: { en: 'Combined orchestras · Ryan Farris, conductor', zh: '聯合樂團 · 指揮：Ryan Farris' },
         date: '2025-05-31',
       },
       {
         id: 'BT3EVuyVrJU',
-        title: 'Grieg: Symphonic Dances, Op. 64',
-        detail: 'Section A · Ryan Farris, conductor',
+        title: { en: 'Grieg: Symphonic Dances, Op. 64', zh: '葛利格：《交響舞曲》，作品 64' },
+        detail: { en: 'Section A · Ryan Farris, conductor', zh: 'A 團 · 指揮：Ryan Farris' },
         date: '2025-03-08',
       },
       {
         id: 'COqnG4qG9ag',
-        title: 'Sibelius: Finlandia, Op. 26',
-        detail: 'Section A · Ryan Farris, conductor',
+        title: { en: 'Sibelius: Finlandia, Op. 26', zh: '西貝流士：《芬蘭頌》，作品 26' },
+        detail: { en: 'Section A · Ryan Farris, conductor', zh: 'A 團 · 指揮：Ryan Farris' },
         date: '2025-03-08',
       },
       {
         id: 'Ho-qn4CUxgI',
-        title: 'Borodin: Symphony No. 3 in A minor “Unfinished”',
-        detail: 'Section A · Ryan Farris, conductor',
+        title: { en: 'Borodin: Symphony No. 3 in A minor “Unfinished”', zh: '鮑羅定：A 小調第三號交響曲「未完成」' },
+        detail: { en: 'Section A · Ryan Farris, conductor', zh: 'A 團 · 指揮：Ryan Farris' },
         date: '2024-11-23',
       },
       {
         id: 'hcrUvShwPkc',
-        title: 'Duparc: Aux étoiles (To the Stars)',
-        detail: 'Section A · Ryan Farris, conductor',
+        title: { en: 'Duparc: Aux étoiles (To the Stars)', zh: '杜帕克：《致群星》' },
+        detail: { en: 'Section A · Ryan Farris, conductor', zh: 'A 團 · 指揮：Ryan Farris' },
         date: '2024-11-23',
       },
       {
         id: '9Z4qxeja9X4',
-        title: 'Smetana: Three Dances from The Bartered Bride',
-        detail: 'Section A · Ryan Farris, conductor',
+        title: { en: 'Smetana: Three Dances from The Bartered Bride', zh: '史麥塔納：《交易新娘》三首舞曲' },
+        detail: { en: 'Section A · Ryan Farris, conductor', zh: 'A 團 · 指揮：Ryan Farris' },
         date: '2024-11-23',
       },
       {
         id: 'Axs641OPMsc',
-        title: 'Holmès: Ludus pro Patria — La Nuit et l’Amour',
-        detail: 'Section A · Daren Weissfisch, conductor',
+        title: { en: 'Holmès: Ludus pro Patria — La Nuit et l’Amour', zh: '荷姆絲：《為祖國而戰》——〈夜與愛〉' },
+        detail: { en: 'Section A · Daren Weissfisch, conductor', zh: 'A 團 · 指揮：Daren Weissfisch' },
         date: '2024-05-18',
       },
       {
         id: '8woaNxrf-O4',
-        title: 'Moncayo: Huapango',
-        detail: 'Combined orchestras · Daren Weissfisch, conductor',
+        title: { en: 'Moncayo: Huapango', zh: '蒙卡尤：《瓦潘戈》' },
+        detail: { en: 'Combined orchestras · Daren Weissfisch, conductor', zh: '聯合樂團 · 指揮：Daren Weissfisch' },
         date: '2024-05-18',
       },
       {
         id: '-n7H4P0dwTY',
-        title: 'Dvořák: Symphony No. 8 in G major, Op. 88',
-        detail: 'Section A · Daren Weissfisch, conductor',
+        title: { en: 'Dvořák: Symphony No. 8 in G major, Op. 88', zh: '德弗札克：G 大調第八號交響曲，作品 88' },
+        detail: { en: 'Section A · Daren Weissfisch, conductor', zh: 'A 團 · 指揮：Daren Weissfisch' },
       },
       {
         id: 'NGwRPUxMRCg',
-        title: 'Rimsky-Korsakov: Scheherazade, Op. 35',
-        detail: 'Section A · Daren Weissfisch, conductor',
+        title: { en: 'Rimsky-Korsakov: Scheherazade, Op. 35', zh: '林姆斯基－高沙可夫：《天方夜譚》，作品 35' },
+        detail: { en: 'Section A · Daren Weissfisch, conductor', zh: 'A 團 · 指揮：Daren Weissfisch' },
         date: '2023-12-02',
       },
     ],
   },
   {
-    title: 'School orchestras',
+    title: { en: 'School orchestras', zh: '校園樂團' },
     performances: [
       {
         id: 'xn3TPRXDgZw',
-        title: 'String Orchestra (chosen piece)',
-        detail: 'National Student Competition of Music',
-        award: 'National Champion',
+        title: { en: 'String Orchestra (chosen piece)', zh: '弦樂團（自選曲）' },
+        detail: { en: 'National Student Competition of Music', zh: '全國學生音樂比賽' },
+        award: { en: 'National Champion', zh: '全國第一名' },
       },
       {
         id: 'MqtcuYVaLao',
-        title: 'Rossini: William Tell Overture',
-        detail: 'Hsinchu County Chenggong Junior High School annual concert',
+        title: { en: 'Rossini: William Tell Overture', zh: '羅西尼：《威廉泰爾》序曲' },
+        detail: { en: 'Hsinchu County Chenggong Junior High School annual concert', zh: '新竹縣立成功國中年度音樂會' },
         date: '2019-06-06',
       },
     ],

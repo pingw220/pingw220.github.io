@@ -4,6 +4,7 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SEO from '../components/SEO.astro';
+import { getLang, HTML_LANG, t } from '../i18n';
 
 interface Props {
   title?: string;
@@ -13,10 +14,11 @@ interface Props {
 }
 
 const { title, description, type, person } = Astro.props;
+const lang = getLang(Astro.url);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={HTML_LANG[lang]}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -48,7 +50,7 @@ const { title, description, type, person } = Astro.props;
       href="#main"
       class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-card focus:px-4 focus:py-2"
     >
-      Skip to content
+      {t(lang).skip}
     </a>
     <Header />
     <main id="main" class="flex-1">

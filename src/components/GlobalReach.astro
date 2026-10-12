@@ -1,6 +1,19 @@
 ---
 import { SITE } from '../config/site';
 import { VISITORS } from '../config/visitors';
+import { getLang, HTML_LANG, t } from '../i18n';
+
+const lang = getLang(Astro.url);
+const ui = t(lang);
+// Strings the browser needs to build the summary, rankings, and tooltips.
+const clientStrings = {
+  locale: HTML_LANG[lang],
+  lang,
+  unavailable: ui['reach.unavailable'],
+  show: ui['reach.show'],
+  hide: ui['reach.hide'],
+  none: ui['reach.none'],
+};
 
 // With a live API the browser fetches real data; otherwise it renders the sample data.
 const sample = SITE.visitorApi ? undefined : JSON.stringify(VISITORS);
@@ -10,26 +23,27 @@ const sample = SITE.visitorApi ? undefined : JSON.stringify(VISITORS);
   aria-labelledby="global-reach"
   class="reach rounded-2xl border border-border bg-card/60 p-6 sm:p-8"
   data-sample={sample}
+  data-strings={JSON.stringify(clientStrings)}
 >
   <h2 id="global-reach" class="text-2xl font-semibold tracking-tight">
-    Global Reach
+    {ui['reach.title']}
   </h2>
   <p class="reach-summary mt-2 min-h-[1.5em] max-w-2xl text-sm leading-relaxed text-muted" aria-live="polite">
-    Loading visitor data…
+    {ui['reach.loading']}
   </p>
 
   <!-- Interactive map (Leaflet, initialised client-side when scrolled into view) -->
   <!-- `isolate` keeps Leaflet’s internal z-indexes (400–1000) from rising above the sticky header. -->
   <div class="relative isolate mt-6 overflow-hidden rounded-xl border border-border">
-    <div class="reach-map h-72 w-full sm:h-96" role="img" aria-label="World map of where visitors come from"></div>
+    <div class="reach-map h-72 w-full sm:h-96" role="img" aria-label={ui['reach.mapLabel']}></div>
     <div
       class="pointer-events-none absolute bottom-8 right-3 z-[1000] rounded-md border border-border bg-background/90 px-3 py-2.5 text-xs text-foreground backdrop-blur"
     >
-      <p class="mb-1.5 font-semibold">Visit density</p>
+      <p class="mb-1.5 font-semibold">{ui['reach.density']}</p>
       <ul class="space-y-1">
-        <li class="flex items-center gap-2"><span class="reach-swatch reach-low h-1.5 w-1.5"></span>Low</li>
-        <li class="flex items-center gap-2"><span class="reach-swatch reach-mid h-2 w-2"></span>Medium</li>
-        <li class="flex items-center gap-2"><span class="reach-swatch reach-high h-2.5 w-2.5"></span>High</li>
+        <li class="flex items-center gap-2"><span class="reach-swatch reach-low h-1.5 w-1.5"></span>{ui['reach.low']}</li>
+        <li class="flex items-center gap-2"><span class="reach-swatch reach-mid h-2 w-2"></span>{ui['reach.medium']}</li>
+        <li class="flex items-center gap-2"><span class="reach-swatch reach-high h-2.5 w-2.5"></span>{ui['reach.high']}</li>
       </ul>
     </div>
   </div>
@@ -41,7 +55,7 @@ const sample = SITE.visitorApi ? undefined : JSON.stringify(VISITORS);
     aria-expanded="false"
     aria-controls="reach-stats"
   >
-    <span class="reach-toggle-label">Show statistics</span>
+    <span class="reach-toggle-label">{ui['reach.show']}</span>
     <svg class="h-3 w-3 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
       <polyline points="6 9 12 15 18 9"></polyline>
     </svg>
@@ -49,11 +63,11 @@ const sample = SITE.visitorApi ? undefined : JSON.stringify(VISITORS);
 
   <div id="reach-stats" class="mt-4 grid gap-4 sm:grid-cols-2" hidden>
     <div class="rounded-lg border border-border bg-background/40 p-5">
-      <h3 class="mb-3 font-mono text-xs uppercase tracking-[0.15em] text-foreground">Top countries</h3>
+      <h3 class="mb-3 font-mono text-xs uppercase tracking-[0.15em] text-foreground">{ui['reach.countries']}</h3>
       <ol class="reach-countries space-y-2 text-sm"></ol>
     </div>
     <div class="rounded-lg border border-border bg-background/40 p-5">
-      <h3 class="mb-3 font-mono text-xs uppercase tracking-[0.15em] text-foreground">Top cities</h3>
+      <h3 class="mb-3 font-mono text-xs uppercase tracking-[0.15em] text-foreground">{ui['reach.cities']}</h3>
       <ol class="reach-cities space-y-2 text-sm"></ol>
     </div>
   </div>
@@ -65,6 +79,15 @@ const sample = SITE.visitorApi ? undefined : JSON.stringify(VISITORS);
   import { recordVisit, type VisitStats } from '../scripts/visits';
 
   type City = VisitStats['cities'][number];
+
+  interface Strings {
+    locale: string;
+    lang: 'en' | 'zh';
+    unavailable: string;
+    show: string;
+    hide: string;
+    none: string;
+  }
 
   const TOP_N = 10;
   // Esri's gray canvas basemaps: free for low-traffic use with attribution, no API key.
@@ -79,8 +102,8 @@ const sample = SITE.visitorApi ? undefined : JSON.stringify(VISITORS);
     return node;
   }
 
-  function renderRanking(list: Element, rows: [string, number][]) {
-    if (rows.length === 0) return list.replaceChildren(el('li', 'text-muted', 'No visits yet.'));
+  function renderRanking(list: Element, rows: [string, number][], s: Strings) {
+    if (rows.length === 0) return list.replaceChildren(el('li', 'text-muted', s.none));
     list.replaceChildren(
       ...rows.map(([name, visits], i) => {
         const li = el('li', 'flex items-baseline justify-between gap-4');
@@ -90,32 +113,39 @@ const sample = SITE.visitorApi ? undefined : JSON.stringify(VISITORS);
     );
   }
 
-  function renderStats(root: HTMLElement, { since, cities }: VisitStats) {
+  function renderStats(root: HTMLElement, { since, cities }: VisitStats, s: Strings) {
     const total = cities.reduce((sum, c) => sum + c.visits, 0);
     const byCountry = new Map<string, number>();
     for (const c of cities) byCountry.set(c.country, (byCountry.get(c.country) ?? 0) + c.visits);
 
-    const sinceText = since
-      ? ` (since ${new Date(since).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' })})`
+    const sinceDate = since
+      ? new Date(since).toLocaleDateString(s.locale, { year: 'numeric', month: s.lang === 'zh' ? 'long' : 'short', day: 'numeric', timeZone: 'UTC' })
       : '';
+    const totalEl = el('strong', 'text-foreground', total.toLocaleString(s.locale));
+    const countriesEl = el('strong', 'text-foreground', String(byCountry.size));
     root.querySelector('.reach-summary')!.replaceChildren(
-      el('strong', 'text-foreground', total.toLocaleString()),
-      ` visitor${total === 1 ? '' : 's'} from `,
-      el('strong', 'text-foreground', String(byCountry.size)),
-      ` ${byCountry.size === 1 ? 'country has' : 'countries have'} visited this site${sinceText}.`,
+      ...(s.lang === 'zh'
+        ? [sinceDate ? `自 ${sinceDate} 起，已有 ` : '已有 ', totalEl, ' 位訪客來自 ', countriesEl, ' 個國家。']
+        : [
+            totalEl,
+            ` visitor${total === 1 ? '' : 's'} from `,
+            countriesEl,
+            ` ${byCountry.size === 1 ? 'country has' : 'countries have'} visited this site${sinceDate ? ` (since ${sinceDate})` : ''}.`,
+          ]),
     );
 
-    renderRanking(root.querySelector('.reach-countries')!, [...byCountry].sort((a, b) => b[1] - a[1]).slice(0, TOP_N));
+    renderRanking(root.querySelector('.reach-countries')!, [...byCountry].sort((a, b) => b[1] - a[1]).slice(0, TOP_N), s);
     renderRanking(
       root.querySelector('.reach-cities')!,
       [...cities]
         .sort((a, b) => b.visits - a.visits)
         .slice(0, TOP_N)
         .map((c) => [`${c.city}, ${c.country}`, c.visits]),
+      s,
     );
   }
 
-  async function renderMap(mapEl: HTMLElement, cities: City[]) {
+  async function renderMap(mapEl: HTMLElement, cities: City[], s: Strings) {
     const L = (await import('leaflet')).default;
     const max = Math.max(1, ...cities.map((c) => c.visits));
 
@@ -154,34 +184,35 @@ const sample = SITE.visitorApi ? undefined : JSON.stringify(VISITORS);
       const share = c.visits / max;
       const level = share > 0.5 ? 'high' : share > 0.2 ? 'mid' : 'low';
       const tip = el('span', '');
-      tip.append(el('strong', '', c.city), `, ${c.country}`, el('br', ''), `${c.visits} visit${c.visits === 1 ? '' : 's'}`);
+      tip.append(el('strong', '', c.city), `, ${c.country}`, el('br', ''), s.lang === 'zh' ? `${c.visits} 次造訪` : `${c.visits} visit${c.visits === 1 ? '' : 's'}`);
       L.circleMarker([c.lat, c.lon], { radius: 5 + 13 * Math.sqrt(share), className: `reach-dot reach-${level}` })
         .bindTooltip(tip, { direction: 'top' })
         .addTo(map);
     }
   }
 
-  function setupToggle(root: HTMLElement) {
+  function setupToggle(root: HTMLElement, s: Strings) {
     const btn = root.querySelector<HTMLButtonElement>('.reach-toggle')!;
     const panel = root.querySelector<HTMLElement>('#reach-stats')!;
     btn.addEventListener('click', () => {
       const open = btn.getAttribute('aria-expanded') !== 'true';
       btn.setAttribute('aria-expanded', String(open));
       panel.hidden = !open;
-      btn.querySelector('.reach-toggle-label')!.textContent = open ? 'Hide statistics' : 'Show statistics';
+      btn.querySelector('.reach-toggle-label')!.textContent = open ? s.hide : s.show;
       btn.querySelector('svg')!.classList.toggle('rotate-180', open);
     });
   }
 
   async function init(root: HTMLElement) {
-    setupToggle(root);
+    const s: Strings = JSON.parse(root.dataset.strings ?? '{}');
+    setupToggle(root, s);
 
     const stats: VisitStats | null = root.dataset.sample ? JSON.parse(root.dataset.sample) : await recordVisit();
     if (!stats) {
-      root.querySelector('.reach-summary')!.textContent = 'Visitor data is unavailable right now.';
+      root.querySelector('.reach-summary')!.textContent = s.unavailable;
       return;
     }
-    renderStats(root, stats);
+    renderStats(root, stats, s);
 
     // Leaflet and the map tiles load only once the map is about to scroll into view.
     const mapEl = root.querySelector<HTMLElement>('.reach-map')!;
@@ -189,7 +220,7 @@ const sample = SITE.visitorApi ? undefined : JSON.stringify(VISITORS);
       (entries) => {
         if (entries.some((e) => e.isIntersecting)) {
           io.disconnect();
-          renderMap(mapEl, stats.cities);
+          renderMap(mapEl, stats.cities, s);
         }
       },
       { rootMargin: '200px' },

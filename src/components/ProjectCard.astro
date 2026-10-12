@@ -1,18 +1,21 @@
 ---
-import type { CollectionEntry } from 'astro:content';
 import Tag from './Tag.astro';
+import type { Project } from '../i18n/content';
+import { getLang, localizePath, t } from '../i18n';
 
 interface Props {
-  project: CollectionEntry<'projects'>;
+  project: Project;
 }
 
 const { project } = Astro.props;
+const lang = getLang(Astro.url);
+const ui = t(lang);
 const { title, subtitle, description, year, status, category, tags, cover } = project.data;
 
 const categoryLabels: Record<typeof category, string> = {
-  research: 'Research',
-  engineering: 'Engineering',
-  experiment: 'Experiment',
+  research: ui['category.research'],
+  engineering: ui['category.engineering'],
+  experiment: ui['category.experiment'],
 };
 
 const categoryStyles: Record<typeof category, string> = {
@@ -22,10 +25,10 @@ const categoryStyles: Record<typeof category, string> = {
 };
 
 const statusLabels: Record<typeof status, string> = {
-  active: 'Active',
-  completed: 'Completed',
-  paused: 'Paused',
-  archived: 'Archived',
+  active: ui['pstatus.active'],
+  completed: ui['pstatus.completed'],
+  paused: ui['pstatus.paused'],
+  archived: ui['pstatus.archived'],
 };
 ---
 
@@ -45,7 +48,7 @@ const statusLabels: Record<typeof status, string> = {
       <span class="font-mono text-xs text-muted">{year} · {statusLabels[status]}</span>
     </div>
     <h3 class="mt-3 text-lg font-semibold leading-snug">
-      <a href={`/projects/${project.id}`} class="transition-colors after:absolute after:inset-0 hover:text-accent-violet">
+      <a href={localizePath(`/projects/${project.slug}`, lang)} class="transition-colors after:absolute after:inset-0 hover:text-accent-violet">
         {title}
       </a>
     </h3>

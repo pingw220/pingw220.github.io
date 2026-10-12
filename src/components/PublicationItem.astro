@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { SITE } from '../config/site';
+import { getLang, localizePath, t } from '../i18n';
 
 /** Compact, academic-style publication entry (home page). The full card is PublicationCard. */
 interface Props {
@@ -8,15 +9,17 @@ interface Props {
 }
 
 const { title, authors, venue, year, links } = Astro.props.publication.data;
+const lang = getLang(Astro.url);
+const ui = t(lang);
 
 const linkEntries = [
-  { label: 'paper', href: links.paper },
-  { label: 'code', href: links.code },
-  { label: 'demo', href: links.demo },
-  { label: 'project', href: links.project },
+  { label: ui['pub.short.paper'], href: links.paper },
+  { label: ui['pub.short.code'], href: links.code },
+  { label: ui['pub.short.demo'], href: links.demo },
+  { label: ui['pub.short.project'], href: links.project && localizePath(links.project, lang) },
 ].filter((l): l is { label: string; href: string } => Boolean(l.href));
 
-const titleHref = links.paper ?? links.project;
+const titleHref = links.paper ?? (links.project && localizePath(links.project, lang));
 ---
 
 <article class="border-l-2 border-accent-violet/50 py-1 pl-5">

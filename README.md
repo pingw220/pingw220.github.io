@@ -29,7 +29,7 @@ npm run check      # astro check (TypeScript + template diagnostics)
 | `src/config/news.ts` | News items on the home page (newest first) |
 | `src/config/music.ts` | Performance videos on the Music page (YouTube ids, titles, dates) |
 | `src/config/cv.ts` | Education, experience, interests, and skills on the About page — keep in sync with the CV PDF |
-| `src/content/` | Publications and projects (MDX); posts and demos collections are empty for now |
+| `src/content/` | Publications and projects (MDX, projects in `en/` and `zh/`); posts and demos are empty for now |
 | `src/content.config.ts` | Zod schemas for the content collections |
 | `src/components/` | Astro components + the `FilterBar` React island |
 | `src/styles/global.css` | Tailwind v4 theme tokens (colors, fonts) and global styles |
@@ -43,6 +43,18 @@ and About pages and the footer.
 
 **Light / dark mode:** follows the visitor's system setting until they use the toggle in the header;
 the choice is saved in their browser. Light-theme colors are in `src/styles/global.css`.
+
+## Two languages (English / 中文)
+
+English is the default at `/`; Traditional Chinese lives at `/zh/` (e.g. `/zh/about`). The 中文 / EN
+button in the header switches to the same page in the other language.
+
+- **UI text** (menus, headings, labels): `src/i18n/index.ts`, one entry per language.
+- **Your content** in `src/config/` (`site.ts`, `news.ts`, `cv.ts`, `music.ts`): bilingual fields are
+  written as `{ en: '…', zh: '…' }`; a plain string is used for both languages.
+- **Projects:** `src/content/projects/en/<slug>.mdx` and `src/content/projects/zh/<slug>.mdx` — give
+  both files the same name. Paper titles, abstracts, and BibTeX stay in English.
+- **Pages:** each page's markup is in `src/views/`; `src/pages/` and `src/pages/zh/` just render it.
 
 ## Personal assets & branding
 

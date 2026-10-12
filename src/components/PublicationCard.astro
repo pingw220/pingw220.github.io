@@ -2,6 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import Tag from './Tag.astro';
 import { SITE } from '../config/site';
+import { getLang, localizePath, t } from '../i18n';
 
 interface Props {
   publication: CollectionEntry<'publications'>;
@@ -18,22 +19,25 @@ const statusStyles: Record<typeof status, string> = {
   'in-progress': 'border-border text-muted',
 };
 
+const lang = getLang(Astro.url);
+const ui = t(lang);
+
 const statusLabels: Record<typeof status, string> = {
-  published: 'Published',
-  accepted: 'Accepted',
-  preprint: 'Preprint',
-  'under-review': 'Under review',
-  'in-progress': 'In progress',
+  published: ui['status.published'],
+  accepted: ui['status.accepted'],
+  preprint: ui['status.preprint'],
+  'under-review': ui['status.under-review'],
+  'in-progress': ui['status.in-progress'],
 };
 
 const linkEntries = [
-  { label: 'PDF', href: links.paper },
-  { label: 'Code', href: links.code },
-  { label: 'Demo', href: links.demo },
-  { label: 'Project', href: links.project },
+  { label: ui['pub.pdf'], href: links.paper },
+  { label: ui['pub.code'], href: links.code },
+  { label: ui['pub.demo'], href: links.demo },
+  { label: ui['pub.project'], href: links.project && localizePath(links.project, lang) },
 ].filter((l): l is { label: string; href: string } => Boolean(l.href));
 
-const titleHref = links.paper ?? links.project;
+const titleHref = links.paper ?? (links.project && localizePath(links.project, lang));
 ---
 
 <article
@@ -100,7 +104,7 @@ const titleHref = links.paper ?? links.project;
       <summary
         class="inline-flex cursor-pointer select-none items-center gap-1 text-xs font-medium uppercase tracking-wider text-muted transition-colors hover:text-accent-violet"
       >
-        Abstract
+        {ui['pub.abstract']}
         <span class="inline-block transition-transform group-open:rotate-90" aria-hidden="true">›</span>
       </summary>
       <p class="mt-2 text-sm leading-relaxed text-muted">{abstract}</p>
@@ -111,7 +115,7 @@ const titleHref = links.paper ?? links.project;
     bibtex && (
       <details class="group mt-2">
         <summary class="inline-flex cursor-pointer select-none items-center gap-1 text-xs font-medium uppercase tracking-wider text-muted transition-colors hover:text-accent-violet">
-          BibTeX
+          {ui['pub.bibtex']}
           <span class="inline-block transition-transform group-open:rotate-90" aria-hidden="true">
             ›
           </span>

@@ -1,11 +1,13 @@
 ---
 import { PROFILE_LINKS, type IconName } from '../config/site';
+import { getLang, t } from '../i18n';
 
 interface Props {
   class?: string;
 }
 
 const { class: className } = Astro.props;
+const ui = t(getLang(Astro.url));
 
 // 24×24 stroke icons (Lucide-style) plus filled brand marks.
 const ICONS: Record<IconName, { path: string; fill?: boolean }> = {
@@ -25,7 +27,8 @@ const ICONS: Record<IconName, { path: string; fill?: boolean }> = {
 
 <ul class:list={['flex flex-wrap gap-2', className]} aria-label="Profiles and contact">
   {
-    PROFILE_LINKS.map(({ label, short, href, icon }) => {
+    PROFILE_LINKS.map(({ label, key, href, icon }) => {
+      const short = ui[key];
       const external = href.startsWith('http');
       const { path, fill } = ICONS[icon];
       return (

@@ -14,15 +14,21 @@ export interface FilterGroup {
   key: string;
   label: string;
   options: string[];
+  /** Display text for option values (defaults to the value itself). */
+  optionLabels?: Record<string, string>;
 }
 
 interface FilterBarProps {
   groups: FilterGroup[];
   /** CSS selector of the container holding the [data-filter-item] cards. */
   targetSelector: string;
+  /** UI text, for translated pages. */
+  labels?: { all: string; none: string; shown: string };
 }
 
-export default function FilterBar({ groups, targetSelector }: FilterBarProps) {
+const DEFAULT_LABELS = { all: 'All', none: 'No items match the selected filters.', shown: 'shown' };
+
+export default function FilterBar({ groups, targetSelector, labels = DEFAULT_LABELS }: FilterBarProps) {
   const [active, setActive] = useState<Record<string, string | null>>({});
   const [visibleCount, setVisibleCount] = useState<number | null>(null);
 
@@ -69,7 +75,7 @@ export default function FilterBar({ groups, targetSelector }: FilterBarProps) {
             className={buttonClass(!active[group.key])}
             onClick={() => setActive((prev) => ({ ...prev, [group.key]: null }))}
           >
-            All
+            {labels.all}
           </button>
           {group.options.map((option) => {
             const selected = active[group.key] === option;
@@ -81,7 +87,7 @@ export default function FilterBar({ groups, targetSelector }: FilterBarProps) {
                 className={buttonClass(selected)}
                 onClick={() => toggle(group.key, option)}
               >
-                {option}
+                {group.optionLabels?.[option] ?? option}
               </button>
             );
           })}
@@ -89,7 +95,7 @@ export default function FilterBar({ groups, targetSelector }: FilterBarProps) {
       ))}
       <p aria-live="polite" className="min-h-4 text-xs text-muted">
         {visibleCount !== null &&
-          (visibleCount === 0 ? 'No items match the selected filters.' : `${visibleCount} shown`)}
+          (visibleCount === 0 ? labels.none : `${visibleCount} ${labels.shown}`)}
       </p>
     </div>
   );

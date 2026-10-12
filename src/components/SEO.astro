@@ -1,5 +1,6 @@
 ---
 import { SITE } from '../config/site';
+import { getLang, HTML_LANG, LANGS, localizePath, stripLang, tr } from '../i18n';
 
 interface Props {
   title?: string;
@@ -9,7 +10,10 @@ interface Props {
   person?: boolean;
 }
 
-const { title, description = SITE.description, type = 'website', person = false } = Astro.props;
+const lang = getLang(Astro.url);
+const { title, description = tr(SITE.description, lang), type = 'website', person = false } = Astro.props;
+const basePath = stripLang(Astro.url.pathname);
+const alternates = LANGS.map((l) => ({ hreflang: HTML_LANG[l], href: new URL(localizePath(basePath, l), Astro.site) }));
 
 const fullTitle = title ? `${title} · ${SITE.name}` : SITE.title;
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -39,8 +43,11 @@ const personSchema = {
 <title>{fullTitle}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonical} />
+{alternates.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
+<link rel="alternate" hreflang="x-default" href={alternates[0].href} />
 
 <meta property="og:type" content={type} />
+<meta property="og:locale" content={lang === 'zh' ? 'zh_TW' : 'en_US'} />
 <meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />

@@ -1,70 +1,13 @@
 ---
-import { getCollection, render } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Button from '../../components/Button.astro';
-import Tag from '../../components/Tag.astro';
+import Project from '../../views/Project.astro';
+import { getProjects } from '../../i18n/content';
 
 export async function getStaticPaths() {
-  const projects = await getCollection('projects');
-  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+  const projects = await getProjects('en');
+  return projects.map((project) => ({ params: { slug: project.slug }, props: { project } }));
 }
 
 const { project } = Astro.props;
-const { title, subtitle, description, role, year, status, category, tags, links, cover } = project.data;
-const { Content } = await render(project);
-
-const linkEntries = [
-  { label: 'GitHub ↗', href: links.github },
-  { label: 'Paper ↗', href: links.paper },
-  { label: 'Demo', href: links.demo },
-  { label: 'Report ↗', href: links.report },
-].filter((l): l is { label: string; href: string } => Boolean(l.href));
-
-const categoryLabels = { research: 'Research', engineering: 'Engineering', experiment: 'Experiment' } as const;
 ---
 
-<BaseLayout title={title} description={description} type="article">
-  <article class="mx-auto max-w-3xl px-5 py-16">
-    <a href="/projects" class="text-sm text-muted transition-colors hover:text-accent-violet">← All projects</a>
-
-    <header class="mt-6">
-      <p class="font-mono text-xs uppercase tracking-[0.2em] text-accent-violet">
-        {categoryLabels[category]} · {year} · {status}
-      </p>
-      <h1 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
-      {subtitle && <p class="mt-2 text-lg text-accent-violet">{subtitle}</p>}
-      <p class="mt-4 leading-relaxed text-muted">{description}</p>
-      {role && <p class="mt-2 text-sm text-muted"><span class="font-medium text-foreground">Role:</span> {role}</p>}
-
-      {
-        tags.length > 0 && (
-          <ul class="mt-5 flex flex-wrap gap-2" aria-label="Topics">
-            {tags.map((tag) => (
-              <li>
-                <Tag label={tag} />
-              </li>
-            ))}
-          </ul>
-        )
-      }
-
-      {
-        linkEntries.length > 0 && (
-          <div class="mt-6 flex flex-wrap gap-3">
-            {linkEntries.map(({ label, href }, i) => (
-              <Button href={href} variant={i === 0 ? 'primary' : 'secondary'} external={href.startsWith('http')}>
-                {label}
-              </Button>
-            ))}
-          </div>
-        )
-      }
-    </header>
-
-    {cover && <img src={cover} alt="" class="mt-10 w-full rounded-xl border border-border" />}
-
-    <div class="prose prose-invert prose-site mt-10 max-w-none">
-      <Content />
-    </div>
-  </article>
-</BaseLayout>
+<Project {project} />

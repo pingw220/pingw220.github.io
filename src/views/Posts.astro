@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import FilterBar from '../components/FilterBar';
+import { getLang, t } from '../i18n';
+
+const lang = getLang(Astro.url);
+const ui = t(lang);
+
+const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+const tags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
+const filterLabels = { all: ui['filter.all'], none: ui['filter.none'], shown: ui['filter.shown'] };
+
+const description =
+  lang === 'zh'
+    ? '王平的文章：音樂 AI、自動採譜、評估、生成與研究筆記。'
+    : 'Posts by Ping Wang on AI for music: transcription, evaluation, generation, and research notes.';
+---
+
+<BaseLayout title={ui['posts.title']} {description}>
+  <div class="mx-auto max-w-3xl px-5 py-16">
+    <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{ui['posts.title']}</h1>
+    <p class="mt-3 text-muted">{ui['posts.intro']}</p>
+
+    <div class="mt-10">
+      <FilterBar
+        client:load
+        groups={[{ key: 'tags', label: ui['filter.topic'], options: tags }]}
+        labels={filterLabels}
+        targetSelector="#post-list"
+      />
+    </div>
+
+    <div id="post-list" class="space-y-5">
+      {posts.map((post) => <PostCard {post} />)}
+    </div>
+    {
+      posts.length === 0 && (
+        <p class="rounded-lg border border-border bg-card/60 p-6 text-sm text-muted">{ui['posts.empty']}</p>
+      )
+    }
+  </div>
+</BaseLayout>

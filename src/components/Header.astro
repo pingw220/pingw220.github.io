@@ -1,8 +1,13 @@
 ---
 import { NAV_LINKS, SITE } from '../config/site';
+import { getLang, localizePath, stripLang, t } from '../i18n';
 
-const currentPath = Astro.url.pathname;
+const lang = getLang(Astro.url);
+const ui = t(lang);
+const otherLang = lang === 'en' ? 'zh' : 'en';
+const currentPath = stripLang(Astro.url.pathname).replace(/\/$/, '') || '/';
 const isActive = (href: string) => currentPath === href || currentPath.startsWith(`${href}/`);
+const switchHref = localizePath(currentPath, otherLang);
 ---
 
 <header
@@ -10,12 +15,12 @@ const isActive = (href: string) => currentPath === href || currentPath.startsWit
 >
   <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-5 py-3">
     <a
-      href="/"
+      href={localizePath('/', lang)}
       class="group flex items-center gap-2.5 font-semibold tracking-tight text-foreground transition-colors hover:text-accent-violet"
     >
       <img src="/images/branding/logo-mark.png" alt="" width="32" height="32" class="only-dark h-8 w-8" />
       <img src="/images/branding/logo-mark-dark.png" alt="" width="32" height="32" class="only-light h-8 w-8" />
-      <span>{SITE.name}</span>
+      <span>{lang === 'zh' ? SITE.nameZh : SITE.name}</span>
     </a>
 
     <div class="flex items-center gap-1">
@@ -26,7 +31,7 @@ const isActive = (href: string) => currentPath === href || currentPath.startsWit
           NAV_LINKS.map((link) => (
             <li>
               <a
-                href={link.href}
+                href={localizePath(link.href, lang)}
                 aria-current={isActive(link.href) ? 'page' : undefined}
                 class:list={[
                   'rounded-md px-2.5 py-1.5 transition-colors',
@@ -35,7 +40,7 @@ const isActive = (href: string) => currentPath === href || currentPath.startsWit
                     : 'text-muted hover:bg-card hover:text-foreground',
                 ]}
               >
-                {link.label}
+                {ui[link.key]}
               </a>
             </li>
           ))
@@ -43,12 +48,25 @@ const isActive = (href: string) => currentPath === href || currentPath.startsWit
       </ul>
     </nav>
 
+    <!-- Language switch: same page in the other language -->
+    <a
+      href={switchHref}
+      hreflang={otherLang === 'zh' ? 'zh-Hant-TW' : 'en'}
+      lang={otherLang === 'zh' ? 'zh-Hant-TW' : 'en'}
+      aria-label={ui['lang.switchLabel']}
+      class="ml-1 inline-flex h-9 min-w-9 items-center justify-center rounded-full border border-border px-2.5 text-xs font-medium text-muted transition-colors hover:border-accent-violet/60 hover:text-foreground"
+    >
+      {ui['lang.switch']}
+    </a>
+
     <!-- Light / dark toggle -->
     <button
       type="button"
       id="theme-toggle"
       class="ml-1 inline-flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted transition-colors hover:border-accent-violet/60 hover:text-foreground"
-      aria-label="Switch to light mode"
+      aria-label={ui['theme.toLight']}
+      data-label-light={ui['theme.toLight']}
+      data-label-dark={ui['theme.toDark']}
     >
       <!-- Sun (shown in dark mode) -->
       <svg class="only-dark h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
@@ -66,7 +84,9 @@ const isActive = (href: string) => currentPath === href || currentPath.startsWit
       type="button"
       id="menu-toggle"
       class="inline-flex items-center justify-center rounded-md p-2 text-foreground transition-colors hover:bg-card md:hidden"
-      aria-label="Open menu"
+      aria-label={ui['menu.open']}
+      data-label-open={ui['menu.open']}
+      data-label-close={ui['menu.close']}
       aria-controls="mobile-nav"
       aria-expanded="false"
     >
@@ -95,7 +115,7 @@ const isActive = (href: string) => currentPath === href || currentPath.startsWit
         NAV_LINKS.map((link) => (
           <li>
             <a
-              href={link.href}
+              href={localizePath(link.href, lang)}
               aria-current={isActive(link.href) ? 'page' : undefined}
               class:list={[
                 'block rounded-md px-3 py-2.5 text-base transition-colors',
@@ -104,7 +124,7 @@ const isActive = (href: string) => currentPath === href || currentPath.startsWit
                   : 'text-muted hover:bg-card hover:text-foreground',
               ]}
             >
-              {link.label}
+              {ui[link.key]}
             </a>
           </li>
         ))
@@ -118,7 +138,8 @@ const isActive = (href: string) => currentPath === href || currentPath.startsWit
   const themeToggle = document.getElementById('theme-toggle');
   const syncThemeLabel = () => {
     const light = document.documentElement.dataset.theme === 'light';
-    themeToggle?.setAttribute('aria-label', light ? 'Switch to dark mode' : 'Switch to light mode');
+    const label = light ? themeToggle?.dataset.labelDark : themeToggle?.dataset.labelLight;
+    if (label) themeToggle?.setAttribute('aria-label', label);
   };
   syncThemeLabel();
   themeToggle?.addEventListener('click', () => {
@@ -140,7 +161,7 @@ const isActive = (href: string) => currentPath === href || currentPath.startsWit
     if (!toggle || !panel) return;
     panel.hidden = !open;
     toggle.setAttribute('aria-expanded', String(open));
-    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    toggle.setAttribute('aria-label', (open ? toggle.dataset.labelClose : toggle.dataset.labelOpen) ?? '');
     openIcon?.classList.toggle('hidden', open);
     closeIcon?.classList.toggle('hidden', !open);
   }
