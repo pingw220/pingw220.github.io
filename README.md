@@ -35,7 +35,7 @@ npm run check      # astro check (TypeScript + template diagnostics)
 | `src/styles/global.css` | Tailwind v4 theme tokens (colors, fonts) and global styles |
 | `public/cv/ping-wang-cv.pdf` | CV linked from the site |
 | `public/images/profile/ping-wang.jpg` | Portrait on the home and About pages |
-| `public/images/og-default.png` | Social share image |
+| `public/images/og-logo.png` | Square logo shown when the link is shared |
 | `visitor-api/` | Cloudflare Worker behind the Global Reach map |
 
 **Hiding a link:** set any URL in `SITE.social` to `''` and it disappears from the home
@@ -50,8 +50,7 @@ the choice is saved in their browser. Light-theme colors are in `src/styles/glob
   footer) and `logo-mark-512.png` (OG image). `logo-badge.png` is the tiled version used for
   `favicon.ico`, `favicon-32.png`, `favicon-192.png`, and `apple-touch-icon.png`.
 - **Portrait.** `public/images/profile/ping-wang.jpg`, a 420×420 head-and-shoulders crop.
-- **OG image.** `public/images/og-default.png` (1200×630): logo, name, role, and tagline.
-  Regenerate it if your name or role changes.
+- **Share image.** `public/images/og-logo.png` (600×600), the logo badge shown in link previews.
 
 ## Global Reach (visitor statistics)
 

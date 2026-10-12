@@ -5,7 +5,7 @@
 export const SITE = {
   name: 'Ping Wang',
   nameZh: '王平',
-  title: 'Ping Wang · AI for Music',
+  title: 'Ping Wang 王平',
   description:
     'Ping Wang is an undergraduate researcher at the University of Washington working on post-training, multimodal learning, and AI for music. Advised by Prof. Noah A. Smith (UW) and Prof. Yi-Hsuan Yang (NTU).',
   role: 'Undergraduate Researcher · University of Washington',
@@ -15,7 +15,8 @@ export const SITE = {
 
   /** Portrait shown on the home intro and About page (head-and-shoulders square crop). */
   portrait: '/images/profile/ping-wang.jpg',
-  ogImage: '/images/og-default.png',
+  /** Square image shown when the site is shared in chats and social posts. */
+  ogImage: '/images/og-logo.png',
 
   /** Leave a URL empty ('') to hide that link everywhere on the site. */
   social: {
