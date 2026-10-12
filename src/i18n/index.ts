@@ -35,8 +35,12 @@ export function localizePath(path: string, lang: Lang): string {
   return path === '/' ? '/zh/' : `/zh${path}`;
 }
 
+/** Space digits from 年/月/日 in Chinese dates (2026 年 10 月 12 日), matching the site's CJK spacing. */
+export const spaceCjkDate = (s: string) => s.replace(/(\d)([年月日])/g, '$1 $2').replace(/([年月])(\d)/g, '$1 $2');
+
 export function formatDate(date: Date | string, lang: Lang, month: 'short' | 'long' = 'short'): string {
-  return new Date(date).toLocaleDateString(HTML_LANG[lang], { year: 'numeric', month, day: 'numeric', timeZone: 'UTC' });
+  const text = new Date(date).toLocaleDateString(HTML_LANG[lang], { year: 'numeric', month, day: 'numeric', timeZone: 'UTC' });
+  return lang === 'zh' ? spaceCjkDate(text) : text;
 }
 
 const STRINGS = {
@@ -133,6 +137,10 @@ const STRINGS = {
     'reach.countries': 'Top countries',
     'reach.cities': 'Top cities',
     'reach.none': 'No visits yet.',
+    'reach.visitors': 'Visitors',
+    'reach.visits': 'Visits',
+    'reach.countriesCount': 'Countries',
+    'reach.note': 'Visitors are counted once per day; visits count every page view.',
     'notFound.title': "This page doesn't exist",
     'notFound.body': "The note you're looking for was never played — or it moved somewhere else.",
     'notFound.home': 'Back to home',
@@ -230,6 +238,10 @@ const STRINGS = {
     'reach.countries': '熱門國家',
     'reach.cities': '熱門城市',
     'reach.none': '目前還沒有造訪紀錄。',
+    'reach.visitors': '訪客',
+    'reach.visits': '造訪次數',
+    'reach.countriesCount': '國家',
+    'reach.note': '訪客每天只計算一次；造訪次數計入每一次頁面瀏覽。',
     'notFound.title': '找不到這個頁面',
     'notFound.body': '你要找的這個音符從未被演奏過，或者它已經移到別的地方了。',
     'notFound.home': '回到首頁',

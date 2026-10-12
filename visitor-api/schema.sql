@@ -4,7 +4,8 @@ CREATE TABLE IF NOT EXISTS cities (
   country    TEXT    NOT NULL,
   lat        REAL    NOT NULL,
   lon        REAL    NOT NULL,
-  visits     INTEGER NOT NULL DEFAULT 0,
+  visits     INTEGER NOT NULL DEFAULT 0, -- visitors, each counted at most once per day
+  views      INTEGER NOT NULL DEFAULT 0, -- every page view
   first_seen TEXT    NOT NULL DEFAULT (datetime('now')),
   PRIMARY KEY (city, country)
 );

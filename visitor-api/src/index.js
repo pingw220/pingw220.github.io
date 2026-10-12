@@ -10,7 +10,8 @@
  *   POST /visit  → record this visit (if not already counted today), return stats
  *   GET  /stats  → return stats
  *
- * Response: { since: ISO date | null, cities: [{ city, country, lat, lon, visits }] }
+ * Response: { since: ISO date | null, cities: [{ city, country, lat, lon, visits, views }] }
+ *   visits = visitors (each counted at most once per day); views = every page view.
  */
 
 const BOT_UA = /bot|crawl|spider|slurp|preview|headless|lighthouse|monitor|curl|wget|python|http/i;
@@ -47,20 +48,21 @@ async function recordVisit(request, env) {
   const lon = Number(cf.longitude);
   if (!cf.country || !Number.isFinite(lat) || !Number.isFinite(lon)) return;
 
-  // Count each visitor at most once per UTC day without storing their IP.
+  // Every page view counts as a visit; each visitor is counted at most once per
+  // UTC day, using a salted daily hash instead of storing their IP.
   const day = new Date().toISOString().slice(0, 10);
   const ip = request.headers.get('CF-Connecting-IP') ?? '';
   const hash = await sha256(`${env.HASH_SALT ?? ''}|${day}|${ip}`);
   const seen = await env.DB.prepare('INSERT OR IGNORE INTO seen (hash, day) VALUES (?, ?)').bind(hash, day).run();
-  if (!seen.meta.changes) return;
+  const newVisitor = seen.meta.changes ? 1 : 0;
 
   const country = countryName(cf.country);
   const city = cf.city || 'Unknown city';
   await env.DB.batch([
     env.DB.prepare(
-      `INSERT INTO cities (city, country, lat, lon, visits) VALUES (?, ?, ?, ?, 1)
-       ON CONFLICT (city, country) DO UPDATE SET visits = visits + 1`,
-    ).bind(city, country, lat, lon),
+      `INSERT INTO cities (city, country, lat, lon, visits, views) VALUES (?, ?, ?, ?, ?, 1)
+       ON CONFLICT (city, country) DO UPDATE SET visits = visits + excluded.visits, views = views + 1`,
+    ).bind(city, country, lat, lon, newVisitor),
     // Hashes are only needed for today's de-duplication.
     env.DB.prepare('DELETE FROM seen WHERE day < ?').bind(day),
   ]);
@@ -68,7 +70,7 @@ async function recordVisit(request, env) {
 
 async function readStats(env) {
   const [rows, first] = await env.DB.batch([
-    env.DB.prepare('SELECT city, country, lat, lon, visits FROM cities ORDER BY visits DESC'),
+    env.DB.prepare('SELECT city, country, lat, lon, visits, views FROM cities ORDER BY visits DESC'),
     env.DB.prepare("SELECT strftime('%Y-%m-%dT%H:%M:%SZ', MIN(first_seen)) AS since FROM cities"),
   ]);
   return { since: first.results[0]?.since ?? null, cities: rows.results };

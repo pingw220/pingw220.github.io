@@ -2,7 +2,8 @@ import { SITE } from '../config/site';
 
 export interface VisitStats {
   since: string | null;
-  cities: { city: string; country: string; lat: number; lon: number; visits: number }[];
+  /** visits = visitors (each counted at most once per day); views = page views. */
+  cities: { city: string; country: string; lat: number; lon: number; visits: number; views?: number }[];
 }
 
 declare global {

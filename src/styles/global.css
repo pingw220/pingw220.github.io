@@ -150,3 +150,9 @@ body {
   color: var(--color-foreground);
   text-decoration-color: currentColor;
 }
+
+/* Chinese text: add a small gap wherever Chinese meets Latin letters or digits that the
+   source didn't already space (supported in recent browsers; harmless elsewhere). */
+:lang(zh) {
+  text-autospace: normal;
+}

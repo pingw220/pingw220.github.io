@@ -34,6 +34,17 @@ npx wrangler deploy
 `SITE.visitorApi` in `src/config/site.ts`, then commit and push. The site will
 start recording visits and the map will show live data.
 
+## What it counts
+
+- **Visitors** (`visits` column): each visitor at most once per UTC day, per city.
+- **Visits** (`views` column): every page view.
+
+Databases created before page views were counted need a one-time migration:
+
+```sh
+npx wrangler d1 execute visitor-map --remote --file=migrations-0001-views.sql
+```
+
 ## Checking it
 
 ```sh

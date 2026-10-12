@@ -14,6 +14,11 @@ const clientStrings = {
   hide: ui['reach.hide'],
   none: ui['reach.none'],
 };
+const tiles = [
+  { key: 'visitors', label: ui['reach.visitors'] },
+  { key: 'views', label: ui['reach.visits'] },
+  { key: 'countries', label: ui['reach.countriesCount'] },
+];
 
 // With a live API the browser fetches real data; otherwise it renders the sample data.
 const sample = SITE.visitorApi ? undefined : JSON.stringify(VISITORS);
@@ -31,6 +36,18 @@ const sample = SITE.visitorApi ? undefined : JSON.stringify(VISITORS);
   <p class="reach-summary mt-2 min-h-[1.5em] max-w-2xl text-sm leading-relaxed text-muted" aria-live="polite">
     {ui['reach.loading']}
   </p>
+
+  <!-- Totals -->
+  <dl class="mt-5 grid grid-cols-3 gap-3">
+    {
+      tiles.map(({ key, label }) => (
+        <div class="rounded-lg border border-border bg-background/40 px-4 py-3">
+          <dt class="text-xs text-muted">{label}</dt>
+          <dd class="mt-1 text-2xl font-semibold tabular-nums text-foreground" data-total={key}>–</dd>
+        </div>
+      ))
+    }
+  </dl>
 
   <!-- Interactive map (Leaflet, initialised client-side when scrolled into view) -->
   <!-- `isolate` keeps Leaflet’s internal z-indexes (400–1000) from rising above the sticky header. -->
@@ -72,6 +89,7 @@ const sample = SITE.visitorApi ? undefined : JSON.stringify(VISITORS);
     </div>
   </div>
 
+  <p class="mt-5 text-xs text-muted">{ui['reach.note']}</p>
 </section>
 
 <script>
@@ -118,21 +136,23 @@ const sample = SITE.visitorApi ? undefined : JSON.stringify(VISITORS);
     const byCountry = new Map<string, number>();
     for (const c of cities) byCountry.set(c.country, (byCountry.get(c.country) ?? 0) + c.visits);
 
+    const views = cities.reduce((sum, c) => sum + (c.views ?? c.visits), 0);
+    const totals: Record<string, number> = { visitors: total, views, countries: byCountry.size };
+    root.querySelectorAll<HTMLElement>('[data-total]').forEach((node) => {
+      node.textContent = (totals[node.dataset.total ?? ''] ?? 0).toLocaleString(s.locale);
+    });
+
     const sinceDate = since
-      ? new Date(since).toLocaleDateString(s.locale, { year: 'numeric', month: s.lang === 'zh' ? 'long' : 'short', day: 'numeric', timeZone: 'UTC' })
+      ? new Date(since)
+          .toLocaleDateString(s.locale, { year: 'numeric', month: s.lang === 'zh' ? 'long' : 'short', day: 'numeric', timeZone: 'UTC' })
+          .replace(/(\d)([年月日])/g, '$1 $2')
+          .replace(/([年月])(\d)/g, '$1 $2')
       : '';
-    const totalEl = el('strong', 'text-foreground', total.toLocaleString(s.locale));
-    const countriesEl = el('strong', 'text-foreground', String(byCountry.size));
-    root.querySelector('.reach-summary')!.replaceChildren(
-      ...(s.lang === 'zh'
-        ? [sinceDate ? `自 ${sinceDate} 起，已有 ` : '已有 ', totalEl, ' 位訪客來自 ', countriesEl, ' 個國家。']
-        : [
-            totalEl,
-            ` visitor${total === 1 ? '' : 's'} from `,
-            countriesEl,
-            ` ${byCountry.size === 1 ? 'country has' : 'countries have'} visited this site${sinceDate ? ` (since ${sinceDate})` : ''}.`,
-          ]),
-    );
+    root.querySelector('.reach-summary')!.textContent = sinceDate
+      ? s.lang === 'zh'
+        ? `統計自 ${sinceDate} 起。`
+        : `Since ${sinceDate}.`
+      : '';
 
     renderRanking(root.querySelector('.reach-countries')!, [...byCountry].sort((a, b) => b[1] - a[1]).slice(0, TOP_N), s);
     renderRanking(
@@ -184,7 +204,9 @@ const sample = SITE.visitorApi ? undefined : JSON.stringify(VISITORS);
       const share = c.visits / max;
       const level = share > 0.5 ? 'high' : share > 0.2 ? 'mid' : 'low';
       const tip = el('span', '');
-      tip.append(el('strong', '', c.city), `, ${c.country}`, el('br', ''), s.lang === 'zh' ? `${c.visits} 次造訪` : `${c.visits} visit${c.visits === 1 ? '' : 's'}`);
+      tip.append(el('strong', '', c.city), `, ${c.country}`, el('br', ''), s.lang === 'zh'
+          ? `${c.visits} 位訪客 · ${c.views ?? c.visits} 次造訪`
+          : `${c.visits} visitor${c.visits === 1 ? '' : 's'} · ${c.views ?? c.visits} visit${(c.views ?? c.visits) === 1 ? '' : 's'}`);
       L.circleMarker([c.lat, c.lon], { radius: 5 + 13 * Math.sqrt(share), className: `reach-dot reach-${level}` })
         .bindTooltip(tip, { direction: 'top' })
         .addTo(map);
