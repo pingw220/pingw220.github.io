@@ -120,7 +120,8 @@ const sample = SITE.visitorApi ? undefined : JSON.stringify(VISITORS);
 
     const map = L.map(mapEl, {
       worldCopyJump: true,
-      scrollWheelZoom: false, // don't hijack page scrolling
+      scrollWheelZoom: true,
+      wheelPxPerZoomLevel: 120, // gentler wheel zoom steps
       minZoom: 0,
       maxZoom: 8,
       zoomSnap: 0.25,

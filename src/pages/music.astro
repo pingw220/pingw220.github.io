@@ -14,14 +14,15 @@ const formatDate = (iso: string) =>
   <div class="mx-auto max-w-5xl px-5 py-14 sm:py-20">
     <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">Music</h1>
     <p class="mt-3 max-w-2xl leading-relaxed text-muted">
-      I play the cello. These are recordings of my performances — solo, chamber music, and orchestra — from
-      concerts and the National Student Competition of Music.
+      I play the cello. These are recordings of my performances: solo, chamber music, and orchestra, from the
+      University of Washington Campus Philharmonia Orchestras and earlier concerts and competitions in Taiwan.
     </p>
 
     {
-      MUSIC_SECTIONS.map(({ title, performances }) => (
+      MUSIC_SECTIONS.map(({ title, description, performances }) => (
         <section class="mt-14" aria-label={title}>
           <SectionHeading {title} />
+          {description && <p class="-mt-3 mb-6 text-sm text-muted">{description}</p>}
           <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {performances.map((p) => (
               <li class="flex flex-col overflow-hidden rounded-xl border border-border bg-card">
