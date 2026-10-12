@@ -253,7 +253,6 @@ export const MUSIC_SECTIONS: MusicSection[] = [
         id: 'xn3TPRXDgZw',
         title: { en: 'String Orchestra (chosen piece)', zh: '弦樂團（自選曲）' },
         detail: { en: 'National Student Competition of Music', zh: '全國學生音樂比賽' },
-        award: { en: 'National Champion', zh: '全國第一名' },
       },
       {
         id: 'MqtcuYVaLao',
