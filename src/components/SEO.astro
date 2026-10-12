@@ -19,18 +19,19 @@ const personSchema = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: SITE.name,
-  alternateName: [SITE.nameRomanized, SITE.nameZh],
+  alternateName: SITE.nameZh,
   url: Astro.site?.toString(),
   email: `mailto:${SITE.email}`,
-  jobTitle: 'AI for Music Researcher',
+  jobTitle: 'Undergraduate Researcher',
+  affiliation: { '@type': 'CollegeOrUniversity', name: 'University of Washington' },
   knowsAbout: [
     'AI for Music',
-    'Automatic Music Transcription',
     'Music Information Retrieval',
+    'Automatic Music Transcription',
     'Music Generation',
-    'Music Evaluation',
+    'Post-training',
   ],
-  sameAs: [SITE.social.github, SITE.social.scholar, SITE.social.linkedin],
+  sameAs: Object.values(SITE.social).filter(Boolean),
 };
 ---
 

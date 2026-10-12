@@ -3,28 +3,25 @@
  * Update social links, email, images, and the site URL here — every page reads from this file.
  */
 export const SITE = {
-  name: 'Peter Wang',
+  name: 'Ping Wang',
   nameZh: '王平',
-  nameRomanized: 'Ping Wang',
-  title: 'Peter Wang · AI for Music',
+  title: 'Ping Wang · AI for Music',
   description:
-    'Peter Wang is a music-AI researcher and engineer working on automatic music transcription, music information retrieval, generation, and evaluation. Building systems that listen to, understand, and create music.',
-  role: 'Music-AI Researcher & Research Engineer',
-  tagline: 'AI for Music · Transcription · Generation · Evaluation',
-  oneLiner: 'I build systems that listen to, transcribe, evaluate, and generate music.',
-  valueProp:
-    'Research thinking paired with engineering execution — from transcription and evaluation methods to the tooling, demos, and datasets that make them usable.',
-  email: 'claude.ai.uw@gmail.com',
-  cv: '/cv/peter-wang-cv.pdf',
+    'Ping Wang is an undergraduate researcher at the University of Washington working on AI for music: music information retrieval, automatic music transcription, music generation, and post-training. Advised by Prof. Noah A. Smith (UW) and Prof. Yi-Hsuan Yang (NTU).',
+  role: 'Undergraduate Researcher · University of Washington',
+  tagline: 'AI for Music · Transcription · Generation · Post-training',
+  email: 'pingw220@gmail.com',
+  cv: '/cv/ping-wang-cv.pdf',
 
-  /** Portrait shown on the home intro and About page (head-centered square crop). */
-  portrait: '/images/profile/peter-wang-square.jpg',
+  /** Portrait shown on the home intro and About page (head-and-shoulders square crop). */
+  portrait: '/images/profile/ping-wang.jpg',
   ogImage: '/images/og-default.png',
 
+  /** Leave a URL empty ('') to hide that link everywhere on the site. */
   social: {
-    github: 'https://github.com/pingw220',
     scholar: 'https://scholar.google.com/citations?user=cICbXioAAAAJ',
-    linkedin: 'https://www.linkedin.com/in/peter-wang-placeholder', // TODO: replace
+    github: 'https://github.com/pingw220',
+    linkedin: '', // TODO: add your LinkedIn profile URL
   },
 
   /**
@@ -35,11 +32,30 @@ export const SITE = {
   visitorApi: 'https://pingw220-visitor-api.pingw220.workers.dev' as string,
 } as const;
 
+/** People and places linked from the bio, About page, and project pages. */
+export const LINKS = {
+  noahSmith: 'https://homes.cs.washington.edu/~nasmith/',
+  yiHsuanYang: 'https://affige.github.io/',
+  noahsArk: 'https://noahs-ark.github.io/',
+  ntuMusicAi: 'https://affige.github.io/lab.html',
+  ubicomp: 'https://ubicomplab.cs.washington.edu/',
+  allenSchool: 'https://www.cs.washington.edu/',
+} as const;
+
+/** Profile links shown as the row of pills on the home page and in the footer / contact page. */
+export const PROFILE_LINKS = [
+  { label: 'Google Scholar', short: 'Scholar', href: SITE.social.scholar, icon: 'scholar' },
+  { label: 'GitHub', short: 'GitHub', href: SITE.social.github, icon: 'github' },
+  { label: 'LinkedIn', short: 'LinkedIn', href: SITE.social.linkedin, icon: 'linkedin' },
+  { label: 'Email', short: 'Email', href: `mailto:${SITE.email}`, icon: 'email' },
+  { label: 'CV', short: 'CV', href: SITE.cv, icon: 'cv' },
+].filter((link) => link.href) as { label: string; short: string; href: string; icon: IconName }[];
+
+export type IconName = 'scholar' | 'github' | 'linkedin' | 'email' | 'cv';
+
 export const NAV_LINKS = [
   { href: '/about', label: 'About' },
   { href: '/publications', label: 'Publications' },
   { href: '/projects', label: 'Projects' },
-  { href: '/demos', label: 'Demos' },
-  { href: '/posts', label: 'Posts' },
   { href: '/contact', label: 'Contact' },
 ] as const;

@@ -1,126 +1,95 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Hero from '../components/Hero.astro';
 import SectionHeading from '../components/SectionHeading.astro';
-import PublicationCard from '../components/PublicationCard.astro';
+import PublicationItem from '../components/PublicationItem.astro';
 import ProjectCard from '../components/ProjectCard.astro';
-import DemoCard from '../components/DemoCard.astro';
-import PostCard from '../components/PostCard.astro';
+import ProfileLinks from '../components/ProfileLinks.astro';
 import GlobalReach from '../components/GlobalReach.astro';
-import StringDivider from '../components/StringDivider.astro';
-import Button from '../components/Button.astro';
-import { SITE } from '../config/site';
+import { LINKS, SITE } from '../config/site';
+import { NEWS } from '../config/news';
 
-const publications = (await getCollection('publications', ({ data }) => data.featured)).sort(
-  (a, b) => b.data.year - a.data.year,
-);
+const publications = (await getCollection('publications')).sort((a, b) => b.data.year - a.data.year);
 
 const projects = (await getCollection('projects', ({ data }) => data.featured))
   .sort((a, b) => b.data.year - a.data.year)
-  .slice(0, 3);
-
-const demos = (await getCollection('demos', ({ data }) => data.featured)).slice(0, 3);
-
-const posts = (await getCollection('posts', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 3);
+  .slice(0, 4);
 ---
 
 <BaseLayout person>
-  <Hero />
+  <div class="mx-auto max-w-4xl space-y-20 px-5 pt-14 sm:pt-20">
+    <!-- Intro -->
+    <section aria-labelledby="intro" class="grid gap-10 md:grid-cols-[1fr_15rem] md:items-start">
+      <div>
+        <h1 id="intro" class="text-4xl font-bold tracking-tight sm:text-5xl">
+          {SITE.name}
+          <span lang="zh" class="ml-2 align-baseline text-2xl font-normal text-muted sm:text-3xl">{SITE.nameZh}</span>
+        </h1>
+        <p class="mt-3 font-mono text-sm text-muted">// {SITE.role}</p>
 
-  <div class="mx-auto max-w-5xl space-y-24 px-5 pt-20">
-    <!-- Personal intro -->
-    <section aria-labelledby="intro" class="grid items-center gap-8 sm:grid-cols-[auto_1fr]">
+        <div class="rich mt-7 space-y-4 leading-relaxed text-foreground/85">
+          <p>
+            I am an undergraduate in the <a href={LINKS.allenSchool}>Paul G. Allen School of Computer Science &
+            Engineering</a> at the University of Washington, where I am advised by Prof.{' '}
+            <a href={LINKS.noahSmith}>Noah A. Smith</a> in <a href={LINKS.noahsArk}>Noah’s ARK</a>. Since May
+            2026, I have also been a student researcher in the <a href={LINKS.ntuMusicAi}>Music and AI Lab</a> at
+            National Taiwan University, advised by Prof. <a href={LINKS.yiHsuanYang}>Yi-Hsuan Yang</a>.
+          </p>
+          <p>
+            I work on AI for music. I study how to turn audio into sheet music people can read and play, how to
+            evaluate those transcriptions in ways that match human judgment, and how to post-train music
+            generation models with better reward signals. More broadly, I am interested in music information
+            retrieval, symbolic music modeling, audio representation learning, and multimodal learning.
+          </p>
+        </div>
+
+        <ProfileLinks class="mt-7" />
+      </div>
+
       <img
         src={SITE.portrait}
         alt={`Portrait of ${SITE.name}`}
-        width="176"
-        height="176"
-        class="mx-auto h-44 w-44 rounded-2xl border border-border object-cover object-center sm:mx-0"
-        loading="lazy"
+        width="240"
+        height="240"
+        class="mx-auto w-48 rounded-2xl border border-border object-cover shadow-lg shadow-black/20 md:mx-0 md:mt-2 md:w-60"
       />
-      <div>
-        <h2 id="intro" class="sr-only">Introduction</h2>
-        <p class="text-lg leading-relaxed text-foreground">
-          I'm {SITE.name}, a music-AI researcher and engineer. I work on the full pipeline of music
-          understanding — <span class="text-accent-violet">transcribing</span> audio into scores and lead
-          sheets, <span class="text-accent-blue">evaluating</span> how faithful those results really are, and
-          <span class="text-accent-violet">generating</span> new music that stays musically coherent.
-        </p>
-        <p class="mt-3 leading-relaxed text-muted">
-          I care equally about the research idea and the engineering that makes it usable: benchmarks,
-          datasets, tooling, and honest demos. I'm preparing for graduate study and open to research
-          internships and collaborations.
-        </p>
-        <div class="mt-5 flex flex-wrap gap-3">
-          <Button href="/about" variant="secondary">More about me</Button>
-          <Button href="/contact" variant="ghost">Get in touch →</Button>
-        </div>
+    </section>
+
+    <!-- News -->
+    <section aria-labelledby="news">
+      <SectionHeading id="news" title="News" />
+      <ul class="rich divide-y divide-border/60 rounded-xl border border-border bg-card/50">
+        {
+          NEWS.map((item) => (
+            <li class="grid gap-1 px-5 py-3.5 sm:grid-cols-[5rem_1fr] sm:gap-4">
+              <span class="pt-0.5 font-mono text-xs text-muted">{item.date}</span>
+              <p class="text-sm leading-relaxed text-foreground/85">
+                <Fragment set:html={item.html} />
+                {item.links?.map((link) => (
+                  <>
+                    {' '}[<a href={link.href}>{link.label}</a>]
+                  </>
+                ))}
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- Publications -->
+    <section aria-labelledby="publications">
+      <SectionHeading id="publications" title="Publications" href="/publications" linkLabel="All publications" />
+      <div class="space-y-6">
+        {publications.map((publication) => <PublicationItem {publication} />)}
       </div>
     </section>
 
-    <StringDivider />
-
-    <section aria-labelledby="featured-research">
-      <SectionHeading
-        eyebrow="Research"
-        title="Featured research"
-        href="/publications"
-        linkLabel="All publications"
-      />
-      <div class="space-y-5">
-        {publications.map((publication) => <PublicationCard {publication} />)}
-      </div>
-    </section>
-
-    <section aria-labelledby="featured-projects">
-      <SectionHeading eyebrow="Work" title="Featured projects" href="/projects" linkLabel="All projects" />
-      <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    <!-- Projects -->
+    <section aria-labelledby="projects">
+      <SectionHeading id="projects" title="Projects" href="/projects" linkLabel="All projects" />
+      <div class="grid gap-5 sm:grid-cols-2">
         {projects.map((project) => <ProjectCard {project} />)}
-      </div>
-    </section>
-
-    <section aria-labelledby="featured-demos">
-      <SectionHeading eyebrow="Research demos" title="Interactive demos" href="/demos" linkLabel="All demos" />
-      <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {demos.map((demo) => <DemoCard {demo} />)}
-      </div>
-    </section>
-
-    {
-      posts.length > 0 && (
-        <section aria-labelledby="recent-posts">
-          <SectionHeading eyebrow="Writing" title="Recent notes" href="/posts" linkLabel="All posts" />
-          <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {posts.map((post) => <PostCard {post} />)}
-          </div>
-        </section>
-      )
-    }
-
-    <!-- Atmospheric harbor panel -->
-    <section class="relative overflow-hidden rounded-2xl border border-border">
-      <img
-        src="/images/backgrounds/harbor.jpg"
-        alt=""
-        aria-hidden="true"
-        width="1800"
-        height="1199"
-        class="h-56 w-full object-cover object-center sm:h-72"
-        loading="lazy"
-      />
-      <div class="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-background/30"></div>
-      <div class="absolute inset-0 flex flex-col justify-center p-6 sm:p-10">
-        <p class="mb-2 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-accent-violet">
-          <span class="accent-rule inline-block h-px w-6" aria-hidden="true"></span>
-          Between the notes
-        </p>
-        <p class="max-w-md text-lg font-medium leading-snug text-foreground sm:text-xl">
-          Building at the intersection of music and machine learning — one transcription, benchmark, and
-          demo at a time.
-        </p>
       </div>
     </section>
 

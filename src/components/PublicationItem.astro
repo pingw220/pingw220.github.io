@@ -1,0 +1,47 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { SITE } from '../config/site';
+
+/** Compact, academic-style publication entry (home page). The full card is PublicationCard. */
+interface Props {
+  publication: CollectionEntry<'publications'>;
+}
+
+const { title, authors, venue, year, links } = Astro.props.publication.data;
+
+const linkEntries = [
+  { label: 'paper', href: links.paper },
+  { label: 'code', href: links.code },
+  { label: 'demo', href: links.demo },
+  { label: 'project', href: links.project },
+].filter((l): l is { label: string; href: string } => Boolean(l.href));
+
+const titleHref = links.paper ?? links.project;
+---
+
+<article class="border-l-2 border-accent-violet/50 py-1 pl-5">
+  <h3 class="font-semibold leading-snug text-foreground">
+    {titleHref ? <a href={titleHref} class="transition-colors hover:text-accent-violet">{title}</a> : title}
+  </h3>
+  <p class="mt-1.5 text-sm leading-relaxed text-muted">
+    {
+      authors.map((author, i) => (
+        <>
+          <span class:list={[author === SITE.name && 'font-semibold text-foreground']}>{author}</span>
+          {i < authors.length - 1 && ', '}
+        </>
+      ))
+    }
+  </p>
+  <p class="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-sm">
+    <span class="italic text-foreground/90">{venue}</span>
+    <span class="font-mono text-xs text-muted">{year}</span>
+    {
+      linkEntries.map(({ label, href }) => (
+        <a href={href} class="font-mono text-xs text-accent-blue transition-colors hover:text-foreground">
+          [{label}]
+        </a>
+      ))
+    }
+  </p>
+</article>

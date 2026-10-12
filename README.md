@@ -1,8 +1,8 @@
-# Peter Wang — Personal Website
+# Ping Wang — Personal Website
 
-Personal academic/research website built with [Astro](https://astro.build), TypeScript, MDX,
-Tailwind CSS v4, and React islands. Static-first, no database, no CMS — all content is MDX files
-you edit directly.
+Academic homepage for Ping Wang, live at **https://pingw220.github.io**. Built with
+[Astro](https://astro.build), TypeScript, MDX, and Tailwind CSS v4. Static site on GitHub Pages;
+all content is MDX and TypeScript files you edit directly.
 
 ## Setup
 
@@ -25,35 +25,29 @@ npm run check      # astro check (TypeScript + template diagnostics)
 
 | Path | Purpose |
 | --- | --- |
-| `src/config/site.ts` | Your name, email, social links, tagline — edit this first |
-| `astro.config.mjs` | Site URL (used for canonical URLs, sitemap, RSS) — update before deploying |
-| `src/content/` | All content: publications, projects, posts, demos (MDX) |
-| `src/content.config.ts` | Zod schemas for the four content collections |
-| `src/components/` | Astro components + React islands (`FilterBar`, `AnimatedWaveform`) |
+| `src/config/site.ts` | Name, role, email, profile links (Scholar / GitHub / LinkedIn), advisor URLs — edit this first |
+| `src/config/news.ts` | News items on the home page (newest first) |
+| `src/config/cv.ts` | Education, experience, interests, and skills on the About page — keep in sync with the CV PDF |
+| `src/content/` | Publications and projects (MDX); posts and demos collections are empty for now |
+| `src/content.config.ts` | Zod schemas for the content collections |
+| `src/components/` | Astro components + the `FilterBar` React island |
 | `src/styles/global.css` | Tailwind v4 theme tokens (colors, fonts) and global styles |
-| `src/config/visitors.ts` | Data for the Global Reach visitor section (hand-editable) |
-| `public/cv/peter-wang-cv.pdf` | Your CV — **currently a placeholder, replace it** |
-| `public/media/` | Audio/image files referenced by demos |
-| `public/images/branding/` | Logo mark (SVG + PNG), apple-touch-icon |
-| `public/images/profile/` | Portrait — drop `peter-wang.jpg` here and point `SITE.portrait` at it |
-| `public/images/backgrounds/` | Decorative harbor art (swap for a real photo if you like) |
-| `public/images/og-default.png` | Open Graph / social share image |
+| `public/cv/ping-wang-cv.pdf` | CV linked from the site |
+| `public/images/profile/ping-wang.jpg` | Portrait on the home and About pages |
+| `public/images/og-default.png` | Social share image |
+| `visitor-api/` | Cloudflare Worker behind the Global Reach map |
+
+**Hiding a link:** set any URL in `SITE.social` to `''` and it disappears from the home page,
+About page, contact page, and footer. LinkedIn is empty until you add your URL.
 
 ## Personal assets & branding
 
-- **Logo / favicon.** The P-and-violin monogram is `public/images/branding/logo-mark.png`
-  (transparent, used in the nav and footer) and `logo-mark-512.png` (larger, for the OG image and
-  the hero watermark). `logo-badge.png` is the navy-tiled version used to generate `favicon.ico`,
-  `favicon-32.png`, `favicon-192.png`, and `apple-touch-icon.png`. To rebrand, replace these and
-  regenerate the icons.
-- **Portrait.** `public/images/profile/peter-wang.jpg`, shown on the home intro and About page via
-  `SITE.portrait`. The crop is biased toward the top so the face stays in frame — adjust the
-  `object-[50%_18%]` class if needed.
-- **Backgrounds.** `public/images/backgrounds/harbor.jpg` (landscape) is used on the About page and
-  in the home "Between the notes" panel with a dark gradient overlay; `harbor-portrait.jpg` is the
-  vertical version, available if you want it.
-- **OG image.** `public/images/og-default.png` (1200×630) is the social preview, composed from the
-  logo + name + tagline. Regenerate it if you rebrand.
+- **Logo / favicon.** The P-and-violin monogram is `public/images/branding/logo-mark.png` (nav and
+  footer) and `logo-mark-512.png` (OG image). `logo-badge.png` is the tiled version used for
+  `favicon.ico`, `favicon-32.png`, `favicon-192.png`, and `apple-touch-icon.png`.
+- **Portrait.** `public/images/profile/ping-wang.jpg`, a 420×420 head-and-shoulders crop.
+- **OG image.** `public/images/og-default.png` (1200×630): logo, name, role, and tagline.
+  Regenerate it if your name or role changes.
 
 ## Global Reach (visitor statistics)
 
@@ -78,7 +72,7 @@ Create `src/content/publications/my-paper.mdx`:
 ```mdx
 ---
 title: 'Paper Title'
-authors: ['Peter Wang', 'Co Author']
+authors: ['Ping Wang', 'Co Author']
 venue: 'ISMIR 2026'
 year: 2026
 status: 'published' # published | accepted | preprint | under-review | in-progress
@@ -170,12 +164,6 @@ builds and publishes on every push to `main`.
 `site` in `astro.config.mjs` is already set to `https://pingw220.github.io` for canonical URLs,
 the sitemap, and RSS.
 
-## Before you ship (placeholders to replace)
+## Still to fill in
 
-- `public/cv/peter-wang-cv.pdf` — placeholder PDF
-- `src/config/site.ts` — LinkedIn URL is a placeholder; `visitorApi` is empty until the Worker is deployed
-- `public/media/*.wav` — synthesized placeholder audio used by the Audio → Lead Sheet demo
-- `public/images/profile/peter-wang.jpg` — add your real portrait, then point `SITE.portrait` at it
-- `public/images/branding/logo-mark.svg` — recreated logo; swap in your exact artwork if you have it
-- `public/images/backgrounds/harbor-dusk.svg` — generated art; replace with a real photo if desired
-- `src/content/demos/audio-to-leadsheet.mdx` — the one remaining demo, still using placeholder audio
+- `src/config/site.ts` — `SITE.social.linkedin` is empty (the LinkedIn link is hidden until set)

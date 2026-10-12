@@ -69,7 +69,7 @@ const titleHref = links.paper ?? links.project;
     {
       authors.map((author, i) => (
         <>
-          <span class:list={[(author === SITE.name || author === SITE.nameRomanized) && 'font-semibold text-foreground']}>{author}</span>
+          <span class:list={[author === SITE.name && 'font-semibold text-foreground']}>{author}</span>
           {i < authors.length - 1 && ', '}
         </>
       ))

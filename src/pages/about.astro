@@ -2,150 +2,135 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Button from '../components/Button.astro';
 import SectionHeading from '../components/SectionHeading.astro';
-import { SITE } from '../config/site';
+import ProfileLinks from '../components/ProfileLinks.astro';
+import { LINKS, SITE } from '../config/site';
+import {
+  EDUCATION,
+  INDUSTRY_EXPERIENCE,
+  RESEARCH_EXPERIENCE,
+  RESEARCH_INTERESTS,
+  SKILLS,
+  type Entry,
+} from '../config/cv';
 
-const interests = [
-  {
-    name: 'AI for Music',
-    detail: 'Machine-learning systems that listen to, reason about, and create music.',
-  },
-  {
-    name: 'Automatic Music Transcription',
-    detail: 'From raw audio to notes, chords, and structured scores — including lead-sheet transcription.',
-  },
-  {
-    name: 'Music Information Retrieval',
-    detail: 'Representations and analysis methods for understanding musical audio at scale.',
-  },
-  {
-    name: 'Music Generation',
-    detail: 'Controllable symbolic and audio generation, from melody continuation to full arrangements.',
-  },
-  {
-    name: 'Music Evaluation',
-    detail: 'Metrics and human-aligned protocols for judging transcription and generation quality.',
-  },
-  {
-    name: 'LLMs & Multimodal Models',
-    detail: 'Adapting large language and multimodal models to symbolic music and audio understanding.',
-  },
-];
-
-const currently = [
-  'Building a dual-perspective evaluation suite for automatic music transcription.',
-  'Transcribing full-mix audio into lead sheets that musicians can actually play from.',
-  'Studying how tokenization and context length shape what LLMs understand about symbolic music.',
+const sections: { id: string; title: string; entries: Entry[] }[] = [
+  { id: 'education', title: 'Education', entries: EDUCATION },
+  { id: 'research', title: 'Research experience', entries: RESEARCH_EXPERIENCE },
+  { id: 'industry', title: 'Industry experience', entries: INDUSTRY_EXPERIENCE },
 ];
 ---
 
 <BaseLayout
   title="About"
-  description="About Peter Wang — a music-AI researcher and engineer working on transcription, MIR, generation, and evaluation, preparing for graduate study."
+  description="About Ping Wang, an undergraduate researcher at the University of Washington working on AI for music, advised by Prof. Noah A. Smith (UW) and Prof. Yi-Hsuan Yang (NTU)."
 >
-  <div class="mx-auto max-w-3xl px-5 py-16">
-    <!-- Intro with portrait -->
-    <div class="grid items-start gap-8 sm:grid-cols-[auto_1fr]">
+  <div class="mx-auto max-w-4xl px-5 py-14 sm:py-20">
+    <!-- Intro -->
+    <div class="grid gap-8 sm:grid-cols-[10rem_1fr] sm:items-start">
       <img
         src={SITE.portrait}
         alt={`Portrait of ${SITE.name}`}
-        width="150"
-        height="180"
-        class="h-44 w-44 rounded-2xl border border-border object-cover object-center"
-        loading="lazy"
+        width="160"
+        height="160"
+        class="h-40 w-40 rounded-2xl border border-border object-cover"
       />
       <div>
         <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">About</h1>
-        <p class="mt-2 font-mono text-sm text-accent-violet">{SITE.role}</p>
-        <p class="mt-4 leading-relaxed text-muted">
-          I'm <span class="font-medium text-foreground">{SITE.name}</span>
-          (<span lang="zh-Hans" class="text-foreground">{SITE.nameZh}</span>, {SITE.nameRomanized}), a
-          researcher and engineer working on
-          <span class="text-accent-violet">AI for music</span>. I build systems that transcribe audio into
-          scores and lead sheets, measure how faithful those results really are, and generate music that stays
-          controllable and musically coherent.
-        </p>
+        <p class="mt-2 font-mono text-sm text-muted">// {SITE.role}</p>
+        <div class="rich mt-5 space-y-4 leading-relaxed text-foreground/85">
+          <p>
+            I'm {SITE.name} (<span lang="zh">{SITE.nameZh}</span>), an undergraduate studying computer science at
+            the <a href={LINKS.allenSchool}>Paul G. Allen School</a>, University of Washington. I do research in
+            AI for music with Prof. <a href={LINKS.noahSmith}>Noah A. Smith</a> at UW and, since May 2026, with
+            Prof. <a href={LINKS.yiHsuanYang}>Yi-Hsuan Yang</a> in the{' '}
+            <a href={LINKS.ntuMusicAi}>Music and AI Lab</a> at National Taiwan University.
+          </p>
+          <p>
+            My work spans the path from audio to notation and back. I build systems that transcribe songs into
+            lead sheets, design evaluations of music transcription that reflect how people actually read and hear
+            the results, and post-train text-to-music models with rubric-based rewards. I am also working on
+            lyrics-conditioned song generation.
+          </p>
+        </div>
+        <ProfileLinks class="mt-6" />
       </div>
     </div>
-
-    <div class="mt-8 space-y-5 leading-relaxed text-muted">
-      <p>
-        My work sits at the intersection of machine learning and music. I'm drawn to problems where getting the
-        <span class="text-foreground">evaluation</span> right is as hard as the modeling: the field moves fast,
-        but our ability to say whether a transcription is faithful or a generated piece is genuinely good lags
-        behind. I build dual-perspective evaluation protocols, human-aligned metrics, and the benchmark tooling
-        that makes results reproducible.
-      </p>
-      <p>
-        I try to pair <span class="text-foreground">research thinking</span> with
-        <span class="text-foreground">engineering execution</span>. A method that only lives in a notebook
-        doesn't change how people work — so I ship the datasets, the pipelines, and the honest demos alongside
-        the ideas. That combination is what I want to bring to a PhD program and to research internships:
-        careful questions, and the ability to build the systems that answer them.
-      </p>
-      <p>
-        I'm currently preparing for graduate study and open to research internships, collaborations, and
-        full-time research-engineering roles in music AI, MIR, and applied machine learning.
-      </p>
-    </div>
-
-    <!-- Currently -->
-    <section class="mt-12" aria-labelledby="currently">
-      <SectionHeading eyebrow="Right now" title="What I'm working on" />
-      <ul class="space-y-3">
-        {
-          currently.map((item) => (
-            <li class="flex items-start gap-3 rounded-xl border border-border bg-card p-4 text-sm leading-relaxed text-muted">
-              <span class="mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-accent-violet" aria-hidden="true" />
-              <span>{item}</span>
-            </li>
-          ))
-        }
-      </ul>
-    </section>
 
     <!-- Research interests -->
-    <section class="mt-14" aria-labelledby="research-interests">
-      <SectionHeading eyebrow="Focus" title="Research interests" />
-      <ul class="grid gap-4 sm:grid-cols-2">
+    <section class="mt-16" aria-labelledby="interests">
+      <SectionHeading id="interests" title="Research interests" />
+      <ul class="flex flex-wrap gap-2">
         {
-          interests.map((interest) => (
-            <li class="card-hover rounded-xl border border-border bg-card p-4">
-              <h3 class="font-medium text-accent-violet">{interest.name}</h3>
-              <p class="mt-1 text-sm leading-relaxed text-muted">{interest.detail}</p>
-            </li>
+          RESEARCH_INTERESTS.map((interest) => (
+            <li class="rounded-full border border-border bg-card/60 px-3 py-1 text-sm text-foreground/85">{interest}</li>
           ))
         }
       </ul>
     </section>
 
-    <!-- Personal / place -->
-    <figure class="mt-14 overflow-hidden rounded-2xl border border-border">
-      <div class="relative">
-        <img
-          src="/images/backgrounds/harbor.jpg"
-          alt="Harbor waterfront with a weathered pier and distant city skyline"
-          width="1800"
-          height="1199"
-          class="h-44 w-full object-cover object-center sm:h-60"
-          loading="lazy"
-        />
-        <div class="absolute inset-0 bg-gradient-to-t from-card/80 via-transparent to-transparent" aria-hidden="true"></div>
-      </div>
-      <figcaption class="bg-card px-5 py-3 text-sm text-muted">
-        Between projects you'll usually find me by the water with a camera — harbors, ferries, and skylines.
-      </figcaption>
-    </figure>
+    <!-- Education & experience -->
+    {
+      sections.map(({ id, title, entries }) => (
+        <section class="mt-14" aria-labelledby={id}>
+          <SectionHeading {id} {title} />
+          <ol class="space-y-8">
+            {entries.map((entry) => (
+              <li class="rich">
+                <div class="flex flex-wrap items-baseline justify-between gap-x-4">
+                  <h3 class="font-semibold text-foreground">
+                    {entry.orgHref ? <a href={entry.orgHref}>{entry.org}</a> : entry.org}
+                  </h3>
+                  <span class="text-sm text-muted">{entry.place}</span>
+                </div>
+                <div class="flex flex-wrap items-baseline justify-between gap-x-4 text-sm">
+                  <p class="italic text-foreground/80">
+                    {entry.title}
+                    {entry.advisor && (
+                      <>
+                        {' '}— Advisor: <a href={entry.advisor.href}>{entry.advisor.name}</a>
+                      </>
+                    )}
+                  </p>
+                  <span class="font-mono text-xs text-muted">{entry.dates}</span>
+                </div>
+                {entry.points && (
+                  <ul class="mt-3 space-y-2 border-l border-border pl-4 text-sm leading-relaxed text-muted">
+                    {entry.points.map((point) => (
+                      <li>
+                        <span class="font-medium text-foreground">
+                          {point.href ? <a href={point.href}>{point.title}</a> : point.title}
+                        </span>
+                        : {point.text}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ol>
+        </section>
+      ))
+    }
 
-    <!-- CV & contact -->
-    <section class="mt-14" aria-labelledby="cv-contact">
-      <SectionHeading eyebrow="Reach me" title="CV & contact" />
-      <div class="flex flex-wrap items-center gap-3">
-        <Button href={SITE.cv}>Download CV (PDF)</Button>
-        <Button href={`mailto:${SITE.email}`} variant="secondary">Email me</Button>
-        <Button href={SITE.social.github} variant="ghost" external>GitHub ↗</Button>
-        <Button href={SITE.social.scholar} variant="ghost" external>Google Scholar ↗</Button>
-        <Button href={SITE.social.linkedin} variant="ghost" external>LinkedIn ↗</Button>
-      </div>
+    <!-- Skills -->
+    <section class="mt-14" aria-labelledby="skills">
+      <SectionHeading id="skills" title="Skills" />
+      <dl class="grid gap-x-6 gap-y-3 text-sm sm:grid-cols-[10rem_1fr]">
+        {
+          SKILLS.map(({ area, items }) => (
+            <>
+              <dt class="font-medium text-foreground">{area}</dt>
+              <dd class="leading-relaxed text-muted">{items}</dd>
+            </>
+          ))
+        }
+      </dl>
+    </section>
+
+    <!-- CV -->
+    <section class="mt-14 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border bg-card/60 p-6" aria-label="Download CV">
+      <p class="text-sm text-muted">The full version, with coursework and details, is in my CV.</p>
+      <Button href={SITE.cv}>Download CV (PDF)</Button>
     </section>
   </div>
 </BaseLayout>

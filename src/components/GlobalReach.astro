@@ -11,11 +11,9 @@ const sample = SITE.visitorApi ? undefined : JSON.stringify(VISITORS);
   class="reach rounded-2xl border border-border bg-card/60 p-6 sm:p-8"
   data-sample={sample}
 >
-  <p class="mb-2 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-accent-violet">
-    <span class="accent-rule inline-block h-px w-6" aria-hidden="true"></span>
-    Global reach
-  </p>
-  <h2 id="global-reach" class="text-2xl font-semibold tracking-tight">Where readers visit from</h2>
+  <h2 id="global-reach" class="text-2xl font-semibold tracking-tight">
+    <span class="mr-2 font-mono font-normal text-muted/50" aria-hidden="true">//</span>Global Reach
+  </h2>
   <p class="reach-summary mt-2 min-h-[1.5em] max-w-2xl text-sm leading-relaxed text-muted" aria-live="polite">
     Loading visitor data…
   </p>

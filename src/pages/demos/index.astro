@@ -26,13 +26,19 @@ const demos = (await getCollection('demos')).sort((a, b) => a.data.title.localeC
       </svg>
       <p>
         These are <span class="font-medium text-foreground">static demos</span>: each page uses pre-rendered
-        examples and clearly labeled placeholder media. They do not run live model inference in your browser.
+        examples. They do not run live model inference in your browser.
         Where a system exists, the demo links out to its code and project page.
       </p>
     </div>
 
-    <div class="mt-10 grid gap-5 sm:grid-cols-2">
-      {demos.map((demo) => <DemoCard {demo} />)}
-    </div>
+    {
+      demos.length === 0 ? (
+        <p class="mt-10 rounded-lg border border-border bg-card/60 p-6 text-sm text-muted">No demos yet — check back soon.</p>
+      ) : (
+        <div class="mt-10 grid gap-5 sm:grid-cols-2">
+          {demos.map((demo) => <DemoCard {demo} />)}
+        </div>
+      )
+    }
   </div>
 </BaseLayout>

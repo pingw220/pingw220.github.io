@@ -1,16 +1,9 @@
 ---
-import { NAV_LINKS, SITE } from '../config/site';
+import { NAV_LINKS, PROFILE_LINKS, SITE } from '../config/site';
 
 const year = new Date().getFullYear();
 
-const socialLinks = [
-  { label: 'Email', href: `mailto:${SITE.email}`, external: false },
-  { label: 'GitHub', href: SITE.social.github, external: true },
-  { label: 'Google Scholar', href: SITE.social.scholar, external: true },
-  { label: 'LinkedIn', href: SITE.social.linkedin, external: true },
-  { label: 'CV', href: SITE.cv, external: false },
-  { label: 'RSS', href: '/rss.xml', external: false },
-];
+const socialLinks = PROFILE_LINKS.map(({ label, href }) => ({ label, href, external: href.startsWith('http') }));
 ---
 
 <footer class="mt-24 border-t border-border/70 bg-surface/40">
@@ -22,7 +15,7 @@ const socialLinks = [
           {SITE.name}
         </a>
         <p class="mt-3 max-w-xs text-sm leading-relaxed text-muted">
-          {SITE.role} — {SITE.tagline}.
+          {SITE.role}. {SITE.tagline}.
         </p>
       </div>
 
@@ -62,8 +55,8 @@ const socialLinks = [
     </div>
 
     <div class="mt-10 flex flex-col items-start justify-between gap-3 border-t border-border/60 pt-6 text-xs text-muted sm:flex-row sm:items-center">
-      <p>© {year} {SITE.name}. Built with Astro, MDX & Tailwind.</p>
-      <p>Cookieless analytics — only coarse location is recorded.</p>
+      <p>© {year} {SITE.name}</p>
+      <p>No cookies. The visitor map stores only city-level totals.</p>
     </div>
   </div>
 </footer>
