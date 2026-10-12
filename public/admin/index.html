@@ -8,15 +8,21 @@
   <body>
     <!-- Sveltia CMS: edits the site's content in the GitHub repo. Config: ./config.yml -->
     <script src="https://unpkg.com/@sveltia/cms@0.221.8/dist/sveltia-cms.js"></script>
+    <!-- Libraries for the live preview (math, Markdown, code colors), same versions as the site where possible -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@18.0.0/lib/marked.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.18.9/dist/katex.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
     <script>
-      // Editor blocks for media in posts. They write plain Markdown, which the site turns
-      // into players at build time (src/lib/rehype-media.mjs):
+      // ─── Editor blocks for media in posts ───────────────────────────────────────
+      // They write plain Markdown, which the site turns into players at build time
+      // (src/lib/rehype-media.mjs):
       //   ![Caption](/media/uploads/file.mp3)  → audio player
       //   ![Caption](/media/uploads/file.mp4)  → video player
       //   a YouTube link on its own line       → embedded video
       const AUDIO = 'mp3|wav|ogg|oga|m4a|flac|aac';
       const VIDEO = 'mp4|webm|mov|m4v';
-      const escapeAttr = (s) => String(s ?? '').replace(/"/g, '&quot;');
+      const escapeHtml = (s) =>
+        String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
       const mediaComponent = (id, label, exts, tag) => ({
         id,
@@ -28,7 +34,7 @@
         pattern: new RegExp(`^!\\[([^\\]]*)\\]\\((\\S+\\.(?:${exts}))\\)$`, 'm'),
         fromBlock: (m) => ({ caption: m[1], src: m[2] }),
         toBlock: (d) => `![${d.caption || ''}](${d.src || ''})`,
-        toPreview: (d) => `<${tag} controls src="${escapeAttr(d.src)}" style="width:100%"></${tag}>`,
+        toPreview: (d) => `<${tag} controls src="${escapeHtml(d.src)}" style="width:100%"></${tag}>`,
       });
 
       CMS.registerEditorComponent(mediaComponent('audio', 'Audio', AUDIO, 'audio'));
@@ -40,8 +46,140 @@
         pattern: /^(https:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\/\S+)$/m,
         fromBlock: (m) => ({ url: m[1] }),
         toBlock: (d) => d.url || '',
-        toPreview: (d) => `<p>▶ YouTube: ${escapeAttr(d.url)}</p>`,
+        toPreview: (d) => `<p>▶ YouTube: ${escapeHtml(d.url)}</p>`,
       });
+
+      // ─── Live preview that looks like the site ──────────────────────────────────
+      CMS.registerPreviewStyle('https://cdn.jsdelivr.net/npm/katex@0.18.9/dist/katex.min.css');
+      CMS.registerPreviewStyle(
+        `@import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css') (prefers-color-scheme: light);
+         @import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css') (prefers-color-scheme: dark);`,
+        { raw: true },
+      );
+      CMS.registerPreviewStyle('/admin/preview.css');
+
+      // React's createElement: a global `h` in this CMS version, CMS.React in newer ones.
+      const h = window.h ?? CMS.React?.createElement;
+
+      marked.use({
+        gfm: true,
+        renderer: {
+          code({ text, lang }) {
+            const language = (lang || '').trim().split(/\s+/)[0];
+            const html =
+              language && hljs.getLanguage(language)
+                ? hljs.highlight(text, { language }).value
+                : hljs.highlightAuto(text).value;
+            return `<pre><code class="hljs">${html}</code></pre>`;
+          },
+        },
+      });
+
+      function youTubeId(url) {
+        try {
+          const u = new URL(url);
+          if (u.hostname === 'youtu.be') return u.pathname.slice(1) || null;
+          if (/(^|\.)youtube(-nocookie)?\.com$/.test(u.hostname)) {
+            if (u.pathname === '/watch') return u.searchParams.get('v');
+            const m = u.pathname.match(/^\/(embed|shorts|live)\/([^/]+)/);
+            return m ? m[2] : null;
+          }
+        } catch {}
+        return null;
+      }
+
+      /** Markdown → HTML the way the site renders it: KaTeX math, highlighted code, media players. */
+      function renderMarkdown(md, assetUrl) {
+        // Keep code out of the math pass, and math out of the Markdown pass.
+        const code = [];
+        const math = [];
+        let text = String(md || '').replace(/```[\s\S]*?```|`[^`\n]+`/g, (m) => `${code.push(m) - 1}`);
+        text = text.replace(/\$\$([\s\S]+?)\$\$/g, (_, tex) => `${math.push({ tex, display: true }) - 1}`);
+        text = text.replace(
+          /(^|[^\\$])\$([^\s$](?:[^$\n]*?[^\s$])?)\$/g,
+          (_, pre, tex) => `${pre}${math.push({ tex, display: false }) - 1}`,
+        );
+        text = text.replace(/(\d+)/g, (_, i) => code[i]);
+
+        let html = marked.parse(text);
+        html = html.replace(/(\d+)/g, (_, i) => {
+          const { tex, display } = math[i];
+          try {
+            return katex.renderToString(tex, { displayMode: display, throwOnError: false });
+          } catch {
+            return `<span class="math-error">${escapeHtml(tex)}</span>`;
+          }
+        });
+
+        // Audio / video written with image syntax.
+        const mediaTag = (src) => (new RegExp(`\\.(${AUDIO})(\\?|$)`, 'i').test(src) ? 'audio' : new RegExp(`\\.(${VIDEO})(\\?|$)`, 'i').test(src) ? 'video' : null);
+        html = html.replace(/<p>\s*<img src="([^"]+)" alt="([^"]*)"[^>]*>\s*<\/p>/g, (m, src, alt) => {
+          const tag = mediaTag(src);
+          return tag ? `<figure><${tag} controls src="${src}"></${tag}>${alt ? `<figcaption>${alt}</figcaption>` : ''}</figure>` : m;
+        });
+        html = html.replace(/<img src="([^"]+)" alt="([^"]*)"[^>]*>/g, (m, src) => {
+          const tag = mediaTag(src);
+          return tag ? `<${tag} controls src="${src}"></${tag}>` : m;
+        });
+
+        // A YouTube link alone in its paragraph.
+        html = html.replace(/<p>\s*(?:<a href="([^"]+)"[^>]*>[^<]*<\/a>|(https?:\/\/[^\s<]+))\s*<\/p>/g, (m, a, b) => {
+          const id = youTubeId((a || b || '').replace(/&amp;/g, '&'));
+          return id
+            ? `<div class="pv-yt"><iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?rel=0" title="YouTube video" allowfullscreen></iframe></div>`
+            : m;
+        });
+
+        // Show files uploaded in this session before they are saved (after media detection,
+        // which needs the original file extension).
+        html = html.replace(/(src|href)="([^"]+)"/g, (m, attr, url) => `${attr}="${escapeHtml(assetUrl(url))}"`);
+        return html;
+      }
+
+      const formatDate = (value) => {
+        if (!value) return '';
+        const d = new Date(value);
+        return isNaN(d) ? String(value) : d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+      };
+
+      /** Shared preview: post or project header, then the rendered body. */
+      const makePreview =
+        ({ kind }) =>
+        ({ entry, getAsset }) => {
+          const data = entry.get('data');
+          const get = (key) => data?.get(key);
+          const toJS = (v) => (v && typeof v.toJS === 'function' ? v.toJS() : v);
+          const assetUrl = (path) => {
+            if (!path || /^(https?:|mailto:|data:|blob:|#)/.test(path)) return path || '';
+            const asset = getAsset?.(path);
+            const url = asset ? String(asset) : '';
+            return url && !url.endsWith(path) ? url : path;
+          };
+          const tags = toJS(get('tags')) || [];
+          const meta =
+            kind === 'post'
+              ? formatDate(get('date'))
+              : [get('category'), get('year'), get('status')].filter(Boolean).join(' · ');
+          const body = renderMarkdown(get('body'), assetUrl);
+          const cover = get('cover');
+
+          return h(
+            'article',
+            { className: 'pv' },
+            meta && h('div', { className: 'pv-meta' }, meta),
+            h('h1', { className: 'pv-title', 'data-key-path': 'title' }, get('title') || 'Untitled'),
+            kind === 'project' && get('subtitle') && h('p', { className: 'pv-subtitle', 'data-key-path': 'subtitle' }, get('subtitle')),
+            get('description') && h('p', { className: 'pv-desc', 'data-key-path': 'description' }, get('description')),
+            kind === 'project' && get('role') && h('p', { className: 'pv-meta' }, get('role')),
+            tags.length > 0 && h('ul', { className: 'pv-tags' }, tags.map((t, i) => h('li', { key: i }, t))),
+            cover && h('img', { className: 'pv-cover', src: assetUrl(cover), alt: '' }),
+            h('hr', { className: 'pv-hr' }),
+            h('div', { className: 'pv-body', 'data-key-path': 'body', dangerouslySetInnerHTML: { __html: body } }),
+          );
+        };
+
+      CMS.registerPreviewTemplate('posts', makePreview({ kind: 'post' }));
+      CMS.registerPreviewTemplate('projects', makePreview({ kind: 'project' }));
     </script>
   </body>
 </html>

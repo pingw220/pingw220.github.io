@@ -61,6 +61,12 @@ commits to this GitHub repo, and the site rebuilds automatically (about 1–2 mi
 | Profile & pages → About page (CV) | Interests, education, experience, skills | `src/data/cv.json` |
 | Profile & pages → Music | Performance videos | `src/data/music.json` |
 
+**Editor layout:** the editor is on the left and a live preview on the right (drag the divider to
+resize; scroll stays in sync). Posts and projects open in plain Markdown, like HackMD — switch to
+*Rich text* in the body field's menu for the Image / Audio / Video / YouTube buttons. The preview
+renders math, code colors, and media the same way the site does (`public/admin/index.html`,
+`public/admin/preview.css`).
+
 **Writing posts** (Markdown):
 
 - Math: `$E = mc^2$` inline, `$$ … $$` on its own lines for display equations (KaTeX).

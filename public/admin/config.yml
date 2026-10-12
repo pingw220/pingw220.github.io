@@ -12,7 +12,7 @@ backend:
 
 site_url: https://pingw220.github.io
 display_url: https://pingw220.github.io
-logo_url: /images/branding/logo-mark-512.png
+logo_url: /images/branding/logo-badge.png
 
 # Files uploaded from the editor (images, audio, video) go here and are served from /media/uploads.
 media_folder: /public/media/uploads
@@ -50,7 +50,11 @@ collections:
       - { name: tags, label: Tags, widget: list, required: false, default: [], hint: 'Used by the topic filter, e.g. latex, music, notes' }
       - { name: draft, label: Draft (hidden from the site), widget: boolean, default: false, required: false }
       - { name: cover, label: Cover image, widget: image, required: false }
-      - { name: body, label: Body, widget: richtext }
+      - name: body
+        label: Body
+        widget: richtext
+        # Write Markdown directly (like HackMD); switch to rich text for the Image/Audio/Video/YouTube buttons.
+        modes: [raw, rich_text]
 
   # ─────────────────────────── Publications ───────────────────────────
   - name: publications
@@ -124,7 +128,7 @@ collections:
           - { name: report, label: Report URL, widget: string, required: false }
       - { name: featured, label: Featured on the home page, widget: boolean, default: false, required: false, i18n: duplicate }
       - { name: cover, label: Cover image, widget: image, required: false, i18n: duplicate }
-      - { name: body, label: Body, widget: richtext, i18n: true }
+      - { name: body, label: Body, widget: richtext, modes: [raw, rich_text], i18n: true }
 
   # ───────────────────────── Profile & pages ─────────────────────────
   - name: settings
