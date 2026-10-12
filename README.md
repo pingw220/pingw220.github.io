@@ -61,7 +61,7 @@ button in the header switches to the same page in the other language.
 - **Logo / favicon.** The P-and-violin monogram is `public/images/branding/logo-mark.png` (nav and
   footer) and `logo-mark-512.png` (OG image). `logo-badge.png` is the tiled version used for
   `favicon.ico`, `favicon-32.png`, `favicon-192.png`, and `apple-touch-icon.png`.
-- **Portrait.** `public/images/profile/ping-wang.jpg`, a 420×420 head-and-shoulders crop.
+- **Portrait.** `public/images/profile/ping-wang.jpg`, a 480×480 head-and-shoulders crop.
 - **Share image.** `public/images/og-logo.png` (600×600), the logo badge shown in link previews.
 
 ## Global Reach (visitor statistics)
