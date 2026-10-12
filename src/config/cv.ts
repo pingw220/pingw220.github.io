@@ -5,14 +5,15 @@
 import { LINKS } from './site';
 
 export const RESEARCH_INTERESTS = [
-  'Music Information Retrieval',
+  'Post-training',
+  'Multimodal Learning',
+  'Reinforcement Learning',
+  'Generative AI',
   'Music Generation',
   'Automatic Music Transcription',
   'Audio Representation Learning',
-  'Multimodal Learning',
-  'Reinforcement Learning',
   'Symbolic Music Modeling',
-  'Generative AI',
+  'Music Information Retrieval',
 ];
 
 export interface Entry {
@@ -33,6 +34,12 @@ export const EDUCATION: Entry[] = [
     orgHref: LINKS.allenSchool,
     dates: 'Expected Jun 2027',
   },
+  {
+    org: 'National Experimental High School at Hsinchu Science Park',
+    place: 'Hsinchu, Taiwan',
+    title: 'High School',
+    dates: '2020 – 2023',
+  },
 ];
 
 export const RESEARCH_EXPERIENCE: Entry[] = [
@@ -48,11 +55,6 @@ export const RESEARCH_EXPERIENCE: Entry[] = [
         title: 'SheetSage-Pro',
         href: '/projects/sheetsage-pro',
         text: 'An audio-to-lead-sheet transcription pipeline that extracts melody, chords, beats, downbeats, meter, and song structure from full-song audio.',
-      },
-      {
-        title: 'Lyrics-to-Song Generation',
-        href: '/projects/lyrics-to-song',
-        text: 'An end-to-end lyrics-conditioned song generation pipeline that connects symbolic lead-sheet generation with arrangement and audio synthesis.',
       },
     ],
   },

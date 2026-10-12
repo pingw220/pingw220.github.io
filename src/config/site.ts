@@ -7,9 +7,9 @@ export const SITE = {
   nameZh: '王平',
   title: 'Ping Wang · AI for Music',
   description:
-    'Ping Wang is an undergraduate researcher at the University of Washington working on AI for music: music information retrieval, automatic music transcription, music generation, and post-training. Advised by Prof. Noah A. Smith (UW) and Prof. Yi-Hsuan Yang (NTU).',
+    'Ping Wang is an undergraduate researcher at the University of Washington working on post-training, multimodal learning, and AI for music. Advised by Prof. Noah A. Smith (UW) and Prof. Yi-Hsuan Yang (NTU).',
   role: 'Undergraduate Researcher · University of Washington',
-  tagline: 'AI for Music · Transcription · Generation · Post-training',
+  tagline: 'Post-training · Multimodal Learning · AI for Music',
   email: 'pingw220@gmail.com',
   cv: '/cv/ping-wang-cv.pdf',
 
