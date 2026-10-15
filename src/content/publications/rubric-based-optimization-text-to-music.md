@@ -8,6 +8,7 @@ abstract: 'Post-training text-to-music generation requires reward signals that c
 tags: ['generation', 'post-training', 'reinforcement-learning', 'evaluation']
 links:
   paper: 'https://arxiv.org/abs/2610.03589'
+  code: 'https://github.com/pingw220/Rubric-Based-Optimization-for-Text-to-Music-Generation'
   project: '/projects/music-rl'
 bibtex: |
   @article{wang2026rubric,

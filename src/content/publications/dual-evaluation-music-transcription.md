@@ -8,6 +8,7 @@ abstract: 'Automatic music transcription systems produce sheet music that can be
 tags: ['amt', 'evaluation', 'mir']
 links:
   paper: 'https://arxiv.org/abs/2608.04511'
+  code: 'https://github.com/pingw220/AMT-Dual-Eval'
   project: '/projects/amt-dual-eval'
 bibtex: |
   @article{wang2026dual,

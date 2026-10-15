@@ -8,6 +8,7 @@ status: 'active'
 category: 'research'
 tags: ['generation', 'post-training', 'reinforcement-learning']
 links:
+  github: 'https://github.com/pingw220/Rubric-Based-Optimization-for-Text-to-Music-Generation'
   paper: 'https://arxiv.org/abs/2610.03589'
 featured: true
 ---

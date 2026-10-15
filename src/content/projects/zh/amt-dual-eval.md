@@ -8,6 +8,7 @@ status: 'active'
 category: 'research'
 tags: ['amt', 'evaluation', 'mir']
 links:
+  github: 'https://github.com/pingw220/AMT-Dual-Eval'
   paper: 'https://arxiv.org/abs/2608.04511'
 featured: true
 ---

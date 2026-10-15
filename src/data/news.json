@@ -11,6 +11,13 @@
             "zh": "論文"
           },
           "href": "https://arxiv.org/abs/2610.03589"
+        },
+        {
+          "label": {
+            "en": "code",
+            "zh": "程式碼"
+          },
+          "href": "https://github.com/pingw220/Rubric-Based-Optimization-for-Text-to-Music-Generation"
         }
       ]
     },
@@ -39,6 +46,13 @@
             "zh": "論文"
           },
           "href": "https://arxiv.org/abs/2608.04511"
+        },
+        {
+          "label": {
+            "en": "code",
+            "zh": "程式碼"
+          },
+          "href": "https://github.com/pingw220/AMT-Dual-Eval"
         }
       ]
     },
