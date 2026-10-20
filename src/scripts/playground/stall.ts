@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { awningTexture, bannerTexture, signTexture } from './textures';
 import { STREET } from './world';
 
-export type StallKind = 'music' | 'posts' | 'novels' | 'anime' | 'travel';
+export type StallKind = 'music' | 'posts' | 'novels' | 'anime' | 'travel' | 'sports' | 'mail';
 
 export interface StallDef {
   /** The world this stall leads into. */
@@ -232,6 +232,46 @@ function buildProps(kind: StallKind, group: THREE.Group, toon: Toon, animated: (
       star.rotation.y = t * 1.5;
       star.position.y = counterTop + 0.35 + Math.sin(t * 2) * 0.05;
     });
+  } else if (kind === 'sports') {
+    // Soccer ball, basketball, and a trophy.
+    const soccer = sphere(0.2, 0xffffff);
+    put(soccer, -0.75, counterTop + 0.2, 0.35);
+    for (let k = 0; k < 6; k++) {
+      const patch = sphere(0.06, 0x222222);
+      const a = (k / 6) * Math.PI * 2;
+      put(patch, -0.75 + Math.cos(a) * 0.17, counterTop + 0.2 + Math.sin(a) * 0.17, 0.42);
+    }
+    const hoopBall = sphere(0.22, 0xe76f2a);
+    put(hoopBall, -0.15, counterTop + 0.22, 0.35);
+    const cup = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.08, 0.32, 16), toon(0xffc93c, { emissive: new THREE.Color(0xffb703), emissiveIntensity: 0.4 }));
+    put(cup, 0.7, counterTop + 0.5, 0.35);
+    put(new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.2, 8), toon(0xffc93c)), 0.7, counterTop + 0.24, 0.35);
+    put(box(0.32, 0.1, 0.32, 0x3d2718), 0.7, counterTop + 0.05, 0.35);
+    for (const s of [-1, 1]) {
+      const handle = new THREE.Mesh(new THREE.TorusGeometry(0.08, 0.02, 6, 12, Math.PI), toon(0xffc93c));
+      handle.rotation.z = s > 0 ? -Math.PI / 2 : Math.PI / 2;
+      put(handle, 0.7 + s * 0.21, counterTop + 0.55, 0.35);
+    }
+    const racket = new THREE.Mesh(new THREE.TorusGeometry(0.16, 0.025, 6, 20), toon(0x3a86ff));
+    racket.scale.y = 1.3;
+    racket.rotation.z = 0.4;
+    put(racket, 0.2, counterTop + 0.55, 0.15);
+    animated.push((t) => (cup.rotation.y = t * 0.8));
+  } else if (kind === 'mail') {
+    const body = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.6, 16), toon(0xd62828));
+    put(body, -0.7, counterTop + 0.3, 0.35);
+    const dome = sphere(0.22, 0xd62828);
+    dome.scale.y = 0.6;
+    put(dome, -0.7, counterTop + 0.6, 0.35);
+    put(box(0.2, 0.03, 0.02, 0x1a1a1a), -0.7, counterTop + 0.48, 0.57);
+    for (let i = 0; i < 4; i++) {
+      const env = box(0.42, 0.02, 0.28, [0xfff6e3, 0xfdeaea, 0xeaf4ff, 0xeefbe8][i]);
+      env.rotation.y = (i - 1.5) * 0.15;
+      put(env, 0.35, counterTop + 0.02 + i * 0.025, 0.35);
+    }
+    const heart = sphere(0.09, 0xff6b9a, { emissive: new THREE.Color(0xff6b9a), emissiveIntensity: 0.8 });
+    put(heart, 0.35, counterTop + 0.35, 0.35);
+    animated.push((t) => (heart.position.y = counterTop + 0.35 + Math.sin(t * 2.5) * 0.06));
   } else if (kind === 'travel') {
     const suitcase = box(0.7, 0.48, 0.25, 0x2f8f8a);
     put(suitcase, -0.6, counterTop + 0.24, 0.35);

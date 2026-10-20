@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Inbox · Ping Wang</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #f8f7fb;
+        --card: #ffffff;
+        --fg: #22213a;
+        --muted: #6b6880;
+        --border: #e3e0ec;
+        --accent: #6d4ad8;
+        --danger: #c0392b;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #12142a;
+          --card: #1a1d3a;
+          --fg: #ecebf5;
+          --muted: #a7a4c0;
+          --border: #2e3160;
+          --accent: #b49cff;
+          --danger: #ff7b6b;
+        }
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font: 15px/1.6 Inter, system-ui, -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+      }
+      main {
+        max-width: 46rem;
+        margin: 0 auto;
+        padding: 2rem 1rem 4rem;
+      }
+      h1 {
+        margin: 0 0 0.25rem;
+        font-size: 1.6rem;
+      }
+      p.muted {
+        color: var(--muted);
+        margin-top: 0;
+      }
+      form,
+      .msg {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1rem 1.1rem;
+      }
+      form {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin: 1.25rem 0;
+      }
+      input {
+        flex: 1;
+        min-width: 14rem;
+        padding: 0.55rem 0.7rem;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: var(--bg);
+        color: var(--fg);
+        font: inherit;
+      }
+      button {
+        padding: 0.5rem 0.9rem;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: var(--accent);
+        color: white;
+        font: inherit;
+        cursor: pointer;
+      }
+      button.ghost {
+        background: transparent;
+        color: var(--muted);
+      }
+      button.danger {
+        background: transparent;
+        color: var(--danger);
+        border-color: currentColor;
+      }
+      .msg {
+        margin-top: 0.75rem;
+      }
+      .meta {
+        display: flex;
+        gap: 0.6rem;
+        align-items: center;
+        flex-wrap: wrap;
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+      .badge {
+        border-radius: 999px;
+        padding: 0.05rem 0.55rem;
+        border: 1px solid currentColor;
+        font-size: 0.75rem;
+      }
+      .badge.public {
+        color: #2a9d8f;
+      }
+      .badge.private {
+        color: var(--accent);
+      }
+      .body {
+        white-space: pre-wrap;
+        margin: 0.5rem 0 0.25rem;
+      }
+      .row {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: start;
+      }
+      #status {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>💌 Inbox</h1>
+      <p class="muted">Messages left at the Playground’s post office. Private messages are only shown here.</p>
+      <form id="key-form">
+        <input id="key" type="password" autocomplete="off" placeholder="Admin key" aria-label="Admin key" />
+        <button type="submit">Open inbox</button>
+        <button type="button" class="ghost" id="forget">Forget key</button>
+      </form>
+      <p id="status"></p>
+      <div id="list"></div>
+    </main>
+    <script>
+      const API = 'https://pingw220-visitor-api.pingw220.workers.dev';
+      const STORE = 'inbox-admin-key';
+      const $ = (id) => document.getElementById(id);
+      const status = (t) => ($('status').textContent = t);
+      const getKey = () => {
+        try {
+          return localStorage.getItem(STORE) || '';
+        } catch {
+          return '';
+        }
+      };
+      const setKey = (k) => {
+        try {
+          k ? localStorage.setItem(STORE, k) : localStorage.removeItem(STORE);
+        } catch {}
+      };
+
+      async function load() {
+        const key = getKey();
+        $('list').replaceChildren();
+        if (!key) return status('Enter your admin key to read messages.');
+        status('Loading…');
+        const res = await fetch(`${API}/inbox`, { headers: { Authorization: `Bearer ${key}` } }).catch(() => null);
+        if (!res) return status('Could not reach the server.');
+        if (res.status === 401) return status('That key was not accepted.');
+        const { messages } = await res.json();
+        status(messages.length ? `${messages.length} message${messages.length === 1 ? '' : 's'}` : 'No messages yet.');
+        for (const m of messages) {
+          const card = document.createElement('div');
+          card.className = 'msg';
+          const row = document.createElement('div');
+          row.className = 'row';
+          const meta = document.createElement('div');
+          meta.className = 'meta';
+          const who = document.createElement('strong');
+          who.textContent = m.name || 'Anonymous';
+          const badge = document.createElement('span');
+          badge.className = `badge ${m.public ? 'public' : 'private'}`;
+          badge.textContent = m.public ? 'Public' : 'Private';
+          const when = document.createElement('span');
+          when.textContent = new Date(m.date).toLocaleString();
+          meta.append(who, badge, when);
+          const del = document.createElement('button');
+          del.className = 'danger';
+          del.textContent = 'Delete';
+          del.addEventListener('click', async () => {
+            if (!confirm('Delete this message?')) return;
+            const r = await fetch(`${API}/messages/${m.id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${getKey()}` } });
+            if (r.ok) card.remove();
+          });
+          row.append(meta, del);
+          const body = document.createElement('p');
+          body.className = 'body';
+          body.textContent = m.message;
+          card.append(row, body);
+          $('list').append(card);
+        }
+      }
+
+      $('key-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        setKey($('key').value.trim());
+        $('key').value = '';
+        load();
+      });
+      $('forget').addEventListener('click', () => {
+        setKey('');
+        load();
+      });
+      load();
+    </script>
+  </body>
+</html>

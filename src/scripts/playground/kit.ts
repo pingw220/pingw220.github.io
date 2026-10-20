@@ -190,3 +190,32 @@ export function buildExitDoor(scene: THREE.Scene, kit: Kit, x: number, z: number
   scene.add(door);
   return { door, hits: [leaf, lintel, sign] };
 }
+
+/** Use a photo/cover when there is one (falls back to the drawn texture if it can't load). */
+export function imageOr(url: string | undefined, fallback: () => THREE.Texture): THREE.Texture {
+  const drawn = fallback();
+  if (!url) return drawn;
+  const loader = new THREE.TextureLoader();
+  loader.setCrossOrigin('anonymous');
+  const tex = loader.load(
+    url,
+    // The photo is a different size than the placeholder: free the GPU copy so it's reallocated.
+    (t) => {
+      t.dispose();
+      t.needsUpdate = true;
+    },
+    undefined,
+    () => {
+      // Couldn't load (offline, blocked): keep showing the drawn texture.
+      tex.image = drawn.image as HTMLImageElement;
+      tex.dispose();
+      tex.needsUpdate = true;
+    },
+  );
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = 4;
+  // Until it arrives, show the drawn version.
+  tex.image = drawn.image as HTMLImageElement;
+  tex.needsUpdate = true;
+  return tex;
+}

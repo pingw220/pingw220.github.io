@@ -5,6 +5,7 @@ import MusicSections from '../components/MusicSections.astro';
 import PostCard from '../components/PostCard.astro';
 import { LIBRARY, type LibraryShelf } from '../config/library';
 import { MUSIC_SECTIONS } from '../config/music';
+import { SITE } from '../config/site';
 import { formatDate, getLang, localizePath, t, tr } from '../i18n';
 import type { PlaygroundData } from '../scripts/playground/types';
 
@@ -19,13 +20,15 @@ const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
 // `panel` is its list view.
 const STALLS = [
   { world: 'studio', panel: 'music', emoji: '🎻', color: '#e76f51', side: -1, z: 3 },
-  { world: 'postoffice', panel: 'posts', emoji: '📝', color: '#2a9d8f', side: 1, z: -2 },
+  { world: 'writing', panel: 'posts', emoji: '📝', color: '#2a9d8f', side: 1, z: -2 },
   { world: 'library', panel: 'novels', emoji: '📚', color: '#9b5de5', side: -1, z: -7 },
   { world: 'theater', panel: 'anime', emoji: '📺', color: '#f15bb5', side: 1, z: -12 },
   { world: 'station', panel: 'travel', emoji: '✈️', color: '#3fa7d6', side: -1, z: -17 },
+  { world: 'sports', panel: 'sports', emoji: '🏆', color: '#ffb703', side: 1, z: -22 },
+  { world: 'postoffice', panel: 'messages', emoji: '💌', color: '#d62828', side: -1, z: -27 },
 ] as const;
 const stalls = STALLS.map((s) => ({ ...s, label: ui[`stall.${s.panel}`], blurb: ui[`stall.${s.panel}.blurb`] }));
-const shelves: LibraryShelf[] = ['novels', 'anime', 'travel'];
+const shelves: LibraryShelf[] = ['novels', 'anime', 'travel', 'sports'];
 // Full dates (YYYY-MM-DD) are formatted; '2025' or '2025-08' are shown as written.
 const showDate = (date: string) => (/^\d{4}-\d{2}-\d{2}$/.test(date) ? formatDate(date, lang) : date);
 
@@ -36,6 +39,14 @@ const card = (item: (typeof LIBRARY)['novels'][number]) => ({
   date: item.date ? showDate(item.date) : undefined,
   link: item.link,
   image: item.image,
+  imageCredit: item.imageCredit,
+  rating: item.rating,
+  love: item.love,
+  category: item.category ? tr(item.category, lang) || undefined : undefined,
+  review: item.review ? tr(item.review, lang) || undefined : undefined,
+  lat: item.lat,
+  lon: item.lon,
+  home: item.home,
 });
 
 const data: PlaygroundData = {
@@ -48,6 +59,8 @@ const data: PlaygroundData = {
   novels: LIBRARY.novels.map(card),
   anime: LIBRARY.anime.map(card),
   travel: LIBRARY.travel.map(card),
+  sports: (LIBRARY.sports ?? []).map(card),
+  messagesApi: SITE.visitorApi,
   posts: posts.map((p) => ({ title: p.data.title, description: p.data.description, date: formatDate(p.data.date, lang), href: localizePath(`/posts/${p.id}`, lang) })),
   strings: {
     back: ui['pg.back'],
@@ -60,6 +73,24 @@ const data: PlaygroundData = {
     comingSoon: ui['pg.comingSoon'],
     mapNote: ui['pg.mapNote'],
     journal: ui['stall.travel'],
+    fireworks: ui['pg.fireworks'],
+    goats: ui['pg.goats'],
+    writingRoom: ui['pg.writingRoom'],
+    noPosts: ui['pg.noPosts'],
+    writeMessage: ui['pg.writeMessage'],
+    messageBoard: ui['pg.messageBoard'],
+    beFirst: ui['pg.beFirst'],
+    anonymous: ui['pg.anonymous'],
+    lookHint: ui['pg.lookHint'],
+    cardRating: ui['pg.card.rating'],
+    cardLove: ui['pg.card.love'],
+    cardCategory: ui['pg.card.category'],
+    cardReview: ui['pg.card.review'],
+    msgSending: ui['pg.msg.sending'],
+    msgSent: ui['pg.msg.sent'],
+    msgError: ui['pg.msg.error'],
+    msgLimited: ui['pg.msg.limited'],
+    msgNone: ui['pg.msg.none'],
     watch: ui['pg.watch'],
     read: ui['pg.read'],
     open: ui['pg.open'],
@@ -68,6 +99,8 @@ const data: PlaygroundData = {
     promptItem: ui['pg.promptItem'],
     promptItemTouch: ui['pg.promptItemTouch'],
     promptExit: ui['pg.promptExit'],
+    promptLaunch: ui['pg.promptLaunch'],
+    promptLaunchTouch: ui['pg.promptLaunchTouch'],
     promptExitTouch: ui['pg.promptExitTouch'],
     title: ui['pg.title'],
     subtitle: ui['pg.subtitle'],
@@ -76,7 +109,7 @@ const data: PlaygroundData = {
     helpKeysWorld: ui['pg.helpKeysWorld'],
     helpTouchWorld: ui['pg.helpTouchWorld'],
     ...Object.fromEntries(
-      (['studio', 'library', 'theater', 'postoffice', 'station'] as const).flatMap((w) => [
+      (['studio', 'writing', 'library', 'theater', 'station', 'sports', 'postoffice'] as const).flatMap((w) => [
         [`world.${w}`, ui[`pg.world.${w}`]],
         [`world.${w}.hint`, ui[`pg.world.${w}.hint`]],
       ]),
@@ -86,8 +119,8 @@ const data: PlaygroundData = {
 
 const description =
   lang === 'zh'
-    ? '王平的夜市遊樂場：跟著麻糬逛逛音樂工作室、圖書館、動畫劇場、郵局與旅行車站。'
-    : 'Ping Wang’s night-market playground: walk around with Mochi and step into a music studio, a library, an anime theater, a post office, and a travel station.';
+    ? '王平的夜市遊樂場：跟著柴犬麻糬逛逛音樂工作室、書房、圖書館、動畫劇場、旅行車站、運動名人堂與郵局，最後在盡頭放煙火。'
+    : 'Ping Wang’s night-market playground: walk around with Mochi the Shiba and step into a music studio, a writing room, a library, an anime theater, a travel station, a hall of sports GOATs, and a post office, then set off fireworks at the end of the lane.';
 ---
 
 <BaseLayout title={ui['nav.playground']} {description}>
@@ -115,7 +148,13 @@ const description =
       class="market-greeting pointer-events-none absolute bottom-24 left-1/2 hidden w-max max-w-[90%] -translate-x-1/2 rounded-2xl bg-[#fff3dc] px-4 py-2 text-center text-sm font-medium text-[#4a2c1a] shadow-lg sm:bottom-auto sm:top-6"
       role="status"
     >
-      🐭 {ui['pg.greeting']}
+      🐶 {ui['pg.greeting']}
+    </p>
+
+    <!-- Crosshair (while the mouse is captured) and a hint to capture it -->
+    <div class="market-crosshair pointer-events-none absolute left-1/2 top-1/2 hidden h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white/90 shadow-[0_0_6px_rgba(0,0,0,0.6)]" aria-hidden="true"></div>
+    <p class="market-lookhint pointer-events-none absolute left-1/2 top-[45%] hidden -translate-x-1/2 rounded-full bg-[#0b0d2e]/70 px-4 py-2 text-sm text-[#fdf4e3] backdrop-blur">
+      🖱️ {ui['pg.lookHint']}
     </p>
 
     <button
@@ -211,6 +250,32 @@ const description =
               </a>
             </>
           )}
+          {s.panel === 'messages' && (
+            <>
+              <form class="msg-form space-y-3">
+                <label class="block text-sm">
+                  <span class="text-muted">{ui['pg.msg.name']}</span>
+                  <input name="name" maxlength="40" autocomplete="nickname" class="mt-1 w-full rounded-lg border border-border bg-card px-3 py-2 text-foreground" />
+                </label>
+                <label class="block text-sm">
+                  <span class="text-muted">{ui['pg.msg.message']}</span>
+                  <textarea name="message" required maxlength="800" rows="5" class="mt-1 w-full rounded-lg border border-border bg-card px-3 py-2 text-foreground"></textarea>
+                </label>
+                {/* Honeypot: hidden from people, tempting to bots. */}
+                <input name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+                <fieldset class="space-y-1.5 text-sm">
+                  <label class="flex items-center gap-2"><input type="radio" name="visibility" value="private" checked /> 🔒 {ui['pg.msg.private']}</label>
+                  <label class="flex items-center gap-2"><input type="radio" name="visibility" value="public" /> 📌 {ui['pg.msg.public']}</label>
+                </fieldset>
+                <div class="flex items-center gap-3">
+                  <button type="submit" class="rounded-full bg-accent-violet px-5 py-2 text-sm font-semibold text-background transition hover:brightness-110">💌 {ui['pg.msg.send']}</button>
+                  <p class="msg-status text-sm text-muted" role="status"></p>
+                </div>
+              </form>
+              <h3 class="mt-10 text-lg font-semibold">{ui['pg.msg.publicList']}</h3>
+              <ul class="msg-list mt-3 space-y-3"></ul>
+            </>
+          )}
           {s.panel === 'posts' &&
             (posts.length ? (
               <>
@@ -276,6 +341,8 @@ const description =
         </button>
       </div>
       <p class="item-note mt-4 leading-relaxed text-foreground/85"></p>
+      <dl class="item-facts mt-4 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-sm"></dl>
+      <a class="item-credit mt-4 hidden text-xs text-muted underline underline-offset-2 hover:text-foreground" target="_blank" rel="noopener noreferrer"></a>
       <a class="item-link mt-5 hidden text-sm text-accent-blue underline underline-offset-4 hover:text-foreground"></a>
     </div>
   </div>
@@ -304,7 +371,9 @@ const description =
   const panelFor: Record<string, string> = JSON.parse(root.dataset.panels ?? '{}');
   const S = data.strings;
   const touch = matchMedia('(pointer: coarse)').matches;
-  const WORLDS: WorldId[] = ['market', 'studio', 'library', 'theater', 'postoffice', 'station'];
+  const WORLDS: WorldId[] = ['market', 'studio', 'writing', 'library', 'theater', 'station', 'sports', 'postoffice'];
+  const crosshair = root.querySelector<HTMLElement>('.market-crosshair')!;
+  const lookHint = root.querySelector<HTMLElement>('.market-lookhint')!;
 
   help.textContent = touch ? S.helpTouch : S.helpKeys;
 
@@ -324,6 +393,7 @@ const description =
     el.scrollTop = 0;
     el.querySelector<HTMLElement>('.market-close')?.focus();
     engine?.setPaused(true);
+    lookHint.classList.add('hidden');
   }
   function hide(restoreFocus = true) {
     if (!open) return;
@@ -332,6 +402,7 @@ const description =
     backdrop.classList.add('hidden');
     open = null;
     engine?.setPaused(false);
+    if (engine && !touch) lookHint.classList.remove('hidden');
     if (restoreFocus) (lastFocus && document.contains(lastFocus) ? lastFocus : host).focus();
   }
   const openPanel = (panel: string) => {
@@ -344,7 +415,35 @@ const description =
   document.querySelectorAll<HTMLButtonElement>('[data-panel-open]').forEach((b) => b.addEventListener('click', () => openPanel(b.dataset.panelOpen!)));
 
   /** Fill and show the item card. */
-  function showCard(o: { title: string; subtitle?: string; note?: string; media?: HTMLElement | null; link?: { href: string; label: string; external?: boolean } }) {
+  type Facts = { rating?: number; love?: number; category?: string; review?: string };
+  function showCard(o: { title: string; subtitle?: string; note?: string; media?: HTMLElement | null; link?: { href: string; label: string; external?: boolean }; facts?: Facts; credit?: { text: string; href?: string } }) {
+    const facts = itemCard.querySelector<HTMLElement>('.item-facts')!;
+    const rows: [string, string][] = [];
+    const f = o.facts ?? {};
+    if (typeof f.rating === 'number') rows.push([S.cardRating, `${'★'.repeat(Math.floor(f.rating))}${f.rating % 1 >= 0.5 ? '½' : ''}${'☆'.repeat(Math.max(0, 5 - Math.ceil(f.rating)))} ${f.rating}/5`]);
+    if (typeof f.love === 'number') rows.push([S.cardLove, '♥'.repeat(Math.round(f.love)) + '♡'.repeat(Math.max(0, 5 - Math.round(f.love)))]);
+    if (f.category) rows.push([S.cardCategory, f.category]);
+    if (f.review) rows.push([S.cardReview, f.review]);
+    facts.replaceChildren(
+      ...rows.flatMap(([k, v]) => {
+        const dt = document.createElement('dt');
+        dt.className = 'font-medium text-muted';
+        dt.textContent = k;
+        const dd = document.createElement('dd');
+        dd.className = 'whitespace-pre-line text-foreground/90';
+        dd.textContent = v;
+        return [dt, dd];
+      }),
+    );
+    facts.classList.toggle('hidden', rows.length === 0);
+    const credit = itemCard.querySelector<HTMLAnchorElement>('.item-credit')!;
+    credit.classList.toggle('hidden', !o.credit);
+    credit.classList.toggle('block', !!o.credit);
+    if (o.credit) {
+      credit.textContent = o.credit.text;
+      if (o.credit.href) credit.href = o.credit.href;
+      else credit.removeAttribute('href');
+    }
     itemCard.querySelector('.item-title')!.textContent = o.title;
     itemCard.querySelector('.item-subtitle')!.textContent = o.subtitle ?? '';
     const note = itemCard.querySelector<HTMLElement>('.item-note')!;
@@ -392,16 +491,24 @@ const description =
     if (kind === 'video') {
       const video = data.music.flatMap((s) => s.videos.map((v) => ({ ...v, section: s.title }))).find((v) => v.id === raw);
       if (video) showCard({ title: video.title, subtitle: meta(video.detail, video.date), media: youtube(video.id, video.title), link: { href: `https://www.youtube.com/watch?v=${video.id}`, label: S.watch, external: true } });
-    } else if (kind === 'book' || kind === 'anime' || kind === 'place') {
-      const c = (kind === 'book' ? data.novels : kind === 'anime' ? data.anime : data.travel)[i];
-      if (c) showCard({ title: c.title, subtitle: meta(c.subtitle, c.date), note: c.note, media: image(c.image), link: c.link ? { href: c.link, label: S.open, external: true } : undefined });
+    } else if (kind === 'book' || kind === 'anime' || kind === 'place' || kind === 'athlete') {
+      const c = (kind === 'book' ? data.novels : kind === 'anime' ? data.anime : kind === 'place' ? data.travel : data.sports)[i];
+      if (c)
+        showCard({
+          title: `${kind === 'place' ? (c.home ? '🏠 ' : '📍 ') : ''}${c.title}`,
+          subtitle: meta(c.subtitle, c.date),
+          note: c.note,
+          media: image(c.image),
+          link: c.link ? { href: c.link, label: S.open, external: true } : undefined,
+          facts: { rating: c.rating, love: c.love, category: c.category, review: c.review },
+          credit: c.imageCredit,
+        });
+    } else if (kind === 'msg') {
+      const m = messages.find((x) => String(x.id) === raw);
+      if (m) showCard({ title: `💌 ${m.name || S.anonymous}`, subtitle: new Date(m.date).toLocaleDateString(data.lang === 'zh' ? 'zh-Hant-TW' : 'en-US'), note: m.message });
     } else if (kind === 'post') {
       const p = data.posts[i];
       if (p) showCard({ title: p.title, subtitle: p.date, note: p.description, link: { href: p.href, label: S.read } });
-    } else if (item.id === 'mailbox') {
-      showCard({ title: `📮 ${S.mailbox}`, note: data.posts.length ? undefined : S.mailboxNote });
-    } else if (item.id === 'map') {
-      showCard({ title: `🗺️ ${S.journal}`, note: S.mapNote });
     }
   }
 
@@ -426,11 +533,24 @@ const description =
     nearItem = item;
     if (!item) return prompt.classList.add('hidden');
     const action =
-      item.kind === 'enter' ? (touch ? S.promptTouch : S.prompt) : item.kind === 'exit' ? (touch ? S.promptExitTouch : S.promptExit) : touch ? S.promptItemTouch : S.promptItem;
+      item.kind === 'enter'
+        ? touch ? S.promptTouch : S.prompt
+        : item.kind === 'exit'
+          ? touch ? S.promptExitTouch : S.promptExit
+          : item.activate
+            ? touch ? S.promptLaunchTouch : S.promptLaunch
+            : touch ? S.promptItemTouch : S.promptItem;
     prompt.textContent = `${item.emoji ?? ''} ${item.label} · ${action}`;
     prompt.classList.remove('hidden');
   }
   function onActivate(item: Interactable) {
+    if (item.kind === 'station') {
+      if (item.id === 'mailbox') {
+        openPanel('messages');
+        document.querySelector<HTMLTextAreaElement>('.msg-form textarea')?.focus();
+      } else openPanel(panelFor[current]);
+      return;
+    }
     if (item.kind === 'enter') {
       lastStall = item.id;
       engine?.enter(item.id as WorldId);
@@ -458,6 +578,74 @@ const description =
     }
   });
 
+  // ── Guestbook ───────────────────────────────────────────────────────────
+  type Message = { id: number; name: string; message: string; date: string };
+  let messages: Message[] = [];
+  const msgList = document.querySelector<HTMLElement>('.msg-list');
+  const api = (data.messagesApi || '').replace(/\/$/, '');
+  function renderMessages() {
+    window.dispatchEvent(new CustomEvent('playground:messages', { detail: messages }));
+    if (!msgList) return;
+    if (!messages.length) {
+      const li = document.createElement('li');
+      li.className = 'rounded-xl border border-dashed border-border p-4 text-sm text-muted';
+      li.textContent = S.msgNone;
+      return msgList.replaceChildren(li);
+    }
+    msgList.replaceChildren(
+      ...messages.map((m) => {
+        const li = document.createElement('li');
+        li.className = 'rounded-xl border border-border bg-card p-4';
+        const head = document.createElement('p');
+        head.className = 'text-sm font-semibold';
+        head.textContent = `💌 ${m.name || S.anonymous}`;
+        const when = document.createElement('span');
+        when.className = 'ml-2 font-mono text-xs font-normal text-muted';
+        when.textContent = new Date(m.date).toLocaleDateString(data.lang === 'zh' ? 'zh-Hant-TW' : 'en-US');
+        head.append(when);
+        const body = document.createElement('p');
+        body.className = 'mt-1 whitespace-pre-line text-sm leading-relaxed text-foreground/85';
+        body.textContent = m.message;
+        li.append(head, body);
+        return li;
+      }),
+    );
+  }
+  async function loadMessages() {
+    if (!api) return renderMessages();
+    try {
+      const res = await fetch(`${api}/messages`);
+      if (res.ok) messages = (await res.json()).messages ?? [];
+    } catch {}
+    renderMessages();
+  }
+  document.querySelector<HTMLFormElement>('.msg-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.currentTarget as HTMLFormElement;
+    const status = form.querySelector<HTMLElement>('.msg-status')!;
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    const fd = new FormData(form);
+    button.disabled = true;
+    status.textContent = S.msgSending;
+    try {
+      const res = await fetch(`${api}/messages`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: fd.get('name'), message: fd.get('message'), public: fd.get('visibility') === 'public', website: fd.get('website') }),
+      });
+      const out = await res.json().catch(() => ({}));
+      if (out.ok) {
+        status.textContent = S.msgSent;
+        form.reset();
+        loadMessages();
+      } else status.textContent = out.error === 'rate limited' ? S.msgLimited : S.msgError;
+    } catch {
+      status.textContent = S.msgError;
+    }
+    button.disabled = false;
+  });
+  loadMessages();
+
   // ── Start ───────────────────────────────────────────────────────────────
   function hasWebGL() {
     try {
@@ -477,15 +665,18 @@ const description =
     root.classList.remove('hidden');
     fallback.classList.add('hidden');
     try {
-      const [{ startEngine }, { marketWorld }, { studioWorld }, { libraryWorld }, { theaterWorld }, { postOfficeWorld }, { stationWorld }] = await Promise.all([
-        import('../scripts/playground/engine'),
-        import('../scripts/playground/worlds/market'),
-        import('../scripts/playground/worlds/studio'),
-        import('../scripts/playground/worlds/library'),
-        import('../scripts/playground/worlds/theater'),
-        import('../scripts/playground/worlds/postoffice'),
-        import('../scripts/playground/worlds/station'),
-      ]);
+      const [{ startEngine }, { marketWorld }, { studioWorld }, { writingWorld }, { libraryWorld }, { theaterWorld }, { stationWorld }, { sportsWorld }, { postOfficeWorld }] =
+        await Promise.all([
+          import('../scripts/playground/engine'),
+          import('../scripts/playground/worlds/market'),
+          import('../scripts/playground/worlds/studio'),
+          import('../scripts/playground/worlds/writing'),
+          import('../scripts/playground/worlds/library'),
+          import('../scripts/playground/worlds/theater'),
+          import('../scripts/playground/worlds/station'),
+          import('../scripts/playground/worlds/sports'),
+          import('../scripts/playground/worlds/postoffice'),
+        ]);
       const fromHash = location.hash.slice(1) as WorldId;
       const first = WORLDS.includes(fromHash) ? fromHash : 'market';
       if (first !== 'market') lastStall = first;
@@ -495,18 +686,26 @@ const description =
           worlds: {
             market: marketWorld(data),
             studio: studioWorld(data),
+            writing: writingWorld(data),
             library: libraryWorld(data),
             theater: theaterWorld(data),
-            postoffice: postOfficeWorld(data),
             station: stationWorld(data),
+            sports: sportsWorld(data),
+            postoffice: postOfficeWorld(data),
           },
           onNear,
           onActivate,
           onWorldChange,
+          onLookChange(locked) {
+            crosshair.classList.toggle('hidden', !locked);
+            lookHint.classList.toggle('hidden', locked || touch || !!open);
+          },
         },
         first,
       );
       requestAnimationFrame(() => loading.remove());
+      if (!touch) lookHint.classList.remove('hidden');
+      renderMessages();
       host.focus({ preventScroll: true });
       if (first === 'market') {
         greeting.classList.remove('hidden');

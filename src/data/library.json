@@ -13,7 +13,12 @@
         "en": "Guo Jing, raised on the Mongolian steppe, and the clever Huang Rong. The first book of the Condor Trilogy.",
         "zh": "在蒙古草原長大的郭靖與聰慧的黃蓉。「射鵰三部曲」的第一部。"
       },
-      "date": "1957"
+      "date": "1957",
+      "image": "https://covers.openlibrary.org/b/id/15174899-L.jpg",
+      "imageCredit": {
+        "text": "Cover: Open Library",
+        "href": "https://openlibrary.org/search?q=%E5%B0%84%E9%B5%B0%E8%8B%B1%E9%9B%84%E5%82%B3"
+      }
     },
     {
       "title": {
@@ -268,7 +273,12 @@
         "en": "Kiyotaka Ayanokōji at an elite school where students are ranked purely on merit. A light novel series.",
         "zh": "綾小路清隆在以實力評價學生的高度育成高中裡的校園生活。輕小說系列。"
       },
-      "date": "2015"
+      "date": "2015",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/bx94970-q77X5sfRIKvU.jpg",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/manga/94970"
+      }
     }
   ],
   "anime": [
@@ -285,7 +295,12 @@
         "en": "Lena and the Spearhead squadron of the Eighty-Six fight a war the Republic claims is fought by drones. Based on the light novel by Asato Asato.",
         "zh": "蕾娜與「先鋒戰隊」的八六區少年們，在一場共和國宣稱由無人機進行的戰爭中奮戰。改編自安里アサト的輕小說。"
       },
-      "date": "2021"
+      "date": "2021",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx116589-KawXHB6sApFt.jpg",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/116589"
+      }
     },
     {
       "title": {
@@ -300,8 +315,586 @@
         "en": "Sōma Yukihira cooks his way through the elite Tōtsuki culinary academy, one food duel at a time. Based on the manga by Yūto Tsukuda and Shun Saeki.",
         "zh": "幸平創真在名門遠月料理學園，以一場場「食戟」料理對決一路挑戰。改編自附田祐斗與佐伯俊的漫畫。"
       },
-      "date": "2015"
+      "date": "2015",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20923-pNT38pjW3RFH.jpg",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/20923"
+      }
     }
   ],
-  "travel": []
+  "travel": [
+    {
+      "title": {
+        "en": "Taiwan",
+        "zh": "臺灣"
+      },
+      "subtitle": {
+        "en": "Home",
+        "zh": "家"
+      },
+      "lat": 23.7,
+      "lon": 121.0,
+      "home": true
+    },
+    {
+      "title": {
+        "en": "Seattle",
+        "zh": "西雅圖"
+      },
+      "subtitle": {
+        "en": "Home · United States",
+        "zh": "家 · 美國"
+      },
+      "lat": 47.61,
+      "lon": -122.33,
+      "home": true
+    },
+    {
+      "title": {
+        "en": "Osaka",
+        "zh": "大阪"
+      },
+      "subtitle": {
+        "en": "Japan",
+        "zh": "日本"
+      },
+      "lat": 34.69,
+      "lon": 135.5
+    },
+    {
+      "title": {
+        "en": "Kyoto",
+        "zh": "京都"
+      },
+      "subtitle": {
+        "en": "Japan",
+        "zh": "日本"
+      },
+      "lat": 35.01,
+      "lon": 135.77
+    },
+    {
+      "title": {
+        "en": "Tokyo",
+        "zh": "東京"
+      },
+      "subtitle": {
+        "en": "Japan",
+        "zh": "日本"
+      },
+      "lat": 35.68,
+      "lon": 139.69
+    },
+    {
+      "title": {
+        "en": "Hokkaido",
+        "zh": "北海道"
+      },
+      "subtitle": {
+        "en": "Japan",
+        "zh": "日本"
+      },
+      "lat": 43.06,
+      "lon": 141.35
+    },
+    {
+      "title": {
+        "en": "Okinawa",
+        "zh": "沖繩"
+      },
+      "subtitle": {
+        "en": "Japan",
+        "zh": "日本"
+      },
+      "lat": 26.21,
+      "lon": 127.68
+    },
+    {
+      "title": {
+        "en": "Seoul",
+        "zh": "首爾"
+      },
+      "subtitle": {
+        "en": "South Korea",
+        "zh": "韓國"
+      },
+      "lat": 37.57,
+      "lon": 126.98
+    },
+    {
+      "title": {
+        "en": "Busan",
+        "zh": "釜山"
+      },
+      "subtitle": {
+        "en": "South Korea",
+        "zh": "韓國"
+      },
+      "lat": 35.18,
+      "lon": 129.08
+    },
+    {
+      "title": {
+        "en": "Beijing",
+        "zh": "北京"
+      },
+      "subtitle": {
+        "en": "China",
+        "zh": "中國"
+      },
+      "lat": 39.9,
+      "lon": 116.4
+    },
+    {
+      "title": {
+        "en": "Shanghai",
+        "zh": "上海"
+      },
+      "subtitle": {
+        "en": "China",
+        "zh": "中國"
+      },
+      "lat": 31.23,
+      "lon": 121.47
+    },
+    {
+      "title": {
+        "en": "Xi'an",
+        "zh": "西安"
+      },
+      "subtitle": {
+        "en": "China",
+        "zh": "中國"
+      },
+      "lat": 34.34,
+      "lon": 108.94
+    },
+    {
+      "title": {
+        "en": "Shandong",
+        "zh": "山東"
+      },
+      "subtitle": {
+        "en": "China",
+        "zh": "中國"
+      },
+      "lat": 36.67,
+      "lon": 117.0
+    },
+    {
+      "title": {
+        "en": "Thailand",
+        "zh": "泰國"
+      },
+      "subtitle": {
+        "en": "Thailand",
+        "zh": "泰國"
+      },
+      "lat": 13.76,
+      "lon": 100.5
+    },
+    {
+      "title": {
+        "en": "Singapore",
+        "zh": "新加坡"
+      },
+      "subtitle": {
+        "en": "Singapore",
+        "zh": "新加坡"
+      },
+      "lat": 1.35,
+      "lon": 103.82
+    },
+    {
+      "title": {
+        "en": "Malaysia",
+        "zh": "馬來西亞"
+      },
+      "subtitle": {
+        "en": "Malaysia",
+        "zh": "馬來西亞"
+      },
+      "lat": 3.14,
+      "lon": 101.69
+    },
+    {
+      "title": {
+        "en": "Hong Kong",
+        "zh": "香港"
+      },
+      "subtitle": {
+        "en": "Hong Kong",
+        "zh": "香港"
+      },
+      "lat": 22.32,
+      "lon": 114.17
+    },
+    {
+      "title": {
+        "en": "Macau",
+        "zh": "澳門"
+      },
+      "subtitle": {
+        "en": "Macau",
+        "zh": "澳門"
+      },
+      "lat": 22.2,
+      "lon": 113.54
+    },
+    {
+      "title": {
+        "en": "Dubai",
+        "zh": "杜拜"
+      },
+      "subtitle": {
+        "en": "United Arab Emirates",
+        "zh": "阿拉伯聯合大公國"
+      },
+      "lat": 25.2,
+      "lon": 55.27
+    },
+    {
+      "title": {
+        "en": "Turkey",
+        "zh": "土耳其"
+      },
+      "subtitle": {
+        "en": "Turkey",
+        "zh": "土耳其"
+      },
+      "lat": 41.01,
+      "lon": 28.98
+    },
+    {
+      "title": {
+        "en": "Germany",
+        "zh": "德國"
+      },
+      "subtitle": {
+        "en": "Germany",
+        "zh": "德國"
+      },
+      "lat": 51.17,
+      "lon": 10.45
+    },
+    {
+      "title": {
+        "en": "Netherlands",
+        "zh": "荷蘭"
+      },
+      "subtitle": {
+        "en": "Netherlands",
+        "zh": "荷蘭"
+      },
+      "lat": 52.37,
+      "lon": 4.9
+    },
+    {
+      "title": {
+        "en": "Belgium",
+        "zh": "比利時"
+      },
+      "subtitle": {
+        "en": "Belgium",
+        "zh": "比利時"
+      },
+      "lat": 50.85,
+      "lon": 4.35
+    },
+    {
+      "title": {
+        "en": "Vienna",
+        "zh": "維也納"
+      },
+      "subtitle": {
+        "en": "Austria",
+        "zh": "奧地利"
+      },
+      "lat": 48.21,
+      "lon": 16.37
+    },
+    {
+      "title": {
+        "en": "Russia",
+        "zh": "俄羅斯"
+      },
+      "subtitle": {
+        "en": "Russia",
+        "zh": "俄羅斯"
+      },
+      "lat": 55.76,
+      "lon": 37.62
+    },
+    {
+      "title": {
+        "en": "Czech Republic",
+        "zh": "捷克"
+      },
+      "subtitle": {
+        "en": "Czech Republic",
+        "zh": "捷克"
+      },
+      "lat": 50.08,
+      "lon": 14.44
+    },
+    {
+      "title": {
+        "en": "Switzerland",
+        "zh": "瑞士"
+      },
+      "subtitle": {
+        "en": "Switzerland",
+        "zh": "瑞士"
+      },
+      "lat": 46.82,
+      "lon": 8.23
+    },
+    {
+      "title": {
+        "en": "Norway",
+        "zh": "挪威"
+      },
+      "subtitle": {
+        "en": "Norway",
+        "zh": "挪威"
+      },
+      "lat": 59.91,
+      "lon": 10.75
+    },
+    {
+      "title": {
+        "en": "Sweden",
+        "zh": "瑞典"
+      },
+      "subtitle": {
+        "en": "Sweden",
+        "zh": "瑞典"
+      },
+      "lat": 59.33,
+      "lon": 18.07
+    },
+    {
+      "title": {
+        "en": "Denmark",
+        "zh": "丹麥"
+      },
+      "subtitle": {
+        "en": "Denmark",
+        "zh": "丹麥"
+      },
+      "lat": 55.68,
+      "lon": 12.57
+    },
+    {
+      "title": {
+        "en": "Finland",
+        "zh": "芬蘭"
+      },
+      "subtitle": {
+        "en": "Finland",
+        "zh": "芬蘭"
+      },
+      "lat": 60.17,
+      "lon": 24.94
+    },
+    {
+      "title": {
+        "en": "New York",
+        "zh": "紐約"
+      },
+      "subtitle": {
+        "en": "United States",
+        "zh": "美國"
+      },
+      "lat": 40.71,
+      "lon": -74.01
+    },
+    {
+      "title": {
+        "en": "Bay Area",
+        "zh": "灣區"
+      },
+      "subtitle": {
+        "en": "United States",
+        "zh": "美國"
+      },
+      "lat": 37.77,
+      "lon": -122.42
+    },
+    {
+      "title": {
+        "en": "Los Angeles",
+        "zh": "洛杉磯"
+      },
+      "subtitle": {
+        "en": "United States",
+        "zh": "美國"
+      },
+      "lat": 34.05,
+      "lon": -118.24
+    },
+    {
+      "title": {
+        "en": "San Diego",
+        "zh": "聖地牙哥"
+      },
+      "subtitle": {
+        "en": "United States",
+        "zh": "美國"
+      },
+      "lat": 32.72,
+      "lon": -117.16
+    },
+    {
+      "title": {
+        "en": "Boston",
+        "zh": "波士頓"
+      },
+      "subtitle": {
+        "en": "United States",
+        "zh": "美國"
+      },
+      "lat": 42.36,
+      "lon": -71.06
+    },
+    {
+      "title": {
+        "en": "Portland",
+        "zh": "波特蘭"
+      },
+      "subtitle": {
+        "en": "United States",
+        "zh": "美國"
+      },
+      "lat": 45.52,
+      "lon": -122.68
+    },
+    {
+      "title": {
+        "en": "Hawaii",
+        "zh": "夏威夷"
+      },
+      "subtitle": {
+        "en": "United States",
+        "zh": "美國"
+      },
+      "lat": 21.31,
+      "lon": -157.86
+    },
+    {
+      "title": {
+        "en": "Canada",
+        "zh": "加拿大"
+      },
+      "subtitle": {
+        "en": "Canada",
+        "zh": "加拿大"
+      },
+      "lat": 49.28,
+      "lon": -123.12
+    },
+    {
+      "title": {
+        "en": "Australia",
+        "zh": "澳洲"
+      },
+      "subtitle": {
+        "en": "Australia",
+        "zh": "澳洲"
+      },
+      "lat": -33.87,
+      "lon": 151.21
+    },
+    {
+      "title": {
+        "en": "New Zealand",
+        "zh": "紐西蘭"
+      },
+      "subtitle": {
+        "en": "New Zealand",
+        "zh": "紐西蘭"
+      },
+      "lat": -36.85,
+      "lon": 174.76
+    }
+  ],
+  "sports": [
+    {
+      "title": {
+        "en": "Lionel Messi",
+        "zh": "梅西"
+      },
+      "subtitle": {
+        "en": "Football · Argentina",
+        "zh": "足球 · 阿根廷"
+      },
+      "note": {
+        "en": "Eight-time Ballon d’Or winner and captain of Argentina’s 2022 FIFA World Cup–winning team.",
+        "zh": "八度榮獲金球獎，並以隊長身分帶領阿根廷贏得 2022 年世界盃冠軍。"
+      },
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c8/Leo_Messi_Argentina_v_Egypt_7_July_2026-1.jpg/960px-Leo_Messi_Argentina_v_Egypt_7_July_2026-1.jpg",
+      "imageCredit": {
+        "text": "Photo: Bryan Berlin / CC BY-SA 4.0, via Wikimedia Commons",
+        "href": "https://commons.wikimedia.org/wiki/File:Leo_Messi_Argentina_v_Egypt_7_July_2026-1.jpg"
+      }
+    },
+    {
+      "title": {
+        "en": "Novak Djokovic",
+        "zh": "喬科維奇"
+      },
+      "subtitle": {
+        "en": "Tennis · Serbia",
+        "zh": "網球 · 塞爾維亞"
+      },
+      "note": {
+        "en": "Holds the record for the most Grand Slam men’s singles titles, and won Olympic gold at Paris 2024.",
+        "zh": "保持男子網球大滿貫單打冠軍次數紀錄，並在 2024 年巴黎奧運奪得金牌。"
+      },
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d1/Novak_Djokovic_Paris_2024_Olympic_Games_%28cropped%29.jpg/960px-Novak_Djokovic_Paris_2024_Olympic_Games_%28cropped%29.jpg",
+      "imageCredit": {
+        "text": "Photo: Andymiah / CC BY-SA 4.0, via Wikimedia Commons",
+        "href": "https://commons.wikimedia.org/wiki/File:Novak_Djokovic_Paris_2024_Olympic_Games_(cropped).jpg"
+      }
+    },
+    {
+      "title": {
+        "en": "LeBron James",
+        "zh": "詹皇 LeBron James"
+      },
+      "subtitle": {
+        "en": "Basketball · United States",
+        "zh": "籃球 · 美國"
+      },
+      "note": {
+        "en": "Four-time NBA champion and the league’s all-time leading scorer.",
+        "zh": "四度贏得 NBA 總冠軍，也是 NBA 史上得分王。"
+      },
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7a/LeBron_James_%2851959977144%29_%28cropped2%29.jpg/960px-LeBron_James_%2851959977144%29_%28cropped2%29.jpg",
+      "imageCredit": {
+        "text": "Photo: Erik Drost / CC BY 2.0, via Wikimedia Commons",
+        "href": "https://commons.wikimedia.org/wiki/File:LeBron_James_(51959977144)_(cropped2).jpg"
+      }
+    },
+    {
+      "title": {
+        "en": "Xu Xin",
+        "zh": "許昕"
+      },
+      "subtitle": {
+        "en": "Table tennis · China",
+        "zh": "桌球 · 中國"
+      },
+      "note": {
+        "en": "Left-handed penhold star nicknamed the “Cloud Walker,” and Olympic team gold medalist at Rio 2016 and Tokyo 2020.",
+        "zh": "人稱「雲端漫步」的左手直拍名將，曾隨中國隊奪得 2016 年里約與 2020 年東京奧運團體金牌。"
+      },
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/ITTF_World_Tour_2017_German_Open_Xu_Xin_04.jpg/960px-ITTF_World_Tour_2017_German_Open_Xu_Xin_04.jpg",
+      "imageCredit": {
+        "text": "Photo: Peter Porai-Koshits / CC BY-SA 4.0, via Wikimedia Commons",
+        "href": "https://commons.wikimedia.org/wiki/File:ITTF_World_Tour_2017_German_Open_Xu_Xin_04.jpg"
+      }
+    }
+  ]
 }

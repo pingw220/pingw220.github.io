@@ -13,6 +13,8 @@ export interface EngineOptions {
   onNear(item: Interactable | null, world: WorldId): void;
   onActivate(item: Interactable, world: WorldId): void;
   onWorldChange(world: WorldId): void;
+  /** The mouse was captured for looking around (desktop), or released. */
+  onLookChange?(locked: boolean): void;
 }
 
 export interface Engine {
@@ -21,12 +23,18 @@ export interface Engine {
   /** Walk to an item in the current world, then use it. */
   visit(itemId: string): void;
   setPaused(paused: boolean): void;
+  /** Release the mouse (e.g. before opening a panel). */
+  releaseLook(): void;
   readonly world: WorldId;
+  /** Add effects to the current world's scene (used for fireworks). */
+  readonly scene: THREE.Scene;
 }
 
-const SPEED = 3.4;
+const SPEED = 3.6;
 const RADIUS = 0.4; // Mochi's size, for bumping into furniture
 const NEAR_DISTANCE = 1.5;
+const AIM_RANGE = 7; // how far the crosshair can pick things
+const LOOK_SPEED = 0.0024;
 const DEFAULT_BLOOM = { strength: 0.6, radius: 0.45, threshold: 0.92 };
 
 export function startEngine(host: HTMLElement, options: EngineOptions, first: WorldId = 'market'): Engine {
@@ -48,7 +56,7 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
       setTimeout(res, 400);
     });
 
-  const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 300);
+  const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 300);
   const gradientMap = toonGradient();
   const mochi = buildMascot(gradientMap);
 
@@ -81,7 +89,7 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
     composer.setSize(w, h);
     camera.aspect = w / h;
     narrow = camera.aspect < 0.9;
-    camera.fov = narrow ? 62 : 50;
+    camera.fov = narrow ? 66 : 55;
     camera.updateProjectionMatrix();
   };
   new ResizeObserver(resize).observe(host);
@@ -91,11 +99,21 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
   const keys = new Set<string>();
   let target: THREE.Vector3 | null = null;
   let targetItem: Interactable | null = null;
-  let near: Interactable | null = null;
+  let near: Interactable | null = null; // what the prompt is about (aimed, or closest)
   let paused = false;
   let switching = false;
-  let snapCamera = true;
   const pos = mochi.group.position;
+
+  // Orbit camera: yaw/pitch around Mochi, distance from Mochi.
+  let yaw = 0;
+  let pitch = 0.35;
+  // Extra height the camera looks at, e.g. up at the fireworks.
+  let lift = 0;
+  let skyUntil = 0;
+  let dist = 6;
+  let defaultDist = 6;
+  const follow = new THREE.Vector3();
+  let snapCamera = true;
 
   const clamp = (v: THREE.Vector3) => {
     const b = world.bounds;
@@ -104,6 +122,10 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
     v.y = 0;
     return v;
   };
+
+  function lookBehind(facing: number) {
+    yaw = facing + Math.PI;
+  }
 
   function placeMochi(arriveAt?: string) {
     const item = arriveAt ? world.items.find((i) => i.id === arriveAt) : undefined;
@@ -115,6 +137,7 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
       mochi.group.rotation.y = world.spawnFacing;
     }
     clamp(pos);
+    lookBehind(mochi.group.rotation.y);
   }
 
   function activateWorld(next: World, arriveAt?: string) {
@@ -125,10 +148,14 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
     bloom.strength = b.strength;
     bloom.radius = b.radius;
     bloom.threshold = b.threshold;
+    const c = world.camera;
+    defaultDist = Math.hypot(c.back, c.up - 1.2) * 0.9;
+    dist = defaultDist;
+    pitch = Math.atan2(c.up - 1.2, c.back) * 0.8;
     target = null;
     targetItem = null;
     keys.clear();
-    if (near) near.setNear?.(false);
+    near?.setNear?.(false);
     near = null;
     options.onNear(null, world.id);
     placeMochi(arriveAt);
@@ -137,9 +164,10 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
   }
   activateWorld(world);
 
-  // ── Input ──────────────────────────────────────────────────────────────────
+  // ── Keyboard ───────────────────────────────────────────────────────────────
   const MOVE_KEYS = ['arrowup', 'arrowdown', 'arrowleft', 'arrowright', 'w', 'a', 's', 'd'];
-  const focusOk = () => host.contains(document.activeElement) || document.activeElement === document.body;
+  const isLocked = () => document.pointerLockElement === renderer.domElement;
+  const focusOk = () => isLocked() || host.contains(document.activeElement) || document.activeElement === document.body;
   window.addEventListener('keydown', (e) => {
     if (paused || switching || e.altKey || e.ctrlKey || e.metaKey) return;
     if ((e.target as HTMLElement)?.closest?.('input, textarea, select, [contenteditable]')) return;
@@ -152,30 +180,69 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
       e.preventDefault();
     } else if ((k === 'e' || k === 'enter') && near && focusOk()) {
       e.preventDefault();
-      options.onActivate(near, world.id);
+      use(near);
     }
   });
   window.addEventListener('keyup', (e) => keys.delete(e.key.toLowerCase()));
   window.addEventListener('blur', () => keys.clear());
 
+  // ── Mouse look (desktop) and drag-to-look (touch) ─────────────────────────
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
-  const setPointer = (e: PointerEvent) => {
-    const rect = renderer.domElement.getBoundingClientRect();
-    pointer.set(((e.clientX - rect.left) / rect.width) * 2 - 1, -((e.clientY - rect.top) / rect.height) * 2 + 1);
-    raycaster.setFromCamera(pointer, camera);
-  };
   const itemHits = () => world.items.flatMap((i) => i.hits);
   const grounds = () => {
     const g: THREE.Object3D[] = [];
     world.scene.traverse((o) => o.userData.ground && g.push(o));
     return g;
   };
-  let downAt: { x: number; y: number } | null = null;
-  renderer.domElement.addEventListener('pointerdown', (e) => (downAt = { x: e.clientX, y: e.clientY }));
+  const turn = (dx: number, dy: number) => {
+    yaw -= dx * LOOK_SPEED;
+    pitch = THREE.MathUtils.clamp(pitch + dy * LOOK_SPEED, -0.2, 1.25);
+  };
+
+  document.addEventListener('pointerlockchange', () => {
+    keys.clear();
+    options.onLookChange?.(isLocked());
+  });
+  document.addEventListener('mousemove', (e) => {
+    if (isLocked() && !paused) turn(e.movementX, e.movementY);
+  });
+
+  let down: { x: number; y: number; id: number; type: string; moved: boolean } | null = null;
+  renderer.domElement.addEventListener('pointerdown', (e) => {
+    down = { x: e.clientX, y: e.clientY, id: e.pointerId, type: e.pointerType, moved: false };
+  });
+  renderer.domElement.addEventListener('pointermove', (e) => {
+    if (paused || switching) return;
+    if (down && down.id === e.pointerId && down.type !== 'mouse') {
+      // Touch / pen: drag to look around.
+      const dx = e.clientX - down.x;
+      const dy = e.clientY - down.y;
+      if (down.moved || Math.hypot(dx, dy) > 8) {
+        down.moved = true;
+        turn(dx * 1.6, dy * 1.6);
+        down.x = e.clientX;
+        down.y = e.clientY;
+      }
+    }
+  });
   renderer.domElement.addEventListener('pointerup', (e) => {
-    if (paused || switching || !downAt || Math.hypot(e.clientX - downAt.x, e.clientY - downAt.y) > 8) return;
-    setPointer(e);
+    const d = down;
+    down = null;
+    if (paused || switching || !d || d.moved) return;
+    if (e.pointerType === 'mouse') {
+      if (!isLocked()) {
+        // First click captures the mouse for looking around.
+        renderer.domElement.requestPointerLock?.();
+        return;
+      }
+      if (near) use(near);
+      return;
+    }
+    // Tap: walk to what was tapped.
+    const rect = renderer.domElement.getBoundingClientRect();
+    pointer.set(((e.clientX - rect.left) / rect.width) * 2 - 1, -((e.clientY - rect.top) / rect.height) * 2 + 1);
+    raycaster.setFromCamera(pointer, camera);
     const hit = raycaster.intersectObjects(itemHits(), false)[0];
     const id = hit?.object.userData.itemId as string | undefined;
     if (id) return visit(id);
@@ -185,11 +252,28 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
       targetItem = null;
     }
   });
-  renderer.domElement.addEventListener('pointermove', (e) => {
-    if (paused || switching) return;
-    setPointer(e);
-    renderer.domElement.style.cursor = raycaster.intersectObjects(itemHits(), false).length ? 'pointer' : 'default';
-  });
+  renderer.domElement.addEventListener(
+    'wheel',
+    (e) => {
+      e.preventDefault();
+      dist = THREE.MathUtils.clamp(dist * (1 + e.deltaY * 0.0012), 1.8, 11);
+    },
+    { passive: false },
+  );
+
+  /** Use an item: open it if Mochi is close, otherwise walk there first. */
+  function use(item: Interactable) {
+    const d = Math.hypot(item.front.x - pos.x, item.front.z - pos.z);
+    if (d < NEAR_DISTANCE + 0.6) trigger(item);
+    else visit(item.id);
+  }
+  function trigger(item: Interactable) {
+    if (item.activate) {
+      item.activate();
+      if (item.skyLook) skyUntil = performance.now() / 1000 + item.skyLook;
+    }
+    else options.onActivate(item, world.id);
+  }
 
   function visit(itemId: string) {
     const item = world.items.find((i) => i.id === itemId);
@@ -211,10 +295,9 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
   // ── Loop ───────────────────────────────────────────────────────────────────
   const timer = new THREE.Timer();
   timer.connect(document);
-  const camPos = new THREE.Vector3();
-  const lookAt = new THREE.Vector3();
-  const lookGoal = new THREE.Vector3();
   const move = new THREE.Vector3();
+  const center = new THREE.Vector2(0, 0);
+  const tmp = new THREE.Vector3();
 
   const frame = () => {
     requestAnimationFrame(frame);
@@ -223,12 +306,17 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
     const dt = Math.min(timer.getDelta(), 0.05);
     const t = timer.getElapsed();
 
+    // Keys move relative to where the camera looks.
     move.set(0, 0, 0);
     if (!paused && !switching) {
-      if (keys.has('arrowup') || keys.has('w')) move.z -= 1;
-      if (keys.has('arrowdown') || keys.has('s')) move.z += 1;
-      if (keys.has('arrowleft') || keys.has('a')) move.x -= 1;
-      if (keys.has('arrowright') || keys.has('d')) move.x += 1;
+      const fx = -Math.sin(yaw);
+      const fz = -Math.cos(yaw);
+      const rx = Math.cos(yaw);
+      const rz = -Math.sin(yaw);
+      if (keys.has('arrowup') || keys.has('w')) move.add(tmp.set(fx, 0, fz));
+      if (keys.has('arrowdown') || keys.has('s')) move.add(tmp.set(-fx, 0, -fz));
+      if (keys.has('arrowleft') || keys.has('a')) move.add(tmp.set(-rx, 0, -rz));
+      if (keys.has('arrowright') || keys.has('d')) move.add(tmp.set(rx, 0, rz));
     }
     if (move.lengthSq() === 0 && target && !switching) {
       move.subVectors(target, pos).setY(0);
@@ -239,7 +327,7 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
           const item = targetItem;
           targetItem = null;
           mochi.group.rotation.y = item.facing;
-          options.onActivate(item, world.id);
+          trigger(item);
         }
       }
     }
@@ -251,11 +339,12 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
       const blocked = (x: number, z: number) =>
         (world.obstacles ?? []).some((o) => x > o.minX - RADIUS && x < o.maxX + RADIUS && z > o.minZ - RADIUS && z < o.maxZ + RADIUS);
       const nx = pos.x + move.x * step;
-      if (!blocked(nx, pos.z)) pos.x = nx;
       const nz = pos.z + move.z * step;
-      if (!blocked(pos.x, nz)) pos.z = nz;
-      // If walking toward a target got completely stuck, give up rather than push forever.
-      if (target && Math.abs(nx - pos.x) > 1e-6 && Math.abs(nz - pos.z) > 1e-6) {
+      const okX = !blocked(nx, pos.z);
+      if (okX) pos.x = nx;
+      const okZ = !blocked(pos.x, nz);
+      if (okZ) pos.z = nz;
+      if (target && !okX && !okZ) {
         target = null;
         targetItem = null;
       }
@@ -268,18 +357,42 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
     }
     mochi.update(t, dt, speed);
 
-    // Nearest usable thing.
+    // Camera: orbit around Mochi.
+    tmp.set(pos.x, 1.25, pos.z);
+    if (snapCamera) follow.copy(tmp);
+    else follow.lerp(tmp, 1 - Math.exp(-dt * 12));
+    const d = dist * (narrow ? 1.15 : 1);
+    camera.position.set(
+      follow.x + Math.sin(yaw) * Math.cos(pitch) * d,
+      Math.max(0.35, follow.y + Math.sin(pitch) * d),
+      follow.z + Math.cos(yaw) * Math.cos(pitch) * d,
+    );
+    lift += ((performance.now() / 1000 < skyUntil ? 5.5 : 0) - lift) * Math.min(1, dt * 2.5);
+    camera.lookAt(follow.x, follow.y + 0.15 + lift, follow.z);
+    snapCamera = false;
+
+    // What the prompt is about: what the crosshair points at, else the closest thing.
     let best: Interactable | null = null;
-    let bestDist = NEAR_DISTANCE;
-    for (const item of world.items) {
-      if (item.proximity === false) continue;
-      const d = Math.hypot(item.front.x - pos.x, item.front.z - pos.z);
-      if (d < bestDist) {
-        bestDist = d;
-        best = item;
+    if (!switching) {
+      raycaster.setFromCamera(center, camera);
+      raycaster.far = d + AIM_RANGE;
+      const hit = raycaster.intersectObjects(itemHits(), false)[0];
+      const aimedId = hit?.object.userData.itemId as string | undefined;
+      const aimed = aimedId ? world.items.find((i) => i.id === aimedId) : undefined;
+      if (aimed && Math.hypot(aimed.front.x - pos.x, aimed.front.z - pos.z) < AIM_RANGE) best = aimed;
+      if (!best) {
+        let bestDist = NEAR_DISTANCE;
+        for (const item of world.items) {
+          if (item.proximity === false) continue;
+          const dd = Math.hypot(item.front.x - pos.x, item.front.z - pos.z);
+          if (dd < bestDist) {
+            bestDist = dd;
+            best = item;
+          }
+        }
       }
     }
-    if (best !== near && !switching) {
+    if (best !== near) {
       near?.setNear?.(false);
       best?.setNear?.(true);
       near = best;
@@ -287,18 +400,6 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
     }
     world.items.forEach((i) => i.update?.(t));
     world.update(t, dt);
-
-    // Camera follows from behind and above.
-    const c = world.camera;
-    const back = c.back * (narrow ? 1.25 : 1);
-    const up = c.up * (narrow ? 1.2 : 1);
-    camPos.set(pos.x * c.followX, up, pos.z + back);
-    lookGoal.set(pos.x * Math.min(1, c.followX + 0.2), c.lookY, pos.z - c.lookAhead);
-    const k = snapCamera ? 1 : 1 - Math.exp(-dt * 3);
-    camera.position.lerp(camPos, k);
-    lookAt.lerp(lookGoal, k);
-    camera.lookAt(lookAt);
-    snapCamera = false;
 
     composer.render(dt);
   };
@@ -311,9 +412,16 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
     setPaused(p) {
       paused = p;
       keys.clear();
+      if (p) document.exitPointerLock?.();
+    },
+    releaseLook() {
+      document.exitPointerLock?.();
     },
     get world() {
       return world.id;
+    },
+    get scene() {
+      return world.scene;
     },
   };
 }

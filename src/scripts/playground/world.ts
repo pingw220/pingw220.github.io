@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { cobbleTexture, glowTexture } from './textures';
 
 /** Street layout shared by the world, the stalls, and movement. */
-export const STREET = { halfWidth: 2.5, start: 8, end: -21 } as const;
+export const STREET = { halfWidth: 2.5, start: 8, end: -40 } as const;
 
 export interface World {
   update(t: number, dt: number): void;
@@ -113,7 +113,11 @@ export function buildWorld(scene: THREE.Scene, gradientMap: THREE.Texture): Worl
       treeSpots.push([x, z + Math.random() * 1.6, 0.8 + Math.random() * 0.6]);
     }
   }
-  for (let i = 0; i < 14; i++) treeSpots.push([-20 + i * 3 + Math.random() * 2, -27 - Math.random() * 6, 1 + Math.random() * 0.8]);
+  // A back row beyond the fireworks plaza, leaving the end of the lane open.
+  for (let i = 0; i < 14; i++) {
+    const x = -20 + i * 3 + Math.random() * 2;
+    if (Math.abs(x) > 4.5) treeSpots.push([x, STREET.end - 8 - Math.random() * 6, 1 + Math.random() * 0.8]);
+  }
   const trunks = new THREE.InstancedMesh(trunkGeo, trunkMat, treeSpots.length);
   const puffs = new THREE.InstancedMesh(puffGeo, toon(0xffffff, gradientMap), treeSpots.length * 3);
   const m = new THREE.Matrix4();

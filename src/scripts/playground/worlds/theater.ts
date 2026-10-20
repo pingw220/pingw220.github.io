@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { buildExitDoor, buildRoom, FONT, labelTexture, makeKit, markHits, roomLights, wallTexture } from '../kit';
+import { buildExitDoor, buildRoom, FONT, imageOr, labelTexture, makeKit, markHits, roomLights, wallTexture } from '../kit';
 import { canvasTexture } from '../textures';
 import type { Interactable, LibraryCard, PlaygroundData, World } from '../types';
 
@@ -151,7 +151,7 @@ export const theaterWorld = (data: PlaygroundData) => (gradientMap: THREE.Textur
     const frame = box(1.7, 2.4, 0.1, toon(0x241a2c));
     const lit = new THREE.Mesh(new THREE.PlaneGeometry(1.86, 2.56), new THREE.MeshBasicMaterial({ color: new THREE.Color(0xfff1c4).multiplyScalar(1.6) }));
     lit.position.z = -0.06;
-    const poster = new THREE.Mesh(new THREE.PlaneGeometry(1.5, 2.17), new THREE.MeshBasicMaterial({ map: posterTexture(card, i), color: 0xe0dcd4 }));
+    const poster = new THREE.Mesh(new THREE.PlaneGeometry(1.5, 2.17), new THREE.MeshBasicMaterial({ map: imageOr(card.image, () => posterTexture(card, i)), color: 0xe0dcd4 }));
     poster.position.z = 0.056;
     g.add(lit, frame, poster);
     g.position.set(side * (W / 2 - 0.12), 2.5, z);

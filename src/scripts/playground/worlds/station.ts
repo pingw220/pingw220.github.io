@@ -1,34 +1,56 @@
 import * as THREE from 'three';
 import { buildExitDoor, buildRoom, FONT, labelTexture, makeKit, markHits, roomLights, wallTexture } from '../kit';
 import { canvasTexture, glowTexture } from '../textures';
+import { feature } from 'topojson-client';
+import type { GeometryCollection, Topology } from 'topojson-specification';
+import landTopo from 'world-atlas/land-110m.json';
 import type { Interactable, PlaygroundData, World } from '../types';
 
 const W = 16;
 const D = 15;
-const H = 6.5;
+const H = 7.2;
 
-/** A storybook world map: soft blobs for continents. */
+/** World map (Natural Earth land, equirectangular) in a soft storybook palette. */
 function mapTexture(): THREE.CanvasTexture {
-  return canvasTexture(1024, 512, (g, w, h) => {
-    g.fillStyle = '#9fd3e6';
+  return canvasTexture(2048, 1024, (g, w, h) => {
+    g.fillStyle = '#a9d8ea';
     g.fillRect(0, 0, w, h);
-    g.fillStyle = 'rgba(255,255,255,0.25)';
-    for (let y = 40; y < h; y += 60) g.fillRect(0, y, w, 2);
-    g.fillStyle = '#9ccc8b';
-    const land: [number, number, number, number][] = [
-      [210, 150, 120, 80], [260, 230, 60, 60], [300, 360, 55, 90], // Americas
-      [520, 140, 70, 50], [540, 260, 70, 100], // Europe / Africa
-      [700, 160, 150, 80], [760, 260, 50, 40], [830, 380, 70, 40], // Asia / Australia
-    ];
-    for (const [x, y, rx, ry] of land) {
+    g.strokeStyle = 'rgba(255,255,255,0.35)';
+    g.lineWidth = 2;
+    for (let lat = -60; lat <= 60; lat += 30) {
       g.beginPath();
-      g.ellipse(x, y, rx, ry, 0.3, 0, Math.PI * 2);
-      g.fill();
+      g.moveTo(0, ((90 - lat) / 180) * h);
+      g.lineTo(w, ((90 - lat) / 180) * h);
+      g.stroke();
     }
-    g.fillStyle = '#4a2c1a';
-    g.font = `700 26px ${FONT}`;
-    g.textAlign = 'center';
-    g.fillText('✈', w / 2, h - 30);
+    for (let lon = -150; lon <= 150; lon += 30) {
+      g.beginPath();
+      g.moveTo(((lon + 180) / 360) * w, 0);
+      g.lineTo(((lon + 180) / 360) * w, h);
+      g.stroke();
+    }
+    const topo = landTopo as unknown as Topology<{ land: GeometryCollection }>;
+    const land = feature(topo, topo.objects.land) as unknown as { features: { geometry: { type: string; coordinates: number[][][] | number[][][][] } }[] };
+    const project = ([lon, lat]: number[]) => [((lon + 180) / 360) * w, ((90 - lat) / 180) * h] as const;
+    g.fillStyle = '#a8d39a';
+    g.strokeStyle = '#7fb36f';
+    g.lineWidth = 2;
+    for (const f of land.features) {
+      const polys = f.geometry.type === 'Polygon' ? [f.geometry.coordinates as number[][][]] : (f.geometry.coordinates as number[][][][]);
+      for (const poly of polys) {
+        g.beginPath();
+        for (const ring of poly) {
+          ring.forEach((pt, i) => {
+            const [x, y] = project(pt);
+            if (i === 0) g.moveTo(x, y);
+            else g.lineTo(x, y);
+          });
+          g.closePath();
+        }
+        g.fill('evenodd');
+        g.stroke();
+      }
+    }
   });
 }
 
@@ -43,40 +65,55 @@ export const stationWorld = (data: PlaygroundData) => (gradientMap: THREE.Textur
   buildRoom(scene, kit, { width: W, depth: D, height: H, floor: wallTexture('#b9a68d', '#a8957c', 'panels'), wall: wallTexture('#e8dcc4', '#ddd0b5', 'stripes'), trim: 0x5a3a24 });
 
   // Map board on the back wall.
-  const board = at(new THREE.Group(), 0, 3.1, -D / 2 + 0.1, scene);
-  board.add(at(box(8.4, 4.4, 0.12, toon(0x6b4329)), 0, 0, 0));
-  const map = new THREE.Mesh(new THREE.PlaneGeometry(8, 4), new THREE.MeshBasicMaterial({ map: mapTexture(), color: 0xe0dcd4 }));
+  const MAP_W = 11;
+  const MAP_H = 5.5;
+  const board = at(new THREE.Group(), 0, 3.4, -D / 2 + 0.1, scene);
+  board.add(at(box(MAP_W + 0.4, MAP_H + 0.4, 0.12, toon(0x6b4329)), 0, 0, 0));
+  const map = new THREE.Mesh(new THREE.PlaneGeometry(MAP_W, MAP_H), new THREE.MeshBasicMaterial({ map: mapTexture(), color: 0xe4e0d8 }));
   map.position.z = 0.07;
   board.add(map);
   const items: Interactable[] = [];
-  const places = data.travel.slice(0, 12);
+  const places = data.travel.filter((p) => typeof p.lat === 'number' && typeof p.lon === 'number');
   if (places.length === 0) {
     const note = new THREE.Mesh(new THREE.PlaneGeometry(3.6, 0.9), new THREE.MeshBasicMaterial({ map: labelTexture(data.strings.comingSoon, { emoji: '🧳', bg: '#fff6e3', border: '#3fa7d6' }), color: 0xe0d8cc, transparent: true }));
     note.position.z = 0.1;
     board.add(note);
   }
+  const homeMat = glow(0x2a9d8f, 0.9);
+  const pinMat = glow(0xe63946, 0.8);
+  const stemMat = toon(0x555555);
   places.forEach((place, i) => {
-    const u = -3.4 + ((i * 2.9) % 7);
-    const v = 1.2 - Math.floor((i * 2.9) / 7) * 0.9;
-    const pin = at(new THREE.Group(), u, v, 0.12, board);
-    const head = ball(0.14, glow(0xe63946, 0.8));
-    pin.add(at(head, 0, 0.12, 0), at(cyl(0.015, 0.015, 0.22, toon(0x555555)), 0, -0.02, 0));
-    const id = `place:${i}`;
+    const u = (place.lon! / 180) * (MAP_W / 2);
+    const v = (place.lat! / 90) * (MAP_H / 2);
+    const pin = at(new THREE.Group(), u, v, 0.1, board);
+    let head: THREE.Mesh;
+    if (place.home) {
+      // A little house for home.
+      head = box(0.16, 0.13, 0.08, homeMat);
+      const roof = new THREE.Mesh(new THREE.ConeGeometry(0.14, 0.1, 4), homeMat);
+      roof.rotation.y = Math.PI / 4;
+      pin.add(at(head, 0, 0.07, 0.04), at(roof, 0, 0.18, 0.04));
+    } else {
+      head = ball(0.06, pinMat, 12);
+      pin.add(at(head, 0, 0.09, 0.04), at(cyl(0.008, 0.008, 0.1, stemMat), 0, 0.02, 0.04));
+    }
+    const id = `place:${data.travel.indexOf(place)}`;
     items.push({
       id,
       kind: 'item',
       label: place.title,
-      emoji: '📍',
-      front: new THREE.Vector3(u, 0, -D / 2 + 2.6),
+      emoji: place.home ? '🏠' : '📍',
+      front: new THREE.Vector3(THREE.MathUtils.clamp(u, -W / 2 + 1.6, W / 2 - 1.8), 0, -D / 2 + 2.6),
       facing: Math.PI,
+      proximity: false, // too close together to pick by walking; aim or tap instead
       hits: markHits([head], id),
       setNear(nv) {
-        pin.scale.setScalar(nv ? 1.6 : 1);
+        pin.scale.setScalar(nv ? 2.2 : 1);
       },
     });
   });
   const title = new THREE.Mesh(new THREE.PlaneGeometry(4, 0.6), new THREE.MeshBasicMaterial({ map: labelTexture(data.strings.journal, { emoji: '🗺️', bg: '#fff3dc', border: '#3fa7d6' }), color: 0xe0d8cc, transparent: true }));
-  title.position.set(0, 5.8, -D / 2 + 0.15);
+  title.position.set(0, 6.55, -D / 2 + 0.15);
   scene.add(title);
 
   // Departures board, clock, ticket window, benches.
@@ -120,9 +157,8 @@ export const stationWorld = (data: PlaygroundData) => (gradientMap: THREE.Textur
 
   const exit = buildExitDoor(scene, kit, -W / 2 + 0.05, D / 2 - 1.6, data.strings.back);
   items.push({ id: 'exit', kind: 'exit', label: data.strings.back, emoji: '🏮', front: new THREE.Vector3(-W / 2 + 1.2, 0, D / 2 - 1.6), facing: -Math.PI / 2, hits: markHits(exit.hits, 'exit') });
-  if (places.length === 0) {
-    items.push({ id: 'map', kind: 'item', label: data.strings.journal, emoji: '🗺️', front: new THREE.Vector3(0, 0, -D / 2 + 2.6), facing: Math.PI, hits: markHits([map], 'map') });
-  }
+  // Walking up to the map opens the list of places.
+  items.push({ id: 'map', kind: 'station', label: data.strings.journal, emoji: '🗺️', front: new THREE.Vector3(0, 0, -D / 2 + 2.6), facing: Math.PI, hits: [] });
 
   return {
     id: 'station',

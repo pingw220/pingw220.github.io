@@ -25,7 +25,10 @@ npx wrangler d1 execute visitor-map --remote --file=schema.sql
 # 4. Set a random secret used to hash IPs (paste any long random string)
 npx wrangler secret put HASH_SALT
 
-# 5. Deploy
+# 5. Set the key that unlocks the message inbox (any long random string; keep it private)
+npx wrangler secret put ADMIN_KEY
+
+# 6. Deploy
 npx wrangler deploy
 ```
 
@@ -43,6 +46,26 @@ Databases created before page views were counted need a one-time migration:
 
 ```sh
 npx wrangler d1 execute visitor-map --remote --file=migrations-0001-views.sql
+```
+
+## Messages (Playground post office)
+
+Visitors can leave a message from the Playground's post office, marked **public** or **private**.
+
+| Endpoint | Who | What |
+| --- | --- | --- |
+| `POST /messages` | anyone (from the site) | `{ name, message, public }`; name ≤ 40 chars, message ≤ 800, at most 5 per visitor per day |
+| `GET /messages` | anyone | the latest 50 **public** messages |
+| `GET /inbox` | `Authorization: Bearer <ADMIN_KEY>` | every message, public and private |
+| `DELETE /messages/:id` | `Authorization: Bearer <ADMIN_KEY>` | removes a message |
+
+Read them at `https://pingw220.github.io/admin/inbox.html` (enter the admin key once; it's
+remembered in that browser). Only a salted daily hash of the sender is kept, for the rate limit.
+
+Databases created before messages existed need a one-time migration:
+
+```sh
+npx wrangler d1 execute visitor-map --remote --file=migrations-0002-messages.sql
 ```
 
 ## Checking it

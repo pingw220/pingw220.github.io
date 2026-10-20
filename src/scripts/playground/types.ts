@@ -1,6 +1,6 @@
 import type * as THREE from 'three';
 
-export type WorldId = 'market' | 'studio' | 'library' | 'theater' | 'postoffice' | 'station';
+export type WorldId = 'market' | 'studio' | 'writing' | 'library' | 'theater' | 'station' | 'sports' | 'postoffice';
 
 /**
  * Something Mochi can walk up to and use:
@@ -24,6 +24,10 @@ export interface Interactable {
   proximity?: boolean;
   setNear?(near: boolean): void;
   update?(t: number): void;
+  /** Handled inside the 3D world (e.g. launching fireworks) instead of by the page. */
+  activate?(): void;
+  /** Seconds to tilt the camera up at the sky after activating (fireworks). */
+  skyLook?: number;
 }
 
 export interface World {
@@ -49,6 +53,9 @@ export interface PlaygroundData {
   novels: LibraryCard[];
   anime: LibraryCard[];
   travel: LibraryCard[];
+  sports: LibraryCard[];
+  /** Public guestbook messages (loaded live from the visitor API). */
+  messagesApi: string;
   posts: { title: string; description: string; date: string; href: string }[];
   strings: Record<string, string>;
 }
@@ -61,4 +68,12 @@ export interface LibraryCard {
   date?: string;
   link?: string;
   image?: string;
+  imageCredit?: { text: string; href?: string };
+  rating?: number;
+  love?: number;
+  category?: string;
+  review?: string;
+  lat?: number;
+  lon?: number;
+  home?: boolean;
 }

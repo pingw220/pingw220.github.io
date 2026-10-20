@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { buildExitDoor, buildRoom, EMOJI_FONT, FONT, labelTexture, makeKit, markHits, roomLights, wallTexture, woodTexture } from '../kit';
+import { buildExitDoor, buildRoom, EMOJI_FONT, FONT, imageOr, labelTexture, makeKit, markHits, roomLights, wallTexture, woodTexture } from '../kit';
 import { canvasTexture, glowTexture } from '../textures';
 import type { Interactable, LibraryCard, PlaygroundData, World } from '../types';
 
@@ -196,7 +196,7 @@ export const libraryWorld = (data: PlaygroundData) => (gradientMap: THREE.Textur
     group.books.forEach((book, k) => {
       const u = (-((n - 1) * spacing) / 2 + k * spacing) * slot.dir;
       const g = new THREE.Group();
-      const cover = new THREE.Mesh(new THREE.PlaneGeometry(0.62, 0.9), new THREE.MeshBasicMaterial({ map: coverTexture(book, bookIndex, data.lang), color: 0xdcd6cc }));
+      const cover = new THREE.Mesh(new THREE.PlaneGeometry(0.62, 0.9), new THREE.MeshBasicMaterial({ map: imageOr(book.image, ((idx) => () => coverTexture(book, idx, data.lang))(bookIndex)), color: 0xdcd6cc }));
       cover.position.z = 0.056;
       const block = box(0.62, 0.9, 0.11, toon(0xf3ead7));
       g.add(block, cover);

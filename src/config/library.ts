@@ -1,5 +1,5 @@
 /**
- * Items on the Playground's library stalls (Novels, Anime, Travel). Edited from the
+ * Items on the Playground's library stalls (Novels, Anime, Travel, Sports). Edited from the
  * admin page (/admin → Profile & pages → Playground library) and stored in
  * src/data/library.json. Every field except the title is optional.
  */
@@ -8,6 +8,20 @@ import data from '../data/library.json';
 
 export interface LibraryItem {
   title: Text;
+  /** Your rating out of 5 (halves allowed), e.g. 4.5. */
+  rating?: number;
+  /** How much you love it, 1–5 hearts. */
+  love?: number;
+  /** Genre or type, e.g. 武俠 / Wuxia. */
+  category?: Text;
+  /** Your review / thoughts. */
+  review?: Text;
+  /** Credit for a photo or cover that isn't yours. */
+  imageCredit?: { text: string; href?: string };
+  /** Travel only: map position and whether it's home. */
+  lat?: number;
+  lon?: number;
+  home?: boolean;
   /** Author, studio, or place. */
   subtitle?: Text;
   /** A sentence or two: why you like it, what happened there. */
@@ -18,6 +32,6 @@ export interface LibraryItem {
   link?: string;
 }
 
-export type LibraryShelf = 'novels' | 'anime' | 'travel';
+export type LibraryShelf = 'novels' | 'anime' | 'travel' | 'sports';
 
 export const LIBRARY = data as Record<LibraryShelf, LibraryItem[]>;

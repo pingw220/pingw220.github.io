@@ -83,27 +83,44 @@ The admin configuration is `public/admin/config.yml`; the embeds are handled by
 
 ## Playground (/playground)
 
-A small 3D night market (three.js) where visitors walk around with Mochi the chinchilla. Each stall
-leads into its own world (also linkable directly, e.g. `/playground#library`):
+A small 3D night market (three.js) where visitors walk around with Mochi, a little Shiba Inu. Each
+stall leads into its own world (also linkable directly, e.g. `/playground#library`):
 
 | Stall | World | What's inside |
 | --- | --- | --- |
 | 🎻 Music | Music studio (`#studio`) | Every performance framed on the walls; walk up to play it |
-| 📝 Posts | Post office (`#postoffice`) | Each post is a letter pinned to the board |
+| 📝 Posts | Writing room (`#writing`) | Each post is a note on the cork board |
 | 📚 Novel Library | Library (`#library`) | Novels on display tables, grouped by author |
 | 📺 Anime Library | Anime theater (`#theater`) | A poster for each anime |
-| ✈️ Travel Journal | Train station (`#station`) | Places pinned on a map |
+| ✈️ Travel Journal | Train station (`#station`) | A world map with a pin per place (green houses = home) |
+| 🏆 Sports | Hall of GOATs (`#sports`) | A pedestal and photo for each athlete |
+| 💌 Post Office | Post office (`#postoffice`) | A mailbox for leaving a message, and a board of public ones |
 
-Walk with WASD / arrow keys or click/tap where to go; walking up to something shows a prompt (E /
-Enter / tap). Every world has a door and a "Back to the market" button, plus "Show as a list".
-Devices without WebGL, and visitors who prefer reduced motion, get the same content as lists.
+At the far end of the street is a fireworks plaza: walk up to the launcher and press E.
 
-- Music videos and posts appear automatically. Novels, anime, and travel places are edited in the
-  admin: **Profile & pages → Playground library** (`src/data/library.json`).
-- Code: `src/views/Playground.astro` (page, panels, item cards) and `src/scripts/playground/`:
-  `engine.ts` (movement, camera, transitions), `worlds/*.ts` (one file per world), `stall.ts`,
-  `mascot.ts` (Mochi), `kit.ts` / `textures.ts` (shared materials and painted textures).
-  Covers and posters are drawn in code; no copyrighted artwork is used.
+**Controls.** On a computer, click once to look around with the mouse (like a first-person game;
+Esc releases it). WASD / arrow keys walk, the scroll wheel zooms, and E / Enter / click uses whatever
+is under the crosshair. On a phone, drag to look and tap to walk or open things. Every world has a
+door and a "Back to the market" button, plus "Show as a list". Devices without WebGL, and visitors
+who prefer reduced motion, get the same content as lists.
+
+**Content.** Music videos and posts appear automatically. Novels, anime, travel places, and sports
+are edited in the admin: **Profile & pages → Playground library** (`src/data/library.json`). Each
+novel, anime, and athlete can have a photo, an image credit, a rating (0–5), how much you love it
+(1–5 hearts), a category, and your thoughts; these show on the card when you click it. Travel places
+take a latitude/longitude, and "Home" makes the pin a green house. Covers and photos are hotlinked
+from their source (AniList, Open Library, Wikimedia Commons) with a credit, never copied into the repo;
+items without one get a cover drawn in code.
+
+**Messages.** The post office form sends a message to the visitor Worker (`POST /messages`). Visitors
+choose **Public** (pinned on the board and listed under the form) or **Private** (only you see it).
+Read and delete everything at **/admin/inbox.html** with your admin key (the Worker's `ADMIN_KEY`
+secret). See `visitor-api/README.md`.
+
+**Code.** `src/views/Playground.astro` (page, panels, item cards, message form) and
+`src/scripts/playground/`: `engine.ts` (movement, mouse-look camera, aiming, transitions),
+`worlds/*.ts` (one file per world), `stall.ts`, `mascot.ts` (Mochi), `fireworks.ts`, and
+`kit.ts` / `textures.ts` (shared materials and painted textures).
 
 ## Two languages (English / 中文)
 
