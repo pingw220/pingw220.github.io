@@ -1,8 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import SectionHeading from '../components/SectionHeading.astro';
-import { MUSIC_SECTIONS } from '../config/music';
-import { formatDate, getLang, t, tr } from '../i18n';
+import MusicSections from '../components/MusicSections.astro';
+import { getLang, t } from '../i18n';
 
 const lang = getLang(Astro.url);
 const ui = t(lang);
@@ -18,63 +17,6 @@ const description =
     <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{ui['music.title']}</h1>
     <p class="mt-3 max-w-2xl leading-relaxed text-muted">{ui['music.intro']}</p>
 
-    {
-      MUSIC_SECTIONS.map(({ title, description, performances }) => (
-        <section class="mt-14" aria-label={tr(title, lang)}>
-          <SectionHeading title={tr(title, lang)} />
-          {description && tr(description, lang) && <p class="-mt-3 mb-6 text-sm text-muted">{tr(description, lang)}</p>}
-          <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {performances.map((p) => (
-              <li class="flex flex-col overflow-hidden rounded-xl border border-border bg-card">
-                <div class="yt-lite relative aspect-video bg-black" data-id={p.id} data-title={tr(p.title, lang)}>
-                  <button type="button" class="group absolute inset-0 h-full w-full" aria-label={`${ui['music.play']}: ${tr(p.title, lang)}`}>
-                    <img
-                      src={`https://i.ytimg.com/vi/${p.id}/hqdefault.jpg`}
-                      alt=""
-                      loading="lazy"
-                      class="h-full w-full object-cover opacity-90 transition-opacity group-hover:opacity-100"
-                    />
-                    <span class="absolute inset-0 flex items-center justify-center" aria-hidden="true">
-                      <span class="flex h-12 w-16 items-center justify-center rounded-xl bg-black/70 transition-colors group-hover:bg-[#ff0033]">
-                        <svg class="ml-0.5 h-5 w-5 text-white" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
-                      </span>
-                    </span>
-                  </button>
-                </div>
-                <div class="flex flex-1 flex-col p-4">
-                  <h3 class="font-semibold leading-snug text-foreground">{tr(p.title, lang)}</h3>
-                  <p class="mt-1 text-sm leading-relaxed text-muted">{tr(p.detail, lang)}</p>
-                  <p class="mt-auto flex flex-wrap items-center gap-2 pt-3 text-xs">
-                    {p.award && tr(p.award, lang) && (
-                      <span class="rounded-full border border-accent-gold/50 px-2 py-0.5 font-medium text-accent-gold">
-                        {tr(p.award, lang)}
-                      </span>
-                    )}
-                    {p.date && <span class="font-mono text-muted">{formatDate(p.date, lang)}</span>}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ))
-    }
+    <MusicSections />
   </div>
 </BaseLayout>
-
-<script>
-  // Load the YouTube player only when a video is clicked (privacy-enhanced domain).
-  document.querySelectorAll<HTMLElement>('.yt-lite').forEach((box) => {
-    box.querySelector('button')?.addEventListener('click', () => {
-      const iframe = document.createElement('iframe');
-      iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(box.dataset.id ?? '')}?autoplay=1&rel=0`;
-      iframe.title = box.dataset.title ?? 'YouTube video';
-      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-      iframe.allowFullscreen = true;
-      iframe.className = 'absolute inset-0 h-full w-full';
-      box.replaceChildren(iframe);
-    });
-  });
-</script>

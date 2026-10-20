@@ -81,6 +81,20 @@ YouTube and embed the link instead.
 The admin configuration is `public/admin/config.yml`; the embeds are handled by
 `src/lib/rehype-media.mjs`.
 
+## Playground (/playground)
+
+A small 3D night market (three.js) where visitors walk around with Mochi the chinchilla and
+visit stalls: **Music**, **Posts**, **Novel Library**, **Anime Library**, and **Travel Journal**.
+Walk with WASD / arrow keys or click/tap where to go; clicking a stall walks there and opens it.
+Devices without WebGL, and visitors who prefer reduced motion, get the same stalls as a list.
+
+- Stall panels show your music videos and posts automatically.
+- Fill the library stalls in the admin: **Profile & pages → Playground library** (`src/data/library.json`).
+  Each item has a title, an optional author/studio/place, note, date, image, and link.
+- Code: `src/views/Playground.astro` (page and panels) and `src/scripts/playground/`
+  (`world.ts` scenery, `stall.ts` stalls and props, `mascot.ts` Mochi, `market.ts` movement and camera).
+  Stall order, colors, and positions are at the top of `Playground.astro`.
+
 ## Two languages (English / 中文)
 
 English is the default at `/`; Traditional Chinese lives at `/zh/` (e.g. `/zh/about`). The 中文 / EN

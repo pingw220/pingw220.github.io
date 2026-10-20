@@ -491,3 +491,113 @@ collections:
                     fields:
                       - { name: en, label: English, widget: string, required: false }
                       - { name: zh, label: 中文, widget: string, required: false }
+
+      - name: library
+        label: Playground library (Novels · Anime · Travel)
+        file: /src/data/library.json
+        fields:
+          - name: novels
+            label: Novel Library
+            label_singular: Item
+            widget: list
+            required: false
+            summary: '{{fields.title.en}}'
+            fields:
+              - name: title
+                label: Title
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - name: subtitle
+                label: 'Author'
+                widget: object
+                required: false
+                fields:
+                  - { name: en, label: English, widget: string, required: false }
+                  - { name: zh, label: 中文, widget: string, required: false }
+              - name: note
+                label: Note
+                widget: object
+                required: false
+                fields:
+                  - { name: en, label: English, widget: text, required: false }
+                  - { name: zh, label: 中文, widget: text, required: false }
+              - { name: date, label: 'Date (e.g. 2025 or 2025-08-14)', widget: string, required: false }
+              - name: image
+                label: Image
+                widget: image
+                required: false
+                media_folder: /public/media/uploads
+                public_folder: /media/uploads
+              - { name: link, label: Link, widget: string, required: false }
+          - name: anime
+            label: Anime Library
+            label_singular: Item
+            widget: list
+            required: false
+            summary: '{{fields.title.en}}'
+            fields:
+              - name: title
+                label: Title
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - name: subtitle
+                label: 'Studio / creator'
+                widget: object
+                required: false
+                fields:
+                  - { name: en, label: English, widget: string, required: false }
+                  - { name: zh, label: 中文, widget: string, required: false }
+              - name: note
+                label: Note
+                widget: object
+                required: false
+                fields:
+                  - { name: en, label: English, widget: text, required: false }
+                  - { name: zh, label: 中文, widget: text, required: false }
+              - { name: date, label: 'Date (e.g. 2025 or 2025-08-14)', widget: string, required: false }
+              - name: image
+                label: Image
+                widget: image
+                required: false
+                media_folder: /public/media/uploads
+                public_folder: /media/uploads
+              - { name: link, label: Link, widget: string, required: false }
+          - name: travel
+            label: Travel Journal
+            label_singular: Item
+            widget: list
+            required: false
+            summary: '{{fields.title.en}}'
+            fields:
+              - name: title
+                label: Title
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - name: subtitle
+                label: 'Place'
+                widget: object
+                required: false
+                fields:
+                  - { name: en, label: English, widget: string, required: false }
+                  - { name: zh, label: 中文, widget: string, required: false }
+              - name: note
+                label: Note
+                widget: object
+                required: false
+                fields:
+                  - { name: en, label: English, widget: text, required: false }
+                  - { name: zh, label: 中文, widget: text, required: false }
+              - { name: date, label: 'Date (e.g. 2025 or 2025-08-14)', widget: string, required: false }
+              - name: image
+                label: Image
+                widget: image
+                required: false
+                media_folder: /public/media/uploads
+                public_folder: /media/uploads
+              - { name: link, label: Link, widget: string, required: false }

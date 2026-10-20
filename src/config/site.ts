@@ -45,6 +45,6 @@ export type IconName = 'scholar' | 'github' | 'linkedin' | 'email' | 'cv';
 export const NAV_LINKS = [
   { href: '/about', key: 'nav.about' },
   { href: '/research', key: 'nav.research' },
-  { href: '/posts', key: 'nav.posts' },
-  { href: '/music', key: 'nav.music' },
+  // Posts and Music live inside the Playground (their pages still exist at /posts and /music).
+  { href: '/playground', key: 'nav.playground' },
 ] as const;
