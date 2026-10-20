@@ -4,7 +4,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import MusicSections from '../components/MusicSections.astro';
 import PostCard from '../components/PostCard.astro';
 import { LIBRARY, type LibraryShelf } from '../config/library';
+import { MUSIC_SECTIONS } from '../config/music';
 import { formatDate, getLang, localizePath, t, tr } from '../i18n';
+import type { PlaygroundData } from '../scripts/playground/types';
 
 const lang = getLang(Astro.url);
 const ui = t(lang);
@@ -13,31 +15,88 @@ const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
 
-// Stall order along the lane: left/right alternate, entrance first.
+// Stalls along the lane (left/right alternate, entrance first). `world` is where each leads;
+// `panel` is its list view.
 const STALLS = [
-  { id: 'music', emoji: '🎻', color: '#e76f51', side: -1, z: 3 },
-  { id: 'posts', emoji: '📝', color: '#2a9d8f', side: 1, z: -2 },
-  { id: 'novels', emoji: '📚', color: '#9b5de5', side: -1, z: -7 },
-  { id: 'anime', emoji: '📺', color: '#f15bb5', side: 1, z: -12 },
-  { id: 'travel', emoji: '✈️', color: '#3fa7d6', side: -1, z: -17 },
+  { world: 'studio', panel: 'music', emoji: '🎻', color: '#e76f51', side: -1, z: 3 },
+  { world: 'postoffice', panel: 'posts', emoji: '📝', color: '#2a9d8f', side: 1, z: -2 },
+  { world: 'library', panel: 'novels', emoji: '📚', color: '#9b5de5', side: -1, z: -7 },
+  { world: 'theater', panel: 'anime', emoji: '📺', color: '#f15bb5', side: 1, z: -12 },
+  { world: 'station', panel: 'travel', emoji: '✈️', color: '#3fa7d6', side: -1, z: -17 },
 ] as const;
-const stalls = STALLS.map((s) => ({ ...s, label: ui[`stall.${s.id}`], blurb: ui[`stall.${s.id}.blurb`] }));
+const stalls = STALLS.map((s) => ({ ...s, label: ui[`stall.${s.panel}`], blurb: ui[`stall.${s.panel}.blurb`] }));
 const shelves: LibraryShelf[] = ['novels', 'anime', 'travel'];
 // Full dates (YYYY-MM-DD) are formatted; '2025' or '2025-08' are shown as written.
 const showDate = (date: string) => (/^\d{4}-\d{2}-\d{2}$/.test(date) ? formatDate(date, lang) : date);
 
+const card = (item: (typeof LIBRARY)['novels'][number]) => ({
+  title: tr(item.title, lang),
+  subtitle: item.subtitle ? tr(item.subtitle, lang) : undefined,
+  note: item.note ? tr(item.note, lang) || undefined : undefined,
+  date: item.date ? showDate(item.date) : undefined,
+  link: item.link,
+  image: item.image,
+});
+
+const data: PlaygroundData = {
+  lang,
+  stalls: stalls.map(({ world, label, emoji, color, side, z }) => ({ id: world, label, emoji, color, side, z })),
+  music: MUSIC_SECTIONS.map((s) => ({
+    title: tr(s.title, lang),
+    videos: s.performances.map((p) => ({ id: p.id, title: tr(p.title, lang), detail: tr(p.detail, lang), date: p.date ? formatDate(p.date, lang) : undefined })),
+  })),
+  novels: LIBRARY.novels.map(card),
+  anime: LIBRARY.anime.map(card),
+  travel: LIBRARY.travel.map(card),
+  posts: posts.map((p) => ({ title: p.data.title, description: p.data.description, date: formatDate(p.data.date, lang), href: localizePath(`/posts/${p.id}`, lang) })),
+  strings: {
+    back: ui['pg.back'],
+    nowShowing: ui['pg.nowShowing'],
+    moreBooks: ui['pg.moreBooks'],
+    postOffice: ui['pg.postOffice'],
+    mailbox: ui['pg.mailbox'],
+    noLetters: ui['pg.noLetters'],
+    mailboxNote: ui['pg.mailboxNote'],
+    comingSoon: ui['pg.comingSoon'],
+    mapNote: ui['pg.mapNote'],
+    journal: ui['stall.travel'],
+    watch: ui['pg.watch'],
+    read: ui['pg.read'],
+    open: ui['pg.open'],
+    prompt: ui['pg.prompt'],
+    promptTouch: ui['pg.promptTouch'],
+    promptItem: ui['pg.promptItem'],
+    promptItemTouch: ui['pg.promptItemTouch'],
+    promptExit: ui['pg.promptExit'],
+    promptExitTouch: ui['pg.promptExitTouch'],
+    title: ui['pg.title'],
+    subtitle: ui['pg.subtitle'],
+    helpKeys: ui['pg.helpKeys'],
+    helpTouch: ui['pg.helpTouch'],
+    helpKeysWorld: ui['pg.helpKeysWorld'],
+    helpTouchWorld: ui['pg.helpTouchWorld'],
+    ...Object.fromEntries(
+      (['studio', 'library', 'theater', 'postoffice', 'station'] as const).flatMap((w) => [
+        [`world.${w}`, ui[`pg.world.${w}`]],
+        [`world.${w}.hint`, ui[`pg.world.${w}.hint`]],
+      ]),
+    ),
+  },
+};
+
 const description =
   lang === 'zh'
-    ? '王平的夜市遊樂場：跟著麻糬逛逛音樂、文章、小說、動畫與旅行攤位。'
-    : 'Ping Wang’s night-market playground: walk around with Mochi and visit stalls for music, posts, novels, anime, and travel.';
+    ? '王平的夜市遊樂場：跟著麻糬逛逛音樂工作室、圖書館、動畫劇場、郵局與旅行車站。'
+    : 'Ping Wang’s night-market playground: walk around with Mochi and step into a music studio, a library, an anime theater, a post office, and a travel station.';
 ---
 
 <BaseLayout title={ui['nav.playground']} {description}>
-  <!-- 3D market -->
+  <!-- 3D playground -->
   <section
     class="market relative h-[calc(100svh-61px)] min-h-[520px] overflow-hidden bg-[#0b0d2e] text-[#fdf4e3]"
     data-market
-    data-stalls={JSON.stringify(stalls.map(({ id, emoji, color, side, z, label }) => ({ id, emoji, color, side, z, label })))}
+    data-playground={JSON.stringify(data)}
+    data-panels={JSON.stringify(Object.fromEntries(STALLS.map((s) => [s.world, s.panel])))}
     aria-label={ui['pg.title']}
   >
     <div class="market-host absolute inset-0 outline-none" tabindex="0" aria-label={ui['pg.helpKeys']}></div>
@@ -47,11 +106,9 @@ const description =
     </p>
 
     <div class="pointer-events-none absolute left-3 top-3 max-w-[22rem] rounded-2xl border border-white/10 bg-[#0b0d2e]/65 p-4 shadow-lg backdrop-blur-sm sm:left-5 sm:top-5">
-      <h1 class="text-2xl font-bold tracking-tight">🏮 {ui['pg.title']}</h1>
-      <p class="mt-1.5 text-sm leading-relaxed text-[#fdf4e3]/85">{ui['pg.subtitle']}</p>
-      <p class="market-help mt-2 text-xs leading-relaxed text-[#ffd8a8]" data-keys={ui['pg.helpKeys']} data-touch={ui['pg.helpTouch']}>
-        {ui['pg.helpKeys']}
-      </p>
+      <h1 class="market-title text-2xl font-bold tracking-tight">🏮 {ui['pg.title']}</h1>
+      <p class="market-subtitle mt-1.5 text-sm leading-relaxed text-[#fdf4e3]/85">{ui['pg.subtitle']}</p>
+      <p class="market-help mt-2 text-xs leading-relaxed text-[#ffd8a8]">{ui['pg.helpKeys']}</p>
     </div>
 
     <p
@@ -63,24 +120,33 @@ const description =
 
     <button
       type="button"
-      class="market-prompt absolute bottom-24 left-1/2 hidden -translate-x-1/2 rounded-full bg-[#fff3dc] px-5 py-2.5 text-sm font-semibold text-[#4a2c1a] shadow-lg transition hover:scale-105"
-      data-keys={ui['pg.prompt']}
-      data-touch={ui['pg.promptTouch']}
+      class="market-prompt absolute bottom-24 left-1/2 hidden max-w-[90%] -translate-x-1/2 truncate rounded-full bg-[#fff3dc] px-5 py-2.5 text-sm font-semibold text-[#4a2c1a] shadow-lg transition hover:scale-105"
     >
     </button>
 
+    <!-- Bottom bar: stall buttons in the market; back / list buttons inside a world -->
     <nav aria-label={ui['pg.stalls']} class="absolute inset-x-0 bottom-0 flex gap-2 overflow-x-auto bg-gradient-to-t from-[#0b0d2e]/90 to-transparent px-3 pb-3 pt-8 sm:justify-center">
-      {
-        stalls.map((s) => (
-          <button
-            type="button"
-            data-stall={s.id}
-            class="stall-btn shrink-0 rounded-full border border-white/15 bg-[#0b0d2e]/70 px-3.5 py-1.5 text-sm text-[#fdf4e3] backdrop-blur transition hover:border-[#ffd8a8] hover:text-[#ffd8a8]"
-          >
-            {s.emoji} {s.label}
-          </button>
-        ))
-      }
+      <div class="market-bar contents">
+        {
+          stalls.map((s) => (
+            <button
+              type="button"
+              data-world={s.world}
+              class="shrink-0 rounded-full border border-white/15 bg-[#0b0d2e]/70 px-3.5 py-1.5 text-sm text-[#fdf4e3] backdrop-blur transition hover:border-[#ffd8a8] hover:text-[#ffd8a8]"
+            >
+              {s.emoji} {s.label}
+            </button>
+          ))
+        }
+      </div>
+      <div class="world-bar hidden gap-2">
+        <button type="button" class="world-back shrink-0 rounded-full border border-white/15 bg-[#0b0d2e]/70 px-3.5 py-1.5 text-sm text-[#fdf4e3] backdrop-blur transition hover:border-[#ffd8a8] hover:text-[#ffd8a8]">
+          🏮 ← {ui['pg.back']}
+        </button>
+        <button type="button" class="world-list shrink-0 rounded-full border border-white/15 bg-[#0b0d2e]/70 px-3.5 py-1.5 text-sm text-[#fdf4e3] backdrop-blur transition hover:border-[#ffd8a8] hover:text-[#ffd8a8]">
+          ☰ {ui['pg.showList']}
+        </button>
+      </div>
     </nav>
   </section>
 
@@ -98,7 +164,7 @@ const description =
           <li>
             <button
               type="button"
-              data-stall={s.id}
+              data-panel-open={s.panel}
               class="card-hover flex w-full items-start gap-4 rounded-xl border border-border bg-card p-5 text-left"
               style={`border-left: 4px solid ${s.color}`}
             >
@@ -114,33 +180,30 @@ const description =
     </ul>
   </section>
 
-  <!-- Stall panels -->
+  <!-- Overlays: a backdrop, the per-stall list panels, and a card for single items -->
   <div class="market-backdrop fixed inset-0 z-[60] hidden bg-black/40 backdrop-blur-[2px]"></div>
   {
     stalls.map((s) => (
       <div
         class="market-panel fixed inset-x-0 bottom-0 z-[70] hidden max-h-[86svh] overflow-y-auto rounded-t-3xl border border-border bg-background shadow-2xl sm:inset-y-0 sm:left-auto sm:right-0 sm:max-h-none sm:w-[min(44rem,92vw)] sm:rounded-none sm:rounded-l-3xl"
-        data-panel={s.id}
+        data-panel={s.panel}
         role="dialog"
         aria-modal="true"
-        aria-labelledby={`panel-${s.id}`}
+        aria-labelledby={`panel-${s.panel}`}
       >
         <div class="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-border bg-background/95 px-6 py-4 backdrop-blur" style={`box-shadow: inset 0 4px 0 ${s.color}`}>
           <div>
-            <h2 id={`panel-${s.id}`} class="text-xl font-semibold tracking-tight">
+            <h2 id={`panel-${s.panel}`} class="text-xl font-semibold tracking-tight">
               <span aria-hidden="true">{s.emoji}</span> {s.label}
             </h2>
             <p class="mt-0.5 text-sm text-muted">{s.blurb}</p>
           </div>
-          <button
-            type="button"
-            class="market-close shrink-0 rounded-full border border-border px-3 py-1.5 text-sm text-muted transition-colors hover:border-accent-violet/60 hover:text-foreground"
-          >
+          <button type="button" class="market-close shrink-0 rounded-full border border-border px-3 py-1.5 text-sm text-muted transition-colors hover:border-accent-violet/60 hover:text-foreground">
             {ui['pg.close']} ✕
           </button>
         </div>
         <div class="px-6 py-6">
-          {s.id === 'music' && (
+          {s.panel === 'music' && (
             <>
               <MusicSections compact />
               <a href={localizePath('/music', lang)} class="mt-8 inline-block text-sm text-accent-blue underline underline-offset-4 hover:text-foreground">
@@ -148,7 +211,7 @@ const description =
               </a>
             </>
           )}
-          {s.id === 'posts' &&
+          {s.panel === 'posts' &&
             (posts.length ? (
               <>
                 <div class="space-y-4">{posts.map((post) => <PostCard {post} />)}</div>
@@ -159,10 +222,10 @@ const description =
             ) : (
               <p class="rounded-xl border border-dashed border-border p-6 text-sm text-muted">{ui['posts.empty']}</p>
             ))}
-          {shelves.includes(s.id as LibraryShelf) &&
-            (LIBRARY[s.id as LibraryShelf].length ? (
+          {shelves.includes(s.panel as LibraryShelf) &&
+            (LIBRARY[s.panel as LibraryShelf].length ? (
               <ul class="grid gap-4 sm:grid-cols-2">
-                {LIBRARY[s.id as LibraryShelf].map((item) => (
+                {LIBRARY[s.panel as LibraryShelf].map((item) => (
                   <li class="overflow-hidden rounded-xl border border-border bg-card">
                     {item.image && <img src={item.image} alt="" loading="lazy" class="aspect-[4/3] w-full object-cover" />}
                     <div class="p-4">
@@ -194,84 +257,206 @@ const description =
       </div>
     ))
   }
+
+  <div
+    class="item-card fixed inset-x-0 bottom-0 z-[70] hidden max-h-[86svh] overflow-y-auto rounded-t-3xl border border-border bg-background shadow-2xl sm:inset-auto sm:left-1/2 sm:top-1/2 sm:w-[min(36rem,92vw)] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-3xl"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="item-card-title"
+  >
+    <div class="item-media"></div>
+    <div class="p-6">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h2 id="item-card-title" class="item-title text-xl font-semibold leading-snug tracking-tight"></h2>
+          <p class="item-subtitle mt-1 text-sm text-muted"></p>
+        </div>
+        <button type="button" class="market-close shrink-0 rounded-full border border-border px-3 py-1.5 text-sm text-muted transition-colors hover:border-accent-violet/60 hover:text-foreground">
+          {ui['pg.close']} ✕
+        </button>
+      </div>
+      <p class="item-note mt-4 leading-relaxed text-foreground/85"></p>
+      <a class="item-link mt-5 hidden text-sm text-accent-blue underline underline-offset-4 hover:text-foreground"></a>
+    </div>
+  </div>
 </BaseLayout>
 
 <script>
-  import type { Market } from '../scripts/playground/market';
-  import type { StallDef, StallKind } from '../scripts/playground/stall';
+  import type { Engine } from '../scripts/playground/engine';
+  import type { Interactable, PlaygroundData, WorldId } from '../scripts/playground/types';
 
   const root = document.querySelector<HTMLElement>('[data-market]')!;
   const host = root.querySelector<HTMLElement>('.market-host')!;
   const loading = root.querySelector<HTMLElement>('.market-loading')!;
   const prompt = root.querySelector<HTMLButtonElement>('.market-prompt')!;
   const greeting = root.querySelector<HTMLElement>('.market-greeting')!;
+  const titleEl = root.querySelector<HTMLElement>('.market-title')!;
+  const subtitleEl = root.querySelector<HTMLElement>('.market-subtitle')!;
   const help = root.querySelector<HTMLElement>('.market-help')!;
+  const marketBar = root.querySelector<HTMLElement>('.market-bar')!;
+  const worldBar = root.querySelector<HTMLElement>('.world-bar')!;
   const fallback = document.querySelector<HTMLElement>('.market-fallback')!;
   const fallbackReason = fallback.querySelector<HTMLElement>('.market-fallback-reason')!;
   const show3d = fallback.querySelector<HTMLButtonElement>('.market-show3d')!;
   const backdrop = document.querySelector<HTMLElement>('.market-backdrop')!;
-  const defs: StallDef[] = JSON.parse(root.dataset.stalls ?? '[]');
+  const itemCard = document.querySelector<HTMLElement>('.item-card')!;
+  const data: PlaygroundData = JSON.parse(root.dataset.playground ?? '{}');
+  const panelFor: Record<string, string> = JSON.parse(root.dataset.panels ?? '{}');
+  const S = data.strings;
   const touch = matchMedia('(pointer: coarse)').matches;
+  const WORLDS: WorldId[] = ['market', 'studio', 'library', 'theater', 'postoffice', 'station'];
 
-  help.textContent = (touch ? help.dataset.touch : help.dataset.keys) ?? '';
+  help.textContent = touch ? S.helpTouch : S.helpKeys;
 
-  let market: Market | null = null;
-  let openId: StallKind | null = null;
+  let engine: Engine | null = null;
+  let current: WorldId = 'market';
+  let lastStall = '';
+  let open: HTMLElement | null = null;
   let lastFocus: HTMLElement | null = null;
 
-  // ── Panels ──────────────────────────────────────────────────────────────
-  const panel = (id: string) => document.querySelector<HTMLElement>(`.market-panel[data-panel="${id}"]`);
-  function openPanel(id: StallKind) {
-    if (openId) closePanel(false);
-    const p = panel(id);
-    if (!p) return;
+  // ── Overlays ────────────────────────────────────────────────────────────
+  function show(el: HTMLElement) {
+    if (open) hide(false);
     lastFocus = document.activeElement as HTMLElement | null;
-    openId = id;
-    p.hidden = false;
-    p.classList.remove('hidden');
+    open = el;
+    el.classList.remove('hidden');
     backdrop.classList.remove('hidden');
-    p.scrollTop = 0;
-    p.querySelector<HTMLElement>('.market-close')?.focus();
-    market?.setPaused(true);
+    el.scrollTop = 0;
+    el.querySelector<HTMLElement>('.market-close')?.focus();
+    engine?.setPaused(true);
   }
-  function closePanel(restoreFocus = true) {
-    if (!openId) return;
-    const p = panel(openId);
-    p?.classList.add('hidden');
-    // Stop any playing video.
-    p?.querySelectorAll('iframe').forEach((f) => f.remove());
+  function hide(restoreFocus = true) {
+    if (!open) return;
+    open.classList.add('hidden');
+    open.querySelectorAll('iframe').forEach((f) => f.remove()); // stop any playing video
     backdrop.classList.add('hidden');
-    openId = null;
-    market?.setPaused(false);
+    open = null;
+    engine?.setPaused(false);
     if (restoreFocus) (lastFocus && document.contains(lastFocus) ? lastFocus : host).focus();
   }
-  document.querySelectorAll('.market-close').forEach((b) => b.addEventListener('click', () => closePanel()));
-  backdrop.addEventListener('click', () => closePanel());
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && openId) closePanel();
-  });
+  const openPanel = (panel: string) => {
+    const el = document.querySelector<HTMLElement>(`.market-panel[data-panel="${panel}"]`);
+    if (el) show(el);
+  };
+  document.querySelectorAll('.market-close').forEach((b) => b.addEventListener('click', () => hide()));
+  backdrop.addEventListener('click', () => hide());
+  document.addEventListener('keydown', (e) => e.key === 'Escape' && open && hide());
+  document.querySelectorAll<HTMLButtonElement>('[data-panel-open]').forEach((b) => b.addEventListener('click', () => openPanel(b.dataset.panelOpen!)));
 
-  // Stall buttons: walk there in 3D, or open directly in the list view.
-  document.querySelectorAll<HTMLButtonElement>('[data-stall]').forEach((b) =>
-    b.addEventListener('click', () => {
-      const id = b.dataset.stall as StallKind;
-      if (market && !root.hidden) {
-        market.visit(id);
-        host.focus();
-      } else openPanel(id);
-    }),
-  );
+  /** Fill and show the item card. */
+  function showCard(o: { title: string; subtitle?: string; note?: string; media?: HTMLElement | null; link?: { href: string; label: string; external?: boolean } }) {
+    itemCard.querySelector('.item-title')!.textContent = o.title;
+    itemCard.querySelector('.item-subtitle')!.textContent = o.subtitle ?? '';
+    const note = itemCard.querySelector<HTMLElement>('.item-note')!;
+    note.textContent = o.note ?? '';
+    note.classList.toggle('hidden', !o.note);
+    itemCard.querySelector('.item-media')!.replaceChildren(...(o.media ? [o.media] : []));
+    const link = itemCard.querySelector<HTMLAnchorElement>('.item-link')!;
+    link.classList.toggle('hidden', !o.link);
+    link.classList.toggle('inline-block', !!o.link);
+    if (o.link) {
+      link.href = o.link.href;
+      link.textContent = `${o.link.label} ${o.link.external ? '↗' : '→'}`;
+      if (o.link.external) {
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+      } else link.removeAttribute('target');
+    }
+    show(itemCard);
+  }
+  function youtube(id: string, title: string) {
+    const box = document.createElement('div');
+    box.className = 'relative aspect-video w-full overflow-hidden rounded-t-3xl bg-black';
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0`;
+    iframe.title = title;
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    iframe.allowFullscreen = true;
+    iframe.className = 'absolute inset-0 h-full w-full';
+    box.append(iframe);
+    return box;
+  }
+  function image(src?: string) {
+    if (!src) return null;
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = '';
+    img.className = 'aspect-[4/3] w-full rounded-t-3xl object-cover';
+    return img;
+  }
+  const meta = (...parts: (string | undefined)[]) => parts.filter(Boolean).join(' · ');
 
-  // "Visit" prompt when Mochi is next to a stall.
-  let nearId: StallKind | null = null;
-  prompt.addEventListener('click', () => nearId && openPanel(nearId));
-  function onNear(id: StallKind | null) {
-    nearId = id;
-    if (!id) return prompt.classList.add('hidden');
-    const def = defs.find((d) => d.id === id)!;
-    prompt.textContent = `${def.emoji} ${def.label} · ${touch ? prompt.dataset.touch : prompt.dataset.keys}`;
+  function openItem(item: Interactable) {
+    const [kind, raw] = item.id.split(':');
+    const i = Number(raw);
+    if (kind === 'video') {
+      const video = data.music.flatMap((s) => s.videos.map((v) => ({ ...v, section: s.title }))).find((v) => v.id === raw);
+      if (video) showCard({ title: video.title, subtitle: meta(video.detail, video.date), media: youtube(video.id, video.title), link: { href: `https://www.youtube.com/watch?v=${video.id}`, label: S.watch, external: true } });
+    } else if (kind === 'book' || kind === 'anime' || kind === 'place') {
+      const c = (kind === 'book' ? data.novels : kind === 'anime' ? data.anime : data.travel)[i];
+      if (c) showCard({ title: c.title, subtitle: meta(c.subtitle, c.date), note: c.note, media: image(c.image), link: c.link ? { href: c.link, label: S.open, external: true } : undefined });
+    } else if (kind === 'post') {
+      const p = data.posts[i];
+      if (p) showCard({ title: p.title, subtitle: p.date, note: p.description, link: { href: p.href, label: S.read } });
+    } else if (item.id === 'mailbox') {
+      showCard({ title: `📮 ${S.mailbox}`, note: data.posts.length ? undefined : S.mailboxNote });
+    } else if (item.id === 'map') {
+      showCard({ title: `🗺️ ${S.journal}`, note: S.mapNote });
+    }
+  }
+
+  // ── World UI ────────────────────────────────────────────────────────────
+  function onWorldChange(world: WorldId) {
+    current = world;
+    const inMarket = world === 'market';
+    marketBar.classList.toggle('hidden', !inMarket);
+    marketBar.classList.toggle('contents', inMarket);
+    worldBar.classList.toggle('hidden', inMarket);
+    worldBar.classList.toggle('flex', !inMarket);
+    const stall = data.stalls.find((s) => s.id === world);
+    titleEl.textContent = inMarket ? `🏮 ${S.title}` : `${stall?.emoji ?? ''} ${S[`world.${world}`]}`;
+    subtitleEl.textContent = inMarket ? S.subtitle : S[`world.${world}.hint`];
+    help.textContent = inMarket ? (touch ? S.helpTouch : S.helpKeys) : touch ? S.helpTouchWorld : S.helpKeysWorld;
+    const hash = inMarket ? '' : `#${world}`;
+    if (location.hash !== hash) history.replaceState(null, '', `${location.pathname}${location.search}${hash}`);
+  }
+
+  let nearItem: Interactable | null = null;
+  function onNear(item: Interactable | null) {
+    nearItem = item;
+    if (!item) return prompt.classList.add('hidden');
+    const action =
+      item.kind === 'enter' ? (touch ? S.promptTouch : S.prompt) : item.kind === 'exit' ? (touch ? S.promptExitTouch : S.promptExit) : touch ? S.promptItemTouch : S.promptItem;
+    prompt.textContent = `${item.emoji ?? ''} ${item.label} · ${action}`;
     prompt.classList.remove('hidden');
   }
+  function onActivate(item: Interactable) {
+    if (item.kind === 'enter') {
+      lastStall = item.id;
+      engine?.enter(item.id as WorldId);
+    } else if (item.kind === 'exit') engine?.enter('market', lastStall || current);
+    else openItem(item);
+  }
+  prompt.addEventListener('click', () => nearItem && onActivate(nearItem));
+
+  marketBar.querySelectorAll<HTMLButtonElement>('[data-world]').forEach((b) =>
+    b.addEventListener('click', () => {
+      engine?.visit(b.dataset.world!);
+      host.focus();
+    }),
+  );
+  worldBar.querySelector('.world-back')!.addEventListener('click', () => {
+    engine?.enter('market', lastStall || current);
+    host.focus();
+  });
+  worldBar.querySelector('.world-list')!.addEventListener('click', () => openPanel(panelFor[current]));
+  window.addEventListener('hashchange', () => {
+    const w = location.hash.slice(1) as WorldId;
+    if (engine && WORLDS.includes(w) && w !== current) {
+      if (w !== 'market') lastStall = w;
+      engine.enter(w);
+    }
+  });
 
   // ── Start ───────────────────────────────────────────────────────────────
   function hasWebGL() {
@@ -283,23 +468,50 @@ const description =
     }
   }
   function showFallback(reason: 'nogl' | 'reduced') {
-    root.hidden = true;
     root.classList.add('hidden');
     fallback.classList.remove('hidden');
     fallbackReason.textContent = (reason === 'nogl' ? fallbackReason.dataset.nogl : fallbackReason.dataset.reduced) ?? '';
     show3d.classList.toggle('hidden', reason !== 'reduced');
   }
   async function start3d() {
-    root.hidden = false;
     root.classList.remove('hidden');
     fallback.classList.add('hidden');
     try {
-      const { startMarket } = await import('../scripts/playground/market');
-      market = startMarket(host, { stalls: defs, onNear, onOpen: openPanel });
+      const [{ startEngine }, { marketWorld }, { studioWorld }, { libraryWorld }, { theaterWorld }, { postOfficeWorld }, { stationWorld }] = await Promise.all([
+        import('../scripts/playground/engine'),
+        import('../scripts/playground/worlds/market'),
+        import('../scripts/playground/worlds/studio'),
+        import('../scripts/playground/worlds/library'),
+        import('../scripts/playground/worlds/theater'),
+        import('../scripts/playground/worlds/postoffice'),
+        import('../scripts/playground/worlds/station'),
+      ]);
+      const fromHash = location.hash.slice(1) as WorldId;
+      const first = WORLDS.includes(fromHash) ? fromHash : 'market';
+      if (first !== 'market') lastStall = first;
+      engine = startEngine(
+        host,
+        {
+          worlds: {
+            market: marketWorld(data),
+            studio: studioWorld(data),
+            library: libraryWorld(data),
+            theater: theaterWorld(data),
+            postoffice: postOfficeWorld(data),
+            station: stationWorld(data),
+          },
+          onNear,
+          onActivate,
+          onWorldChange,
+        },
+        first,
+      );
       requestAnimationFrame(() => loading.remove());
       host.focus({ preventScroll: true });
-      greeting.classList.remove('hidden');
-      setTimeout(() => greeting.classList.add('hidden'), 5000);
+      if (first === 'market') {
+        greeting.classList.remove('hidden');
+        setTimeout(() => greeting.classList.add('hidden'), 5000);
+      }
     } catch (err) {
       console.error(err);
       showFallback('nogl');

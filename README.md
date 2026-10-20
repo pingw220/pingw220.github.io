@@ -83,17 +83,27 @@ The admin configuration is `public/admin/config.yml`; the embeds are handled by
 
 ## Playground (/playground)
 
-A small 3D night market (three.js) where visitors walk around with Mochi the chinchilla and
-visit stalls: **Music**, **Posts**, **Novel Library**, **Anime Library**, and **Travel Journal**.
-Walk with WASD / arrow keys or click/tap where to go; clicking a stall walks there and opens it.
-Devices without WebGL, and visitors who prefer reduced motion, get the same stalls as a list.
+A small 3D night market (three.js) where visitors walk around with Mochi the chinchilla. Each stall
+leads into its own world (also linkable directly, e.g. `/playground#library`):
 
-- Stall panels show your music videos and posts automatically.
-- Fill the library stalls in the admin: **Profile & pages → Playground library** (`src/data/library.json`).
-  Each item has a title, an optional author/studio/place, note, date, image, and link.
-- Code: `src/views/Playground.astro` (page and panels) and `src/scripts/playground/`
-  (`world.ts` scenery, `stall.ts` stalls and props, `mascot.ts` Mochi, `market.ts` movement and camera).
-  Stall order, colors, and positions are at the top of `Playground.astro`.
+| Stall | World | What's inside |
+| --- | --- | --- |
+| 🎻 Music | Music studio (`#studio`) | Every performance framed on the walls; walk up to play it |
+| 📝 Posts | Post office (`#postoffice`) | Each post is a letter pinned to the board |
+| 📚 Novel Library | Library (`#library`) | Novels on display tables, grouped by author |
+| 📺 Anime Library | Anime theater (`#theater`) | A poster for each anime |
+| ✈️ Travel Journal | Train station (`#station`) | Places pinned on a map |
+
+Walk with WASD / arrow keys or click/tap where to go; walking up to something shows a prompt (E /
+Enter / tap). Every world has a door and a "Back to the market" button, plus "Show as a list".
+Devices without WebGL, and visitors who prefer reduced motion, get the same content as lists.
+
+- Music videos and posts appear automatically. Novels, anime, and travel places are edited in the
+  admin: **Profile & pages → Playground library** (`src/data/library.json`).
+- Code: `src/views/Playground.astro` (page, panels, item cards) and `src/scripts/playground/`:
+  `engine.ts` (movement, camera, transitions), `worlds/*.ts` (one file per world), `stall.ts`,
+  `mascot.ts` (Mochi), `kit.ts` / `textures.ts` (shared materials and painted textures).
+  Covers and posters are drawn in code; no copyrighted artwork is used.
 
 ## Two languages (English / 中文)
 

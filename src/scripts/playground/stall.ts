@@ -5,7 +5,10 @@ import { STREET } from './world';
 export type StallKind = 'music' | 'posts' | 'novels' | 'anime' | 'travel';
 
 export interface StallDef {
-  id: StallKind;
+  /** The world this stall leads into. */
+  id: string;
+  /** Which props to put on the counter. */
+  props: StallKind;
   label: string;
   emoji: string;
   /** Awning color. */
@@ -15,7 +18,7 @@ export interface StallDef {
 }
 
 export interface Stall {
-  id: StallKind;
+  id: string;
   group: THREE.Group;
   /** Where Mochi stands to visit the stall (on the lane). */
   front: THREE.Vector3;
@@ -95,12 +98,12 @@ export function buildStall(def: StallDef, gradientMap: THREE.Texture): Stall {
 
   // Props on the counter.
   const animated: ((t: number) => void)[] = [];
-  buildProps(def.id, group, toon, animated);
+  buildProps(def.props, group, toon, animated);
 
   // Face the lane.
   group.position.set(def.side * (STREET.halfWidth + 1.85), 0, def.z);
   group.rotation.y = def.side < 0 ? Math.PI / 2 : -Math.PI / 2;
-  hits.forEach((h) => (h.userData.stallId = def.id));
+  hits.forEach((h) => (h.userData.itemId = def.id));
 
   const front = new THREE.Vector3(def.side * (STREET.halfWidth - 0.55), 0, def.z);
 

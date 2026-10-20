@@ -1,5 +1,307 @@
 {
-  "novels": [],
-  "anime": [],
+  "novels": [
+    {
+      "title": {
+        "en": "The Legend of the Condor Heroes",
+        "zh": "射鵰英雄傳"
+      },
+      "subtitle": {
+        "en": "Jin Yong",
+        "zh": "金庸"
+      },
+      "note": {
+        "en": "Guo Jing, raised on the Mongolian steppe, and the clever Huang Rong. The first book of the Condor Trilogy.",
+        "zh": "在蒙古草原長大的郭靖與聰慧的黃蓉。「射鵰三部曲」的第一部。"
+      },
+      "date": "1957"
+    },
+    {
+      "title": {
+        "en": "The Return of the Condor Heroes",
+        "zh": "神鵰俠侶"
+      },
+      "subtitle": {
+        "en": "Jin Yong",
+        "zh": "金庸"
+      },
+      "note": {
+        "en": "Yang Guo and his teacher Xiaolongnü. The second book of the Condor Trilogy.",
+        "zh": "楊過與小龍女的故事。「射鵰三部曲」的第二部。"
+      },
+      "date": "1959"
+    },
+    {
+      "title": {
+        "en": "The Heaven Sword and Dragon Saber",
+        "zh": "倚天屠龍記"
+      },
+      "subtitle": {
+        "en": "Jin Yong",
+        "zh": "金庸"
+      },
+      "note": {
+        "en": "Zhang Wuji and the fight over the Heaven Sword and the Dragon Saber. The third book of the Condor Trilogy.",
+        "zh": "張無忌與倚天劍、屠龍刀之爭。「射鵰三部曲」的第三部。"
+      },
+      "date": "1961"
+    },
+    {
+      "title": {
+        "en": "Demi-Gods and Semi-Devils",
+        "zh": "天龍八部"
+      },
+      "subtitle": {
+        "en": "Jin Yong",
+        "zh": "金庸"
+      },
+      "note": {
+        "en": "Three sworn brothers, Qiao Feng, Duan Yu, and Xuzhu, in the Northern Song era.",
+        "zh": "北宋年間，喬峰、段譽與虛竹三兄弟的故事。"
+      },
+      "date": "1963"
+    },
+    {
+      "title": {
+        "en": "The Smiling, Proud Wanderer",
+        "zh": "笑傲江湖"
+      },
+      "subtitle": {
+        "en": "Jin Yong",
+        "zh": "金庸"
+      },
+      "note": {
+        "en": "The free-spirited swordsman Linghu Chong amid rivalries among the martial schools.",
+        "zh": "灑脫的令狐沖，在各大門派的明爭暗鬥之中。"
+      },
+      "date": "1967"
+    },
+    {
+      "title": {
+        "en": "The Deer and the Cauldron",
+        "zh": "鹿鼎記"
+      },
+      "subtitle": {
+        "en": "Jin Yong",
+        "zh": "金庸"
+      },
+      "note": {
+        "en": "Wei Xiaobao, a streetwise boy who rises in the Kangxi Emperor’s court. Jin Yong’s last full-length novel.",
+        "zh": "市井出身的韋小寶，在康熙朝廷中左右逢源。金庸的最後一部長篇小說。"
+      },
+      "date": "1969"
+    },
+    {
+      "title": {
+        "en": "The Book and the Sword",
+        "zh": "書劍恩仇錄"
+      },
+      "subtitle": {
+        "en": "Jin Yong",
+        "zh": "金庸"
+      },
+      "note": {
+        "en": "Chen Jialuo and the Red Flower Society in the Qianlong era. Jin Yong’s first novel.",
+        "zh": "乾隆年間，陳家洛與紅花會。金庸的第一部小說。"
+      },
+      "date": "1955"
+    },
+    {
+      "title": {
+        "en": "Sword Stained with Royal Blood",
+        "zh": "碧血劍"
+      },
+      "subtitle": {
+        "en": "Jin Yong",
+        "zh": "金庸"
+      },
+      "note": {
+        "en": "Yuan Chengzhi at the end of the Ming dynasty.",
+        "zh": "明朝末年，袁承志的故事。"
+      },
+      "date": "1956"
+    },
+    {
+      "title": {
+        "en": "Fox Volant of the Snowy Mountain",
+        "zh": "雪山飛狐"
+      },
+      "subtitle": {
+        "en": "Jin Yong",
+        "zh": "金庸"
+      },
+      "note": {
+        "en": "An old feud between the Hu and Miao families, told over a single day.",
+        "zh": "胡、苗兩家的恩怨，在一天之內娓娓道來。"
+      },
+      "date": "1959"
+    },
+    {
+      "title": {
+        "en": "The Young Flying Fox",
+        "zh": "飛狐外傳"
+      },
+      "subtitle": {
+        "en": "Jin Yong",
+        "zh": "金庸"
+      },
+      "note": {
+        "en": "The youth of Hu Fei, before Fox Volant of the Snowy Mountain.",
+        "zh": "胡斐的少年時代，《雪山飛狐》的前傳。"
+      },
+      "date": "1960"
+    },
+    {
+      "title": {
+        "en": "A Deadly Secret",
+        "zh": "連城訣"
+      },
+      "subtitle": {
+        "en": "Jin Yong",
+        "zh": "金庸"
+      },
+      "note": {
+        "en": "Di Yun, a country boy betrayed and imprisoned, and the secret of a hidden treasure.",
+        "zh": "被陷害入獄的鄉下少年狄雲，與一個寶藏的秘密。"
+      },
+      "date": "1963"
+    },
+    {
+      "title": {
+        "en": "Ode to Gallantry",
+        "zh": "俠客行"
+      },
+      "subtitle": {
+        "en": "Jin Yong",
+        "zh": "金庸"
+      },
+      "note": {
+        "en": "Shi Potian, a guileless young man who is mistaken for someone else.",
+        "zh": "單純的少年石破天，被誤認為他人的奇遇。"
+      },
+      "date": "1965"
+    },
+    {
+      "title": {
+        "en": "White Horse Neighs in the Western Wind",
+        "zh": "白馬嘯西風"
+      },
+      "subtitle": {
+        "en": "Jin Yong",
+        "zh": "金庸"
+      },
+      "note": {
+        "en": "Li Wenxiu, a Han girl who grows up among the Kazakhs.",
+        "zh": "在哈薩克族之間長大的漢族少女李文秀。"
+      },
+      "date": "1961"
+    },
+    {
+      "title": {
+        "en": "Blade-dance of the Two Lovers",
+        "zh": "鴛鴦刀"
+      },
+      "subtitle": {
+        "en": "Jin Yong",
+        "zh": "金庸"
+      },
+      "note": {
+        "en": "A lighthearted novella about the pair of Mandarin Duck Blades.",
+        "zh": "圍繞一對鴛鴦刀的輕鬆中篇小說。"
+      },
+      "date": "1961"
+    },
+    {
+      "title": {
+        "en": "Sword of the Yue Maiden",
+        "zh": "越女劍"
+      },
+      "subtitle": {
+        "en": "Jin Yong",
+        "zh": "金庸"
+      },
+      "note": {
+        "en": "A short story set in the Spring and Autumn period, about the swordswoman Aqing.",
+        "zh": "春秋時代，越國少女阿青的短篇故事。"
+      },
+      "date": "1970"
+    },
+    {
+      "title": {
+        "en": "Sword Snow Stride",
+        "zh": "雪中悍刀行"
+      },
+      "subtitle": {
+        "en": "Fenghuo Xi Zhuhou",
+        "zh": "烽火戲諸侯"
+      },
+      "note": {
+        "en": "Xu Fengnian, heir of the Prince of Beiliang, and his journey through the jianghu and the empire.",
+        "zh": "北涼世子徐鳳年的江湖與天下。"
+      },
+      "date": "2012"
+    },
+    {
+      "title": {
+        "en": "Joy of Life",
+        "zh": "慶餘年"
+      },
+      "subtitle": {
+        "en": "Mao Ni",
+        "zh": "貓膩"
+      },
+      "note": {
+        "en": "Fan Xian, reborn with memories of the modern world, finds his own way through palace intrigue.",
+        "zh": "帶著現代記憶重生的范閒，在權謀之間走出自己的路。"
+      },
+      "date": "2007"
+    },
+    {
+      "title": {
+        "en": "Classroom of the Elite",
+        "zh": "實力至上主義教室"
+      },
+      "subtitle": {
+        "en": "Shōgo Kinugasa",
+        "zh": "衣笠彰梧"
+      },
+      "note": {
+        "en": "Kiyotaka Ayanokōji at an elite school where students are ranked purely on merit. A light novel series.",
+        "zh": "綾小路清隆在以實力評價學生的高度育成高中裡的校園生活。輕小說系列。"
+      },
+      "date": "2015"
+    }
+  ],
+  "anime": [
+    {
+      "title": {
+        "en": "86 —Eighty-Six—",
+        "zh": "86 不存在的戰區"
+      },
+      "subtitle": {
+        "en": "A-1 Pictures",
+        "zh": "A-1 Pictures"
+      },
+      "note": {
+        "en": "Lena and the Spearhead squadron of the Eighty-Six fight a war the Republic claims is fought by drones. Based on the light novel by Asato Asato.",
+        "zh": "蕾娜與「先鋒戰隊」的八六區少年們，在一場共和國宣稱由無人機進行的戰爭中奮戰。改編自安里アサト的輕小說。"
+      },
+      "date": "2021"
+    },
+    {
+      "title": {
+        "en": "Food Wars! Shokugeki no Soma",
+        "zh": "食戟之靈"
+      },
+      "subtitle": {
+        "en": "J.C.Staff",
+        "zh": "J.C.Staff"
+      },
+      "note": {
+        "en": "Sōma Yukihira cooks his way through the elite Tōtsuki culinary academy, one food duel at a time. Based on the manga by Yūto Tsukuda and Shun Saeki.",
+        "zh": "幸平創真在名門遠月料理學園，以一場場「食戟」料理對決一路挑戰。改編自附田祐斗與佐伯俊的漫畫。"
+      },
+      "date": "2015"
+    }
+  ],
   "travel": []
 }
