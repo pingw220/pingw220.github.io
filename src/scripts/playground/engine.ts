@@ -31,6 +31,7 @@ export interface Engine {
 }
 
 const SPEED = 3.6;
+const RUN_FACTOR = 2.2; // while Space or Shift is held
 const RADIUS = 0.4; // Joy's size, for bumping into furniture
 const NEAR_DISTANCE = 1.5;
 const AIM_RANGE = 7; // how far the crosshair can pick things
@@ -165,6 +166,7 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
   activateWorld(world);
 
   // ── Keyboard ───────────────────────────────────────────────────────────────
+  let running = false;
   const MOVE_KEYS = ['arrowup', 'arrowdown', 'arrowleft', 'arrowright', 'w', 'a', 's', 'd'];
   const isLocked = () => document.pointerLockElement === renderer.domElement;
   const focusOk = () => isLocked() || host.contains(document.activeElement) || document.activeElement === document.body;
@@ -172,7 +174,11 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
     if (paused || switching || e.altKey || e.ctrlKey || e.metaKey) return;
     if ((e.target as HTMLElement)?.closest?.('input, textarea, select, [contenteditable]')) return;
     const k = e.key.toLowerCase();
-    if (MOVE_KEYS.includes(k)) {
+    if ((e.code === 'Space' || k === 'shift') && focusOk()) {
+      // Hold Space (or Shift) to run.
+      running = true;
+      e.preventDefault();
+    } else if (MOVE_KEYS.includes(k)) {
       if (!focusOk()) return;
       keys.add(k);
       target = null;
@@ -183,8 +189,14 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
       use(near);
     }
   });
-  window.addEventListener('keyup', (e) => keys.delete(e.key.toLowerCase()));
-  window.addEventListener('blur', () => keys.clear());
+  window.addEventListener('keyup', (e) => {
+    keys.delete(e.key.toLowerCase());
+    if (e.code === 'Space' || e.key === 'Shift') running = false;
+  });
+  window.addEventListener('blur', () => {
+    keys.clear();
+    running = false;
+  });
 
   // ── Mouse look (desktop) and drag-to-look (touch) ─────────────────────────
   const raycaster = new THREE.Raycaster();
@@ -333,7 +345,7 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
     }
     let speed = 0;
     if (move.lengthSq() > 0) {
-      const step = Math.min(SPEED * dt, move.length());
+      const step = Math.min(SPEED * (running ? RUN_FACTOR : 1) * dt, move.length());
       move.normalize();
       // Move each axis separately so Joy slides along furniture instead of stopping.
       const blocked = (x: number, z: number) =>

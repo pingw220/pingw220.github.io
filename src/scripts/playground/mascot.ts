@@ -172,7 +172,7 @@ export function buildMascot(gradientMap: THREE.Texture): Mascot {
     group,
     update(t, dt, speed) {
       const moving = speed > 0.05;
-      walkPhase += dt * (moving ? 11 : 0);
+      walkPhase += dt * (moving ? 11 * Math.max(1, speed / 3.6) : 0); // faster trot when running
       body.position.y = moving ? Math.abs(Math.sin(walkPhase)) * 0.08 : Math.sin(t * 2.2) * 0.01;
       body.rotation.z = moving ? Math.sin(walkPhase) * 0.05 : 0;
       legs.forEach((leg, i) => {

@@ -116,7 +116,8 @@ export const postOfficeWorld = (data: PlaygroundData) => (gradientMap: THREE.Tex
       });
     });
   }
-  showMessages([]);
+  // The room is built the first time someone walks in, which may be after the messages arrived.
+  showMessages((window as { playgroundMessages?: PublicMessage[] }).playgroundMessages ?? []);
   window.addEventListener('playground:messages', (e) => showMessages((e as CustomEvent<PublicMessage[]>).detail));
 
   const lampGlow = glowTexture('rgba(255,214,150,0.65)');

@@ -629,6 +629,7 @@ const description =
   const msgList = document.querySelector<HTMLElement>('.msg-list');
   const api = (data.messagesApi || '').replace(/\/$/, '');
   function renderMessages() {
+    (window as { playgroundMessages?: Message[] }).playgroundMessages = messages;
     window.dispatchEvent(new CustomEvent('playground:messages', { detail: messages }));
     if (!msgList) return;
     if (!messages.length) {
