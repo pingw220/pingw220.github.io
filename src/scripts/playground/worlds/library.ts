@@ -4,7 +4,7 @@ import { canvasTexture, glowTexture } from '../textures';
 import type { Interactable, LibraryCard, PlaygroundData, World } from '../types';
 
 const W = 18;
-const D = 20;
+const D = 24;
 const H = 6.5;
 
 const COVER_COLORS = ['#8c2f39', '#2f5d8a', '#3f7a5a', '#7b4fa0', '#b5651d', '#1f6f78', '#a23b72', '#4b5d16', '#5c3c92', '#9a3412'];
@@ -65,6 +65,24 @@ function coverTexture(book: LibraryCard, i: number, lang: 'en' | 'zh'): THREE.Ca
   });
 }
 
+/** A gold medal with the rank number. */
+export function rankTexture(rank: number): THREE.CanvasTexture {
+  return canvasTexture(128, 128, (g, w, h) => {
+    g.fillStyle = rank === 1 ? '#ffd166' : rank === 2 ? '#e0e0e0' : rank === 3 ? '#e09f5a' : '#9b5de5';
+    g.beginPath();
+    g.arc(w / 2, h / 2, w / 2 - 4, 0, Math.PI * 2);
+    g.fill();
+    g.strokeStyle = 'rgba(0,0,0,0.25)';
+    g.lineWidth = 6;
+    g.stroke();
+    g.fillStyle = rank <= 3 ? '#3a2410' : '#ffffff';
+    g.font = `900 64px ${FONT}`;
+    g.textAlign = 'center';
+    g.textBaseline = 'middle';
+    g.fillText(String(rank), w / 2, h / 2 + 4);
+  });
+}
+
 /** Novels → a library. Each novel stands on a display table; walk up to open it. */
 export const libraryWorld = (data: PlaygroundData) => (gradientMap: THREE.Texture): World => {
   const kit = makeKit(gradientMap);
@@ -110,7 +128,7 @@ export const libraryWorld = (data: PlaygroundData) => (gradientMap: THREE.Textur
     scene.add(unit);
   }
   for (const x of [-6, -2, 2, 6]) shelfUnit(x, -D / 2 + 0.3, 0, 3.6);
-  for (const z of [-6, -2.2, 1.6]) {
+  for (const z of [-8.4, -4.6, -0.8, 3]) {
     shelfUnit(-W / 2 + 0.3, z, Math.PI / 2, 3.6);
     shelfUnit(W / 2 - 0.3, z, -Math.PI / 2, 3.6);
   }
@@ -126,7 +144,8 @@ export const libraryWorld = (data: PlaygroundData) => (gradientMap: THREE.Textur
   for (const s of [-1, 1]) ladder.add(at(box(0.07, 4.8, 0.07, toon(0x8a5a3a)), s * 0.35, 2.4, 0));
   for (let k = 0; k < 9; k++) ladder.add(at(box(0.7, 0.05, 0.07, toon(0x8a5a3a)), 0, 0.4 + k * 0.5, 0));
   ladder.rotation.x = -0.12;
-  const nook = at(new THREE.Group(), -W / 2 + 2, 0, D / 2 - 6.5, scene);
+  const nook = at(new THREE.Group(), W / 2 - 2, 0, D / 2 - 6, scene);
+  nook.rotation.y = -Math.PI / 2;
   nook.add(at(box(1.3, 0.5, 1.1, toon(0xb5524a)), 0, 0.3, 0), at(box(1.3, 1.0, 0.25, toon(0xb5524a)), 0, 0.9, -0.45));
   for (const s of [-1, 1]) nook.add(at(box(0.25, 0.75, 1.1, toon(0x9c4038)), s * 0.6, 0.55, 0));
   nook.add(at(cyl(0.03, 0.03, 1.8, toon(0x2b2b33)), 1.1, 0.9, -0.2), at(ball(0.28, glow(0xffd29a, 1.8)), 1.1, 1.85, -0.2));
@@ -145,7 +164,7 @@ export const libraryWorld = (data: PlaygroundData) => (gradientMap: THREE.Textur
 
   // Warm lamps over the tables.
   const lampGlow = glowTexture('rgba(255,214,150,0.65)');
-  for (const [x, z] of [[-4, 3], [4, 3], [-4, -3], [4, -3], [0, 6]]) {
+  for (const [x, z] of [[-4, 5], [4, 5], [-4, -1], [4, -1], [0, -6], [0, 8]]) {
     scene.add(at(ball(0.22, glow(0xffd29a, 2.2)), x, H - 0.45, z));
     const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: lampGlow, transparent: true, depthWrite: false }));
     halo.scale.set(0.9, 0.9, 1);
@@ -153,36 +172,59 @@ export const libraryWorld = (data: PlaygroundData) => (gradientMap: THREE.Textur
     scene.add(at(new THREE.PointLight(0xffd29a, 6, 9, 1.5), x, H - 0.65, z));
   }
 
-  // ── Display tables: one per author with 3+ books, the rest share a table ───
+  // ── Display tables: the all-time favorites at the back, then one table per category ──
   const items: Interactable[] = [];
-  const byAuthor = new Map<string, LibraryCard[]>();
-  for (const b of data.novels) {
-    const key = b.subtitle ?? '';
-    byAuthor.set(key, [...(byAuthor.get(key) ?? []), b]);
+  type Group = { title: string; sub: string; top?: boolean; books: { book: LibraryCard; index: number }[] };
+  const indexed = data.novels.map((book, index) => ({ book, index }));
+  const ranked = indexed.filter((b) => b.book.rank).sort((a, b) => a.book.rank! - b.book.rank!);
+  const groups: Group[] = [];
+  if (ranked.length) groups.push({ title: data.strings.allTimeTop.replace('{n}', String(ranked.length)), sub: '🏆', top: true, books: ranked });
+  const byCategory = new Map<string, Group>();
+  for (const b of indexed) {
+    if (b.book.rank) continue;
+    const key = b.book.category || data.strings.moreBooks;
+    if (!byCategory.has(key)) byCategory.set(key, { title: key, sub: '', books: [] });
+    byCategory.get(key)!.books.push(b);
   }
-  const groups: { title: string; books: LibraryCard[] }[] = [];
-  const others: LibraryCard[] = [];
-  for (const [author, list] of byAuthor) (list.length >= 3 && author ? groups.push({ title: author, books: list }) : others.push(...list));
-  if (others.length) groups.push({ title: data.strings.moreBooks, books: others });
+  for (const g of byCategory.values()) groups.push({ ...g, sub: `${g.books.length} 📚` });
 
-  // Tables along the left and right sides (books facing the center aisle), then one at the back.
-  const obstacles: NonNullable<World['obstacles']> = [];
-  const slots = [
-    { x: -4.4, z: 0, facing: -Math.PI / 2, along: 'z' as const, dir: 1 },
-    { x: 4.4, z: 0, facing: Math.PI / 2, along: 'z' as const, dir: -1 },
-    { x: 0, z: -6.6, facing: Math.PI, along: 'x' as const, dir: 1 },
-  ];
-  let bookIndex = 0;
-  groups.slice(0, slots.length).forEach((group, gi) => {
-    const slot = slots[gi];
+  const SPACING = 0.82;
+  const lengthOf = (g: Group) => Math.max(2.4, g.books.length * SPACING + 0.5);
+  // The back table holds the favorites; the rest fill the left lane, then the right lane.
+  type Slot = { x: number; z: number; facing: number; along: 'x' | 'z'; dir: number };
+  const placed: { group: Group; slot: Slot; length: number }[] = [];
+  const LANE_START = -6.2;
+  const LANE_END = 8.6;
+  const GAP = 0.9;
+  let lane = 0;
+  let cursor = LANE_START;
+  for (const group of groups) {
+    const length = lengthOf(group);
+    if (group.top) {
+      placed.push({ group, length, slot: { x: 0, z: -D / 2 + 3.2, facing: Math.PI, along: 'x', dir: 1 } });
+      continue;
+    }
+    if (cursor + length > LANE_END && lane === 0) {
+      lane = 1;
+      cursor = LANE_START;
+    }
+    const side = lane === 0 ? -1 : 1;
+    const center = cursor + length / 2;
+    placed.push({ group, length, slot: { x: side * 4.4, z: center, facing: side < 0 ? -Math.PI / 2 : Math.PI / 2, along: 'z', dir: side < 0 ? 1 : -1 } });
+    cursor += length + GAP;
+  }
+
+  const obstacles: NonNullable<World['obstacles']> = [{ minX: W / 2 - 2.8, maxX: W / 2 - 1.2, minZ: D / 2 - 7, maxZ: D / 2 - 5 }];
+  for (const { group, slot, length } of placed) {
     const n = group.books.length;
-    const spacing = Math.min(0.82, 12 / Math.max(n, 1));
-    const length = Math.max(2.6, n * spacing + 0.6);
     const table = new THREE.Group();
-    table.add(at(box(length, 0.9, 1.0, toon(0x6b4329)), 0, 0.45, 0), at(box(length + 0.2, 0.08, 1.15, toon(0x8a5a3a)), 0, 0.93, 0));
+    const top = toon(group.top ? 0xb8860b : 0x8a5a3a);
+    table.add(at(box(length, 0.9, 1.0, toon(0x6b4329)), 0, 0.45, 0), at(box(length + 0.2, 0.08, 1.15, top), 0, 0.93, 0));
+    if (group.top) table.add(at(box(length + 0.1, 0.5, 0.02, toon(0x9b2226)), 0, 0.68, 0.51)); // red cloth
+    const signWidth = Math.min(3.4, length + 0.5);
     const sign = new THREE.Mesh(
-      new THREE.PlaneGeometry(3.4, 0.62),
-      new THREE.MeshBasicMaterial({ map: labelTexture(group.title, { sub: `${n} 📚`, bg: '#fff3dc', border: '#9b5de5', height: 192 }), color: 0xe0d8cc, transparent: true }),
+      new THREE.PlaneGeometry(signWidth, signWidth * 0.18),
+      new THREE.MeshBasicMaterial({ map: labelTexture(group.title, { sub: group.sub, bg: group.top ? '#ffd166' : '#fff3dc', border: group.top ? '#9b2226' : '#9b5de5', height: 192 }), color: 0xe0d8cc, transparent: true }),
     );
     sign.position.set(0, 2.55, -0.35);
     table.add(sign);
@@ -190,16 +232,27 @@ export const libraryWorld = (data: PlaygroundData) => (gradientMap: THREE.Textur
     // Local +z of the table faces the aisle.
     table.rotation.y = slot.along === 'z' ? slot.facing + Math.PI : 0;
     scene.add(table);
+    if (group.top) {
+      const spot = new THREE.SpotLight(0xfff2cc, 16, 9, 0.6, 0.6, 1.4);
+      spot.position.set(slot.x, H - 0.3, slot.z + 2);
+      spot.target.position.set(slot.x, 1, slot.z);
+      scene.add(spot, spot.target);
+    }
     const half = length / 2 + 0.1;
     obstacles.push(slot.along === 'z' ? { minX: slot.x - 0.58, maxX: slot.x + 0.58, minZ: slot.z - half, maxZ: slot.z + half } : { minX: slot.x - half, maxX: slot.x + half, minZ: slot.z - 0.58, maxZ: slot.z + 0.58 });
 
-    group.books.forEach((book, k) => {
-      const u = (-((n - 1) * spacing) / 2 + k * spacing) * slot.dir;
+    group.books.forEach(({ book, index }, k) => {
+      const u = (-((n - 1) * SPACING) / 2 + k * SPACING) * slot.dir;
       const g = new THREE.Group();
-      const cover = new THREE.Mesh(new THREE.PlaneGeometry(0.62, 0.9), new THREE.MeshBasicMaterial({ map: imageOr(book.image, ((idx) => () => coverTexture(book, idx, data.lang))(bookIndex)), color: 0xdcd6cc }));
+      const cover = new THREE.Mesh(new THREE.PlaneGeometry(0.62, 0.9), new THREE.MeshBasicMaterial({ map: imageOr(book.image, () => coverTexture(book, index, data.lang)), color: 0xdcd6cc }));
       cover.position.z = 0.056;
       const block = box(0.62, 0.9, 0.11, toon(0xf3ead7));
       g.add(block, cover);
+      if (book.rank) {
+        const badge = new THREE.Mesh(new THREE.CircleGeometry(0.13, 24), new THREE.MeshBasicMaterial({ map: rankTexture(book.rank), transparent: true }));
+        badge.position.set(0.24, 0.4, 0.07);
+        g.add(badge);
+      }
       g.position.set(u, 1.42, 0.05);
       g.rotation.x = -0.12;
       table.add(g);
@@ -207,14 +260,14 @@ export const libraryWorld = (data: PlaygroundData) => (gradientMap: THREE.Textur
       table.updateMatrixWorld(true);
       g.getWorldPosition(world);
       const out = new THREE.Vector3(Math.sin(slot.facing + Math.PI), 0, Math.cos(slot.facing + Math.PI)); // toward the aisle
-      const id = `book:${bookIndex}`;
+      const id = `book:${index}`;
       const baseY = 1.42;
       let isNear = false;
       items.push({
         id,
         kind: 'item',
         label: book.title,
-        emoji: '📖',
+        emoji: book.rank ? '🏆' : '📖',
         front: new THREE.Vector3(world.x, 0, world.z).addScaledVector(out, 1.25),
         facing: slot.facing,
         hits: markHits([block, cover], id),
@@ -227,9 +280,8 @@ export const libraryWorld = (data: PlaygroundData) => (gradientMap: THREE.Textur
           g.rotation.x += ((isNear ? 0 : -0.12) - g.rotation.x) * 0.15;
         },
       });
-      bookIndex++;
     });
-  });
+  }
 
   const exit = buildExitDoor(scene, kit, -W / 2 + 0.05, D / 2 - 1.8, data.strings.back);
   items.push({ id: 'exit', kind: 'exit', label: data.strings.back, emoji: '🏮', front: new THREE.Vector3(-W / 2 + 1.2, 0, D / 2 - 1.8), facing: -Math.PI / 2, hits: markHits(exit.hits, 'exit') });
@@ -237,7 +289,7 @@ export const libraryWorld = (data: PlaygroundData) => (gradientMap: THREE.Textur
   return {
     id: 'library',
     scene,
-    bounds: { minX: -W / 2 + 1.2, maxX: W / 2 - 1.2, minZ: -5.2, maxZ: D / 2 - 0.8 },
+    bounds: { minX: -W / 2 + 1.2, maxX: W / 2 - 1.2, minZ: -D / 2 + 4.6, maxZ: D / 2 - 0.8 },
     obstacles,
     spawn: new THREE.Vector3(0, 0, D / 2 - 1.6),
     spawnFacing: Math.PI,

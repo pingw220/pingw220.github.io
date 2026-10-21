@@ -1,5 +1,5 @@
 /**
- * Items on the Playground's library stalls (Novels, Anime, Travel, Sports). Edited from the
+ * Items on the Playground's library stalls (Novels, Anime, Dramas, Movies, Travel, Sports). Edited from the
  * admin page (/admin → Profile & pages → Playground library) and stored in
  * src/data/library.json. Every field except the title is optional.
  */
@@ -12,7 +12,9 @@ export interface LibraryItem {
   rating?: number;
   /** How much you love it, 1–5 hearts. */
   love?: number;
-  /** Genre or type, e.g. 武俠 / Wuxia. */
+  /** All-time ranking (1 = favorite). Ranked items get the place of honor. */
+  rank?: number;
+  /** Genre / group, e.g. 武俠 / Wuxia. Items are grouped by it in the 3D worlds. */
   category?: Text;
   /** Your review / thoughts. */
   review?: Text;
@@ -32,6 +34,6 @@ export interface LibraryItem {
   link?: string;
 }
 
-export type LibraryShelf = 'novels' | 'anime' | 'travel' | 'sports';
+export type LibraryShelf = 'novels' | 'anime' | 'dramas' | 'movies' | 'travel' | 'sports';
 
 export const LIBRARY = data as Record<LibraryShelf, LibraryItem[]>;

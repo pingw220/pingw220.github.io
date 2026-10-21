@@ -20,7 +20,7 @@ export function makeKit(gradientMap: THREE.Texture) {
     parent?.add(obj);
     return obj;
   };
-  return { toon, glow, box, cyl, ball, at };
+  return { toon, glow, box, cyl, ball, at, gradientMap };
 }
 export type Kit = ReturnType<typeof makeKit>;
 
@@ -191,8 +191,11 @@ export function buildExitDoor(scene: THREE.Scene, kit: Kit, x: number, z: number
   return { door, hits: [leaf, lintel, sign] };
 }
 
-/** Use a photo/cover when there is one (falls back to the drawn texture if it can't load). */
-export function imageOr(url: string | undefined, fallback: () => THREE.Texture): THREE.Texture {
+/**
+ * Use a photo/cover when there is one (falls back to the drawn texture if it can't load).
+ * With `aspect` (width / height of the surface), the photo is center-cropped to fit.
+ */
+export function imageOr(url: string | undefined, fallback: () => THREE.Texture, aspect?: number): THREE.Texture {
   const drawn = fallback();
   if (!url) return drawn;
   const loader = new THREE.TextureLoader();
@@ -201,6 +204,13 @@ export function imageOr(url: string | undefined, fallback: () => THREE.Texture):
     url,
     // The photo is a different size than the placeholder: free the GPU copy so it's reallocated.
     (t) => {
+      const img = t.image as HTMLImageElement;
+      if (aspect && img.width && img.height) {
+        const ratio = img.width / img.height / aspect;
+        if (ratio > 1) t.repeat.set(1 / ratio, 1);
+        else t.repeat.set(1, ratio);
+        t.offset.set((1 - t.repeat.x) / 2, (1 - t.repeat.y) / 2);
+      }
       t.dispose();
       t.needsUpdate = true;
     },

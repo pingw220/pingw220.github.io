@@ -83,18 +83,20 @@ The admin configuration is `public/admin/config.yml`; the embeds are handled by
 
 ## Playground (/playground)
 
-A small 3D night market (three.js) where visitors walk around with Mochi, a little Shiba Inu. Each
-stall leads into its own world (also linkable directly, e.g. `/playground#library`):
+A small 3D night market (three.js) where visitors walk around with Joy, a little Akita. Each stall
+leads into its own world (also linkable directly, e.g. `/playground#library`):
 
 | Stall | World | What's inside |
 | --- | --- | --- |
+| 💌 Post Office | Post office (`#postoffice`) | A mailbox for leaving a message, and a board of public ones |
 | 🎻 Music | Music studio (`#studio`) | Every performance framed on the walls; walk up to play it |
 | 📝 Posts | Writing room (`#writing`) | Each post is a note on the cork board |
-| 📚 Novel Library | Library (`#library`) | Novels on display tables, grouped by author |
-| 📺 Anime Library | Anime theater (`#theater`) | A poster for each anime |
-| ✈️ Travel Journal | Train station (`#station`) | A world map with a pin per place (green houses = home) |
+| 📚 Novel Library | Library (`#library`) | The all-time top 6 at the back; the rest on tables by genre |
+| 🌸 Anime | Anime theater (`#theater`) | The all-time top 5 under the screen; the rest by genre on the walls |
+| 📺 TV Dramas | TV lounge (`#dramas`) | Series by country (US, Korea, China, Japan) around a couch and TV |
+| 🎬 Movies | Cinema (`#movies`) | The all-time top 6 under the big screen |
+| ✈️ Travel | Airplane cabin (`#flight`) | A photo of a place in every window, and a world map up front |
 | 🏆 Sports | Hall of GOATs (`#sports`) | A pedestal and photo for each athlete |
-| 💌 Post Office | Post office (`#postoffice`) | A mailbox for leaving a message, and a board of public ones |
 
 At the far end of the street is a fireworks plaza: walk up to the launcher and press E.
 
@@ -104,12 +106,13 @@ is under the crosshair. On a phone, drag to look and tap to walk or open things.
 door and a "Back to the market" button, plus "Show as a list". Devices without WebGL, and visitors
 who prefer reduced motion, get the same content as lists.
 
-**Content.** Music videos and posts appear automatically. Novels, anime, travel places, and sports
-are edited in the admin: **Profile & pages → Playground library** (`src/data/library.json`). Each
-novel, anime, and athlete can have a photo, an image credit, a rating (0–5), how much you love it
-(1–5 hearts), a category, and your thoughts; these show on the card when you click it. Travel places
+**Content.** Music videos and posts appear automatically. Novels, anime, dramas, movies, travel
+places, and sports are edited in the admin: **Profile & pages → Playground library** (`src/data/library.json`). Each
+item can have a photo, an image credit, an all-time **rank** (ranked items get the place of honor), a
+**category** (items are grouped by it), a rating (0–5), how much you love it (1–5 hearts), and your
+thoughts; these show on the card when you click it. Travel places
 take a latitude/longitude, and "Home" makes the pin a green house. Covers and photos are hotlinked
-from their source (AniList, Open Library, Wikimedia Commons) with a credit, never copied into the repo;
+from their source (AniList, TVmaze, Wikipedia, Open Library, Wikimedia Commons) with a credit, never copied into the repo;
 items without one get a cover drawn in code.
 
 **Messages.** The post office form sends a message to the visitor Worker (`POST /messages`). Visitors
@@ -119,7 +122,8 @@ secret). See `visitor-api/README.md`.
 
 **Code.** `src/views/Playground.astro` (page, panels, item cards, message form) and
 `src/scripts/playground/`: `engine.ts` (movement, mouse-look camera, aiming, transitions),
-`worlds/*.ts` (one file per world), `stall.ts`, `mascot.ts` (Mochi), `fireworks.ts`, and
+`worlds/*.ts` (one file per world; `gallery.ts` is the shared poster room behind the anime,
+drama, and movie worlds), `stall.ts`, `mascot.ts` (Joy), `fireworks.ts`, and
 `kit.ts` / `textures.ts` (shared materials and painted textures).
 
 ## Two languages (English / 中文)

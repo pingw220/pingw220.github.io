@@ -92,7 +92,7 @@ export const studioWorld = (data: PlaygroundData) => (gradientMap: THREE.Texture
       const col = Math.floor(i / 2);
       const top = i % 2 === 0;
       const u = cols > 1 ? u0 + step * col : (u0 + u1) / 2;
-      // Stagger where Mochi stands so each frame (top or bottom) can be reached by walking.
+      // Stagger where Joy stands so each frame (top or bottom) can be reached by walking.
       const dir = Math.sign(u1 - u0) || 1;
       hang(v, wall, u, top ? 3.05 : 1.75, (top ? -0.3 : 0.3) * dir * Math.min(1, Math.abs(step) / 1.6));
     });

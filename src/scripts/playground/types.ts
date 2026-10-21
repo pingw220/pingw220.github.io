@@ -1,9 +1,9 @@
 import type * as THREE from 'three';
 
-export type WorldId = 'market' | 'studio' | 'writing' | 'library' | 'theater' | 'station' | 'sports' | 'postoffice';
+export type WorldId = 'market' | 'postoffice' | 'studio' | 'writing' | 'library' | 'theater' | 'dramas' | 'movies' | 'flight' | 'sports';
 
 /**
- * Something Mochi can walk up to and use:
+ * Something Joy can walk up to and use:
  *  - enter:   a market stall that leads into another world
  *  - exit:    the door back to the market
  *  - item:    one thing to look at (a book, a poster, a video, a letter…)
@@ -14,13 +14,13 @@ export interface Interactable {
   kind: 'enter' | 'exit' | 'item' | 'station';
   label: string;
   emoji?: string;
-  /** Where Mochi stands to use it. */
+  /** Where Joy stands to use it. */
   front: THREE.Vector3;
-  /** Which way Mochi faces when using it (radians, y-rotation). */
+  /** Which way Joy faces when using it (radians, y-rotation). */
   facing: number;
   /** Meshes that can be clicked. */
   hits: THREE.Object3D[];
-  /** Shows a "visit" prompt when Mochi is close (false = click only). */
+  /** Shows a "visit" prompt when Joy is close (false = click only). */
   proximity?: boolean;
   setNear?(near: boolean): void;
   update?(t: number): void;
@@ -35,7 +35,7 @@ export interface World {
   scene: THREE.Scene;
   /** Walkable rectangle on the ground (x/z). */
   bounds: { minX: number; maxX: number; minZ: number; maxZ: number };
-  /** Furniture Mochi can't walk through (x/z rectangles); Mochi slides along their edges. */
+  /** Furniture Joy can't walk through (x/z rectangles); Joy slides along their edges. */
   obstacles?: { minX: number; maxX: number; minZ: number; maxZ: number }[];
   spawn: THREE.Vector3;
   spawnFacing: number;
@@ -52,6 +52,8 @@ export interface PlaygroundData {
   music: { title: string; videos: { id: string; title: string; detail: string; date?: string }[] }[];
   novels: LibraryCard[];
   anime: LibraryCard[];
+  dramas: LibraryCard[];
+  movies: LibraryCard[];
   travel: LibraryCard[];
   sports: LibraryCard[];
   /** Public guestbook messages (loaded live from the visitor API). */
@@ -71,6 +73,7 @@ export interface LibraryCard {
   imageCredit?: { text: string; href?: string };
   rating?: number;
   love?: number;
+  rank?: number;
   category?: string;
   review?: string;
   lat?: number;

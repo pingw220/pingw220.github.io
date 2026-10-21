@@ -2,6 +2,22 @@
   "novels": [
     {
       "title": {
+        "en": "The Heaven Sword and Dragon Saber",
+        "zh": "倚天屠龍記"
+      },
+      "subtitle": {
+        "en": "Jin Yong",
+        "zh": "金庸"
+      },
+      "note": {
+        "en": "Zhang Wuji and the fight over the Heaven Sword and the Dragon Saber. The third book of the Condor Trilogy.",
+        "zh": "張無忌與倚天劍、屠龍刀之爭。「射鵰三部曲」的第三部。"
+      },
+      "date": "1961",
+      "rank": 1
+    },
+    {
+      "title": {
         "en": "The Legend of the Condor Heroes",
         "zh": "射鵰英雄傳"
       },
@@ -18,7 +34,8 @@
       "imageCredit": {
         "text": "Cover: Open Library",
         "href": "https://openlibrary.org/search?q=%E5%B0%84%E9%B5%B0%E8%8B%B1%E9%9B%84%E5%82%B3"
-      }
+      },
+      "rank": 2
     },
     {
       "title": {
@@ -33,67 +50,8 @@
         "en": "Yang Guo and his teacher Xiaolongnü. The second book of the Condor Trilogy.",
         "zh": "楊過與小龍女的故事。「射鵰三部曲」的第二部。"
       },
-      "date": "1959"
-    },
-    {
-      "title": {
-        "en": "The Heaven Sword and Dragon Saber",
-        "zh": "倚天屠龍記"
-      },
-      "subtitle": {
-        "en": "Jin Yong",
-        "zh": "金庸"
-      },
-      "note": {
-        "en": "Zhang Wuji and the fight over the Heaven Sword and the Dragon Saber. The third book of the Condor Trilogy.",
-        "zh": "張無忌與倚天劍、屠龍刀之爭。「射鵰三部曲」的第三部。"
-      },
-      "date": "1961"
-    },
-    {
-      "title": {
-        "en": "Demi-Gods and Semi-Devils",
-        "zh": "天龍八部"
-      },
-      "subtitle": {
-        "en": "Jin Yong",
-        "zh": "金庸"
-      },
-      "note": {
-        "en": "Three sworn brothers, Qiao Feng, Duan Yu, and Xuzhu, in the Northern Song era.",
-        "zh": "北宋年間，喬峰、段譽與虛竹三兄弟的故事。"
-      },
-      "date": "1963"
-    },
-    {
-      "title": {
-        "en": "The Smiling, Proud Wanderer",
-        "zh": "笑傲江湖"
-      },
-      "subtitle": {
-        "en": "Jin Yong",
-        "zh": "金庸"
-      },
-      "note": {
-        "en": "The free-spirited swordsman Linghu Chong amid rivalries among the martial schools.",
-        "zh": "灑脫的令狐沖，在各大門派的明爭暗鬥之中。"
-      },
-      "date": "1967"
-    },
-    {
-      "title": {
-        "en": "The Deer and the Cauldron",
-        "zh": "鹿鼎記"
-      },
-      "subtitle": {
-        "en": "Jin Yong",
-        "zh": "金庸"
-      },
-      "note": {
-        "en": "Wei Xiaobao, a streetwise boy who rises in the Kangxi Emperor’s court. Jin Yong’s last full-length novel.",
-        "zh": "市井出身的韋小寶，在康熙朝廷中左右逢源。金庸的最後一部長篇小說。"
-      },
-      "date": "1969"
+      "date": "1959",
+      "rank": 3
     },
     {
       "title": {
@@ -108,127 +66,59 @@
         "en": "Chen Jialuo and the Red Flower Society in the Qianlong era. Jin Yong’s first novel.",
         "zh": "乾隆年間，陳家洛與紅花會。金庸的第一部小說。"
       },
-      "date": "1955"
+      "date": "1955",
+      "rank": 4
     },
     {
       "title": {
-        "en": "Sword Stained with Royal Blood",
-        "zh": "碧血劍"
+        "en": "Demi-Gods and Semi-Devils",
+        "zh": "天龍八部"
       },
       "subtitle": {
         "en": "Jin Yong",
         "zh": "金庸"
       },
       "note": {
-        "en": "Yuan Chengzhi at the end of the Ming dynasty.",
-        "zh": "明朝末年，袁承志的故事。"
+        "en": "Three sworn brothers, Qiao Feng, Duan Yu, and Xuzhu, in the Northern Song era.",
+        "zh": "北宋年間，喬峰、段譽與虛竹三兄弟的故事。"
       },
-      "date": "1956"
+      "date": "1963",
+      "rank": 5
     },
     {
       "title": {
-        "en": "Fox Volant of the Snowy Mountain",
-        "zh": "雪山飛狐"
+        "en": "Twin Dragons of the Tang",
+        "zh": "大唐雙龍傳"
       },
       "subtitle": {
-        "en": "Jin Yong",
-        "zh": "金庸"
+        "en": "Huang Yi",
+        "zh": "黃易"
       },
       "note": {
-        "en": "An old feud between the Hu and Miao families, told over a single day.",
-        "zh": "胡、苗兩家的恩怨，在一天之內娓娓道來。"
+        "en": "At the fall of the Sui, two street kids from Yangzhou, Kou Zhong and Xu Ziling, rise to shape the empire.",
+        "zh": "隋末亂世，揚州的兩個小混混寇仲與徐子陵，一步步成為改變天下的人物。"
       },
-      "date": "1959"
+      "date": "1996",
+      "rank": 6
     },
     {
       "title": {
-        "en": "The Young Flying Fox",
-        "zh": "飛狐外傳"
+        "en": "Kunlun",
+        "zh": "崑崙"
       },
       "subtitle": {
-        "en": "Jin Yong",
-        "zh": "金庸"
+        "en": "Feng Ge",
+        "zh": "鳳歌"
       },
       "note": {
-        "en": "The youth of Hu Fei, before Fox Volant of the Snowy Mountain.",
-        "zh": "胡斐的少年時代，《雪山飛狐》的前傳。"
+        "en": "In the last years of the Southern Song, Liang Xiao builds martial arts on mathematics and is swept into the war between Song and Yuan.",
+        "zh": "南宋末年的梁蕭，把數學與算學融入武功，捲入宋元之間的戰亂。"
       },
-      "date": "1960"
-    },
-    {
-      "title": {
-        "en": "A Deadly Secret",
-        "zh": "連城訣"
-      },
-      "subtitle": {
-        "en": "Jin Yong",
-        "zh": "金庸"
-      },
-      "note": {
-        "en": "Di Yun, a country boy betrayed and imprisoned, and the secret of a hidden treasure.",
-        "zh": "被陷害入獄的鄉下少年狄雲，與一個寶藏的秘密。"
-      },
-      "date": "1963"
-    },
-    {
-      "title": {
-        "en": "Ode to Gallantry",
-        "zh": "俠客行"
-      },
-      "subtitle": {
-        "en": "Jin Yong",
-        "zh": "金庸"
-      },
-      "note": {
-        "en": "Shi Potian, a guileless young man who is mistaken for someone else.",
-        "zh": "單純的少年石破天，被誤認為他人的奇遇。"
-      },
-      "date": "1965"
-    },
-    {
-      "title": {
-        "en": "White Horse Neighs in the Western Wind",
-        "zh": "白馬嘯西風"
-      },
-      "subtitle": {
-        "en": "Jin Yong",
-        "zh": "金庸"
-      },
-      "note": {
-        "en": "Li Wenxiu, a Han girl who grows up among the Kazakhs.",
-        "zh": "在哈薩克族之間長大的漢族少女李文秀。"
-      },
-      "date": "1961"
-    },
-    {
-      "title": {
-        "en": "Blade-dance of the Two Lovers",
-        "zh": "鴛鴦刀"
-      },
-      "subtitle": {
-        "en": "Jin Yong",
-        "zh": "金庸"
-      },
-      "note": {
-        "en": "A lighthearted novella about the pair of Mandarin Duck Blades.",
-        "zh": "圍繞一對鴛鴦刀的輕鬆中篇小說。"
-      },
-      "date": "1961"
-    },
-    {
-      "title": {
-        "en": "Sword of the Yue Maiden",
-        "zh": "越女劍"
-      },
-      "subtitle": {
-        "en": "Jin Yong",
-        "zh": "金庸"
-      },
-      "note": {
-        "en": "A short story set in the Spring and Autumn period, about the swordswoman Aqing.",
-        "zh": "春秋時代，越國少女阿青的短篇故事。"
-      },
-      "date": "1970"
+      "date": "2006",
+      "category": {
+        "en": "Wuxia",
+        "zh": "武俠"
+      }
     },
     {
       "title": {
@@ -243,7 +133,326 @@
         "en": "Xu Fengnian, heir of the Prince of Beiliang, and his journey through the jianghu and the empire.",
         "zh": "北涼世子徐鳳年的江湖與天下。"
       },
-      "date": "2012"
+      "date": "2012",
+      "category": {
+        "en": "Wuxia",
+        "zh": "武俠"
+      }
+    },
+    {
+      "title": {
+        "en": "The Smiling, Proud Wanderer",
+        "zh": "笑傲江湖"
+      },
+      "subtitle": {
+        "en": "Jin Yong",
+        "zh": "金庸"
+      },
+      "note": {
+        "en": "The free-spirited swordsman Linghu Chong amid rivalries among the martial schools.",
+        "zh": "灑脫的令狐沖，在各大門派的明爭暗鬥之中。"
+      },
+      "date": "1967",
+      "category": {
+        "en": "Wuxia",
+        "zh": "武俠"
+      }
+    },
+    {
+      "title": {
+        "en": "The Deer and the Cauldron",
+        "zh": "鹿鼎記"
+      },
+      "subtitle": {
+        "en": "Jin Yong",
+        "zh": "金庸"
+      },
+      "note": {
+        "en": "Wei Xiaobao, a streetwise boy who rises in the Kangxi Emperor’s court. Jin Yong’s last full-length novel.",
+        "zh": "市井出身的韋小寶，在康熙朝廷中左右逢源。金庸的最後一部長篇小說。"
+      },
+      "date": "1969",
+      "category": {
+        "en": "Wuxia",
+        "zh": "武俠"
+      }
+    },
+    {
+      "title": {
+        "en": "Sword Stained with Royal Blood",
+        "zh": "碧血劍"
+      },
+      "subtitle": {
+        "en": "Jin Yong",
+        "zh": "金庸"
+      },
+      "note": {
+        "en": "Yuan Chengzhi at the end of the Ming dynasty.",
+        "zh": "明朝末年，袁承志的故事。"
+      },
+      "date": "1956",
+      "category": {
+        "en": "Wuxia",
+        "zh": "武俠"
+      }
+    },
+    {
+      "title": {
+        "en": "Ode to Gallantry",
+        "zh": "俠客行"
+      },
+      "subtitle": {
+        "en": "Jin Yong",
+        "zh": "金庸"
+      },
+      "note": {
+        "en": "Shi Potian, a guileless young man who is mistaken for someone else.",
+        "zh": "單純的少年石破天，被誤認為他人的奇遇。"
+      },
+      "date": "1965",
+      "category": {
+        "en": "Wuxia",
+        "zh": "武俠"
+      }
+    },
+    {
+      "title": {
+        "en": "A Deadly Secret",
+        "zh": "連城訣"
+      },
+      "subtitle": {
+        "en": "Jin Yong",
+        "zh": "金庸"
+      },
+      "note": {
+        "en": "Di Yun, a country boy betrayed and imprisoned, and the secret of a hidden treasure.",
+        "zh": "被陷害入獄的鄉下少年狄雲，與一個寶藏的秘密。"
+      },
+      "date": "1963",
+      "category": {
+        "en": "Wuxia",
+        "zh": "武俠"
+      }
+    },
+    {
+      "title": {
+        "en": "The Young Flying Fox",
+        "zh": "飛狐外傳"
+      },
+      "subtitle": {
+        "en": "Jin Yong",
+        "zh": "金庸"
+      },
+      "note": {
+        "en": "The youth of Hu Fei, before Fox Volant of the Snowy Mountain.",
+        "zh": "胡斐的少年時代，《雪山飛狐》的前傳。"
+      },
+      "date": "1960",
+      "category": {
+        "en": "Wuxia",
+        "zh": "武俠"
+      }
+    },
+    {
+      "title": {
+        "en": "Fox Volant of the Snowy Mountain",
+        "zh": "雪山飛狐"
+      },
+      "subtitle": {
+        "en": "Jin Yong",
+        "zh": "金庸"
+      },
+      "note": {
+        "en": "An old feud between the Hu and Miao families, told over a single day.",
+        "zh": "胡、苗兩家的恩怨，在一天之內娓娓道來。"
+      },
+      "date": "1959",
+      "category": {
+        "en": "Wuxia",
+        "zh": "武俠"
+      }
+    },
+    {
+      "title": {
+        "en": "White Horse Neighs in the Western Wind",
+        "zh": "白馬嘯西風"
+      },
+      "subtitle": {
+        "en": "Jin Yong",
+        "zh": "金庸"
+      },
+      "note": {
+        "en": "Li Wenxiu, a Han girl who grows up among the Kazakhs.",
+        "zh": "在哈薩克族之間長大的漢族少女李文秀。"
+      },
+      "date": "1961",
+      "category": {
+        "en": "Wuxia",
+        "zh": "武俠"
+      }
+    },
+    {
+      "title": {
+        "en": "Blade-dance of the Two Lovers",
+        "zh": "鴛鴦刀"
+      },
+      "subtitle": {
+        "en": "Jin Yong",
+        "zh": "金庸"
+      },
+      "note": {
+        "en": "A lighthearted novella about the pair of Mandarin Duck Blades.",
+        "zh": "圍繞一對鴛鴦刀的輕鬆中篇小說。"
+      },
+      "date": "1961",
+      "category": {
+        "en": "Wuxia",
+        "zh": "武俠"
+      }
+    },
+    {
+      "title": {
+        "en": "Sword of the Yue Maiden",
+        "zh": "越女劍"
+      },
+      "subtitle": {
+        "en": "Jin Yong",
+        "zh": "金庸"
+      },
+      "note": {
+        "en": "A short story set in the Spring and Autumn period, about the swordswoman Aqing.",
+        "zh": "春秋時代，越國少女阿青的短篇故事。"
+      },
+      "date": "1970",
+      "category": {
+        "en": "Wuxia",
+        "zh": "武俠"
+      }
+    },
+    {
+      "title": {
+        "en": "Ever Night",
+        "zh": "將夜"
+      },
+      "subtitle": {
+        "en": "Mao Ni",
+        "zh": "貓膩"
+      },
+      "note": {
+        "en": "Ning Que, a young soldier from the frontier, enters the Academy with his maid Sang Sang and begins to cultivate.",
+        "zh": "邊城少年寧缺帶著小侍女桑桑進入書院，踏上修行之路。"
+      },
+      "date": "2011",
+      "category": {
+        "en": "Wuxia",
+        "zh": "武俠"
+      }
+    },
+    {
+      "title": {
+        "en": "A Record of a Mortal’s Journey to Immortality",
+        "zh": "凡人修仙傳"
+      },
+      "subtitle": {
+        "en": "Wang Yu",
+        "zh": "忘語"
+      },
+      "note": {
+        "en": "Han Li, a village boy of ordinary talent, climbs the path of cultivation through caution and grit.",
+        "zh": "資質平凡的山村少年韓立，憑謹慎與毅力一步步修仙。"
+      },
+      "date": "2008",
+      "category": {
+        "en": "Cultivation",
+        "zh": "修仙"
+      }
+    },
+    {
+      "title": {
+        "en": "Battle Through the Heavens",
+        "zh": "鬥破蒼穹"
+      },
+      "subtitle": {
+        "en": "Tian Can Tu Dou",
+        "zh": "天蠶土豆"
+      },
+      "note": {
+        "en": "Xiao Yan, a fallen prodigy who lost his power, rises again with the help of the spirit Yao Lao.",
+        "zh": "天才少年蕭炎鬥氣盡失，在藥老的幫助下重新崛起。"
+      },
+      "date": "2009",
+      "category": {
+        "en": "Cultivation",
+        "zh": "修仙"
+      }
+    },
+    {
+      "title": {
+        "en": "Versatile Mage",
+        "zh": "全職法師"
+      },
+      "subtitle": {
+        "en": "Luan",
+        "zh": "亂"
+      },
+      "note": {
+        "en": "Mo Fan wakes up in a world where magic has replaced science, and finds he can master more than one element.",
+        "zh": "莫凡醒來發現世界變成魔法取代科學的地方，而他能同時修煉多種系別。"
+      },
+      "date": "2014",
+      "category": {
+        "en": "Sci-fi & fantasy",
+        "zh": "科幻"
+      }
+    },
+    {
+      "title": {
+        "en": "The Necromancer",
+        "zh": "死靈法師"
+      },
+      "date": "",
+      "category": {
+        "en": "Sci-fi & fantasy",
+        "zh": "科幻"
+      }
+    },
+    {
+      "title": {
+        "en": "Nirvana in Fire",
+        "zh": "琅琊榜"
+      },
+      "subtitle": {
+        "en": "Hai Yan",
+        "zh": "海宴"
+      },
+      "note": {
+        "en": "Mei Changsu returns to the capital under a new name to clear the names of those wronged twelve years before.",
+        "zh": "梅長蘇化名重回金陵，為十二年前的冤案翻案。"
+      },
+      "date": "2007",
+      "category": {
+        "en": "Political intrigue",
+        "zh": "權謀"
+      }
+    },
+    {
+      "title": {
+        "en": "Nirvana in Fire II: The Wind Blows in Chang Lin",
+        "zh": "琅琊榜之風起長林"
+      },
+      "subtitle": {
+        "en": "Hai Yan",
+        "zh": "海宴"
+      },
+      "note": {
+        "en": "The sequel to Nirvana in Fire, following the Changlin Army’s Xiao Pingjing and his brother Xiao Pingzhang.",
+        "zh": "《琅琊榜》的續作，講述長林軍的蕭平旌與兄長蕭平章。"
+      },
+      "date": "2017",
+      "category": {
+        "en": "Political intrigue",
+        "zh": "權謀"
+      }
     },
     {
       "title": {
@@ -258,7 +467,11 @@
         "en": "Fan Xian, reborn with memories of the modern world, finds his own way through palace intrigue.",
         "zh": "帶著現代記憶重生的范閒，在權謀之間走出自己的路。"
       },
-      "date": "2007"
+      "date": "2007",
+      "category": {
+        "en": "Political intrigue",
+        "zh": "權謀"
+      }
     },
     {
       "title": {
@@ -278,6 +491,10 @@
       "imageCredit": {
         "text": "Cover: AniList",
         "href": "https://anilist.co/manga/94970"
+      },
+      "category": {
+        "en": "Light novel",
+        "zh": "輕小說"
       }
     }
   ],
@@ -300,7 +517,8 @@
       "imageCredit": {
         "text": "Cover: AniList",
         "href": "https://anilist.co/anime/116589"
-      }
+      },
+      "rank": 1
     },
     {
       "title": {
@@ -320,7 +538,1233 @@
       "imageCredit": {
         "text": "Cover: AniList",
         "href": "https://anilist.co/anime/20923"
+      },
+      "rank": 2
+    },
+    {
+      "title": {
+        "en": "Naruto",
+        "zh": "火影忍者"
+      },
+      "subtitle": {
+        "en": "Studio Pierrot",
+        "zh": "Studio Pierrot"
+      },
+      "note": {
+        "en": "Naruto Uzumaki, an outcast ninja kid, sets out to become Hokage, the leader of his village.",
+        "zh": "被村人排斥的忍者少年漩渦鳴人，立志成為村子的首領「火影」。"
+      },
+      "date": "2002",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20-dE6UHbFFg1A5.jpg",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/20"
+      },
+      "rank": 3
+    },
+    {
+      "title": {
+        "en": "Your lie in April",
+        "zh": "四月是你的謊言"
+      },
+      "subtitle": {
+        "en": "A-1 Pictures",
+        "zh": "A-1 Pictures"
+      },
+      "note": {
+        "en": "Piano prodigy Kōsei Arima, who can no longer hear his own playing, meets the free-spirited violinist Kaori Miyazono.",
+        "zh": "聽不見自己琴聲的鋼琴神童有馬公生，遇見自由奔放的小提琴手宮園薰。"
+      },
+      "date": "2014",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20665-TLgkL8T8IRFd.png",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/20665"
+      },
+      "rank": 4
+    },
+    {
+      "title": {
+        "en": "ONE PIECE",
+        "zh": "海賊王"
+      },
+      "subtitle": {
+        "en": "Toei Animation",
+        "zh": "Toei Animation"
+      },
+      "note": {
+        "en": "Luffy and the Straw Hat Pirates sail the Grand Line in search of the legendary treasure, the One Piece.",
+        "zh": "魯夫與草帽海賊團航向偉大航道，尋找傳說中的大秘寶「ONE PIECE」。"
+      },
+      "date": "1999",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/21"
+      },
+      "rank": 5
+    },
+    {
+      "title": {
+        "en": "My Teen Romantic Comedy SNAFU",
+        "zh": "果然我的青春戀愛喜劇搞錯了。"
+      },
+      "subtitle": {
+        "en": "Brain's Base",
+        "zh": "Brain's Base"
+      },
+      "note": {
+        "en": "Loner Hachiman Hikigaya is made to join the Service Club with Yukino Yukinoshita and Yui Yuigahama, helping classmates with their problems.",
+        "zh": "孤僻的比企谷八幡被迫加入「侍奉社」，和雪之下雪乃、由比濱結衣一起替人解決煩惱。"
+      },
+      "date": "2013",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx14813-3mNvcKNEQcDs.jpg",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/14813"
+      },
+      "category": {
+        "en": "Romance",
+        "zh": "戀愛"
       }
+    },
+    {
+      "title": {
+        "en": "Rascal Does Not Dream of Bunny Girl Senpai",
+        "zh": "青春豬頭少年不會夢到兔女郎學姊"
+      },
+      "subtitle": {
+        "en": "CloverWorks",
+        "zh": "CloverWorks"
+      },
+      "note": {
+        "en": "Sakuta Azusagawa meets Mai Sakurajima, a senpai in a bunny suit whom no one else can see, and runs into one case of “Adolescence Syndrome” after another.",
+        "zh": "梓川咲太遇見穿著兔女郎裝、卻沒有人看得見的學姊櫻島麻衣，捲入一連串「青春期症候群」。"
+      },
+      "date": "2018",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101291-wfEdgPqtfU0l.jpg",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/101291"
+      },
+      "category": {
+        "en": "Romance",
+        "zh": "戀愛"
+      }
+    },
+    {
+      "title": {
+        "en": "My Dress-Up Darling",
+        "zh": "戀上換裝娃娃"
+      },
+      "subtitle": {
+        "en": "CloverWorks",
+        "zh": "CloverWorks"
+      },
+      "note": {
+        "en": "Wakana Gojō, who wants to craft hina dolls, and Marin Kitagawa, a cheerful girl who loves cosplay.",
+        "zh": "想成為雛人形頭師的五條新菜，和熱愛 cosplay 的辣妹喜多川海夢。"
+      },
+      "date": "2022",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx132405-qP7FQYGmNI3d.jpg",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/132405"
+      },
+      "category": {
+        "en": "Romance",
+        "zh": "戀愛"
+      }
+    },
+    {
+      "title": {
+        "en": "Horimiya",
+        "zh": "堀與宮村"
+      },
+      "subtitle": {
+        "en": "CloverWorks",
+        "zh": "CloverWorks"
+      },
+      "note": {
+        "en": "Popular Kyōko Hori and quiet Izumi Miyamura discover each other’s hidden sides outside school.",
+        "zh": "人氣女孩堀京子和陰沉的宮村伊澄，在校外看見彼此不為人知的一面。"
+      },
+      "date": "2021",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx124080-3i22mRVPBS0T.jpg",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/124080"
+      },
+      "category": {
+        "en": "Romance",
+        "zh": "戀愛"
+      }
+    },
+    {
+      "title": {
+        "en": "Blue Box",
+        "zh": "青之箱"
+      },
+      "subtitle": {
+        "en": "Telecom Animation Film",
+        "zh": "Telecom Animation Film"
+      },
+      "note": {
+        "en": "Badminton player Taiki Inomata has a crush on Chinatsu Kano, a basketball star a year above him, and then she comes to live at his house.",
+        "zh": "羽球社的豬股大喜暗戀籃球社的學姊鹿野千夏，沒想到兩人竟住進同一個屋簷下。"
+      },
+      "date": "2024",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx170942-KKcLfQzV57nG.jpg",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/170942"
+      },
+      "category": {
+        "en": "Romance",
+        "zh": "戀愛"
+      }
+    },
+    {
+      "title": {
+        "en": "Assassination Classroom",
+        "zh": "暗殺教室"
+      },
+      "subtitle": {
+        "en": "Lerche",
+        "zh": "Lerche"
+      },
+      "note": {
+        "en": "Class 3-E has one school year to assassinate their teacher, a super-creature called Koro-sensei.",
+        "zh": "椚丘中學三年 E 班要在一年內暗殺自己的班導：自稱「殺老師」的超生物。"
+      },
+      "date": "2015",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20755-dWrhs569YGUO.jpg",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/20755"
+      },
+      "category": {
+        "en": "School",
+        "zh": "校園"
+      }
+    },
+    {
+      "title": {
+        "en": "Classroom of the Elite",
+        "zh": "歡迎來到實力至上主義的教室"
+      },
+      "subtitle": {
+        "en": "Lerche",
+        "zh": "Lerche"
+      },
+      "note": {
+        "en": "Kiyotaka Ayanokōji hides his true ability at a school where merit decides everything.",
+        "zh": "綾小路清隆在以實力決定一切的高度育成高中裡，隱藏自己的真正實力。"
+      },
+      "date": "2017",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx98659-WNyPLIZDpGGY.jpg",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/98659"
+      },
+      "category": {
+        "en": "School",
+        "zh": "校園"
+      }
+    },
+    {
+      "title": {
+        "en": "Kono Oto Tomare!: Sounds of Life",
+        "zh": "一弦定音！"
+      },
+      "subtitle": {
+        "en": "Platinum Vision",
+        "zh": "Platinum Vision"
+      },
+      "note": {
+        "en": "Delinquent Chika Kudō joins a koto club with only one member left, Takezō Kurata, and helps bring it back to life.",
+        "zh": "不良少年久遠愛加入只剩一個人的箏曲社，和社長倉田武藏一起重振社團。"
+      },
+      "date": "2019",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx103302-RVGwGRDGdMQq.jpg",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/103302"
+      },
+      "category": {
+        "en": "School",
+        "zh": "校園"
+      }
+    },
+    {
+      "title": {
+        "en": "Mushoku Tensei: Jobless Reincarnation",
+        "zh": "無職轉生～到了異世界就拿出真本事～"
+      },
+      "subtitle": {
+        "en": "Studio Bind",
+        "zh": "Studio Bind"
+      },
+      "note": {
+        "en": "A man who wasted his life is reborn in another world as Rudeus Greyrat, and resolves to live this one properly.",
+        "zh": "一事無成的男人死後轉生成魯迪烏斯，決定這一次要認真活下去。"
+      },
+      "date": "2021",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx108465-1ANspF1EWyFx.jpg",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/108465"
+      },
+      "category": {
+        "en": "Isekai",
+        "zh": "異世界"
+      }
+    },
+    {
+      "title": {
+        "en": "That Time I Got Reincarnated as a Slime",
+        "zh": "關於我轉生變成史萊姆這檔事"
+      },
+      "subtitle": {
+        "en": "8-bit",
+        "zh": "8-bit"
+      },
+      "note": {
+        "en": "Office worker Satoru Mikami is killed and reborn in another world as a slime named Rimuru.",
+        "zh": "上班族三上悟遇刺身亡，轉生成異世界的史萊姆「利姆路」。"
+      },
+      "date": "2018",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101280-tDxCVJm714nt.jpg",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/101280"
+      },
+      "category": {
+        "en": "Isekai",
+        "zh": "異世界"
+      }
+    },
+    {
+      "title": {
+        "en": "Dr. STONE",
+        "zh": "Dr.STONE 新石紀"
+      },
+      "subtitle": {
+        "en": "TMS Entertainment",
+        "zh": "TMS Entertainment"
+      },
+      "note": {
+        "en": "Thousands of years after all humans were turned to stone, science-loving Senku sets out to rebuild civilization.",
+        "zh": "全人類石化數千年後，科學少年千空要靠科學重建文明。"
+      },
+      "date": "2019",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx105333-GybuoSoOZfpH.jpg",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/105333"
+      },
+      "category": {
+        "en": "Isekai",
+        "zh": "異世界"
+      }
+    },
+    {
+      "title": {
+        "en": "Hunter x Hunter (2011)",
+        "zh": "獵人 HUNTER×HUNTER"
+      },
+      "subtitle": {
+        "en": "MADHOUSE",
+        "zh": "MADHOUSE"
+      },
+      "note": {
+        "en": "Gon sets out to become a Hunter and find his father, who is one.",
+        "zh": "小傑為了尋找身為獵人的父親，踏上成為獵人的旅程。"
+      },
+      "date": "2011",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx11061-y5gsT1hoHuHw.png",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/11061"
+      },
+      "category": {
+        "en": "Battle",
+        "zh": "戰鬥"
+      }
+    },
+    {
+      "title": {
+        "en": "Attack on Titan",
+        "zh": "進擊的巨人"
+      },
+      "subtitle": {
+        "en": "WIT STUDIO",
+        "zh": "WIT STUDIO"
+      },
+      "note": {
+        "en": "After the Titans break through the walls, Eren swears to wipe out every last one.",
+        "zh": "巨人攻破城牆後，艾連立誓驅逐世界上所有的巨人。"
+      },
+      "date": "2013",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx16498-buvcRTBx4NSm.jpg",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/16498"
+      },
+      "category": {
+        "en": "Battle",
+        "zh": "戰鬥"
+      }
+    },
+    {
+      "title": {
+        "en": "Black Clover",
+        "zh": "黑色五葉草"
+      },
+      "subtitle": {
+        "en": "Studio Pierrot",
+        "zh": "Studio Pierrot"
+      },
+      "note": {
+        "en": "Asta, born without magic in a world where everyone has it, aims to become the Wizard King.",
+        "zh": "天生沒有魔力的少年亞斯塔，以成為魔法帝為目標。"
+      },
+      "date": "2017",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx97940-fyh8o7gNbha0.png",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/97940"
+      },
+      "category": {
+        "en": "Battle",
+        "zh": "戰鬥"
+      }
+    },
+    {
+      "title": {
+        "en": "Aoashi",
+        "zh": "青之蘆葦"
+      },
+      "subtitle": {
+        "en": "Production I.G",
+        "zh": "Production I.G"
+      },
+      "note": {
+        "en": "Ashito Aoi from Ehime joins a J-League youth team in Tokyo and is moved from striker to fullback.",
+        "zh": "愛媛少年青井葦人加入東京的 J 聯盟青年隊，從前鋒轉為後衛。"
+      },
+      "date": "2022",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx134732-OXKSrOhF9pCM.jpg",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/134732"
+      },
+      "category": {
+        "en": "Sports",
+        "zh": "運動"
+      }
+    },
+    {
+      "title": {
+        "en": "HAIKYU!!",
+        "zh": "排球少年!!"
+      },
+      "subtitle": {
+        "en": "Production I.G",
+        "zh": "Production I.G"
+      },
+      "note": {
+        "en": "Short but fearless Shōyō Hinata teams up with genius setter Tobio Kageyama on Karasuno High’s volleyball team.",
+        "zh": "個子不高的日向翔陽和天才舉球員影山飛雄，在烏野高中排球部成為搭檔。"
+      },
+      "date": "2014",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20464-ooZUyBe4ptp9.png",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/20464"
+      },
+      "category": {
+        "en": "Sports",
+        "zh": "運動"
+      }
+    },
+    {
+      "title": {
+        "en": "SPY x FAMILY",
+        "zh": "SPY×FAMILY 間諜家家酒"
+      },
+      "subtitle": {
+        "en": "CloverWorks, WIT STUDIO",
+        "zh": "CloverWorks, WIT STUDIO"
+      },
+      "note": {
+        "en": "Spy Twilight builds a fake family for a mission, not knowing his wife is an assassin and his daughter reads minds.",
+        "zh": "間諜「黃昏」為了任務組成假家庭：妻子是殺手，女兒會讀心。"
+      },
+      "date": "2022",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx140960-Kb6R5nYQfjmP.jpg",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/140960"
+      },
+      "category": {
+        "en": "Slice of life",
+        "zh": "日常"
+      }
+    },
+    {
+      "title": {
+        "en": "Teasing Master Takagi-san",
+        "zh": "擅長捉弄的高木同學"
+      },
+      "subtitle": {
+        "en": "Shin-Ei Animation",
+        "zh": "Shin-Ei Animation"
+      },
+      "note": {
+        "en": "Nishikata keeps trying to get back at Takagi, the girl next to him who loves to tease him.",
+        "zh": "西片總想反擊老是捉弄他的鄰座高木同學。"
+      },
+      "date": "2018",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx99468-XayCplkIL3Gf.png",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/99468"
+      },
+      "category": {
+        "en": "Slice of life",
+        "zh": "日常"
+      }
+    },
+    {
+      "title": {
+        "en": "Ya Boy Kongming!",
+        "zh": "派對咖孔明"
+      },
+      "subtitle": {
+        "en": "P.A.WORKS",
+        "zh": "P.A.WORKS"
+      },
+      "note": {
+        "en": "Zhuge Kongming, the Three Kingdoms strategist, is reborn in modern Shibuya and becomes the tactician for singer Eiko.",
+        "zh": "三國軍師諸葛孔明轉生到現代澀谷，成為歌手英子的軍師。"
+      },
+      "date": "2022",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx141774-iteNFzPq2oGw.jpg",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/141774"
+      },
+      "category": {
+        "en": "Slice of life",
+        "zh": "日常"
+      }
+    },
+    {
+      "title": {
+        "en": "Run with the Wind",
+        "zh": "強風吹拂"
+      },
+      "subtitle": {
+        "en": "Production I.G",
+        "zh": "Production I.G"
+      },
+      "note": {
+        "en": "Haiji Kiyose rallies the ten residents of his dorm to run the Hakone Ekiden.",
+        "zh": "清瀨灰二號召住在竹青莊的十個人，一起挑戰箱根驛傳。"
+      },
+      "date": "2018",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101903-ncgPJbbA5Nou.jpg",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/101903"
+      },
+      "category": {
+        "en": "Other",
+        "zh": "其他"
+      }
+    },
+    {
+      "title": {
+        "en": "Smoking Behind the Supermarket with You",
+        "zh": "在超市後門抽菸的兩人"
+      },
+      "subtitle": {
+        "en": "Asahi Production",
+        "zh": "Asahi Production"
+      },
+      "note": {
+        "en": "Tired office worker Sasaki unwinds after work by smoking and chatting with Yamada, a clerk, behind the supermarket.",
+        "zh": "疲憊的上班族佐佐木，下班後在超市後門和店員山田一起抽菸聊天。"
+      },
+      "date": "2026",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx196187-0dgFi2CPp3xn.jpg",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/196187"
+      },
+      "category": {
+        "en": "Other",
+        "zh": "其他"
+      }
+    },
+    {
+      "title": {
+        "en": "The Apothecary Diaries",
+        "zh": "藥師少女的獨語"
+      },
+      "subtitle": {
+        "en": "OLM, TOHO animation STUDIO",
+        "zh": "OLM, TOHO animation STUDIO"
+      },
+      "note": {
+        "en": "Maomao, an apothecary sold into the imperial palace, solves the court’s mysteries with her knowledge of medicine.",
+        "zh": "被賣進後宮的藥師少女貓貓，用藥學知識解開宮中的一個個謎團。"
+      },
+      "date": "2023",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx161645-QLbzHXiYRgV2.jpg",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/161645"
+      },
+      "category": {
+        "en": "Other",
+        "zh": "其他"
+      }
+    },
+    {
+      "title": {
+        "en": "Detective Conan",
+        "zh": "名偵探柯南"
+      },
+      "subtitle": {
+        "en": "TMS Entertainment",
+        "zh": "TMS Entertainment"
+      },
+      "note": {
+        "en": "High-school detective Shinichi Kudo is poisoned and shrunk into a child, and keeps solving cases as Conan Edogawa.",
+        "zh": "高中生偵探工藤新一被灌下毒藥變成小學生，化名江戶川柯南繼續破案。"
+      },
+      "date": "1996",
+      "image": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx235-MyYT7K3chBdO.jpg",
+      "imageCredit": {
+        "text": "Cover: AniList",
+        "href": "https://anilist.co/anime/235"
+      },
+      "category": {
+        "en": "Other",
+        "zh": "其他"
+      }
+    }
+  ],
+  "dramas": [
+    {
+      "title": {
+        "en": "Friends",
+        "zh": "六人行"
+      },
+      "subtitle": {
+        "en": "NBC",
+        "zh": "NBC"
+      },
+      "note": {
+        "en": "Six friends in New York City, their jobs, and their love lives.",
+        "zh": "六個住在紐約的好朋友，他們的工作、生活與戀愛。"
+      },
+      "date": "1994",
+      "image": "https://static.tvmaze.com/uploads/images/medium_portrait/41/104565.jpg",
+      "imageCredit": {
+        "text": "Poster: TVmaze",
+        "href": "https://www.tvmaze.com/shows/431/friends"
+      },
+      "category": {
+        "en": "US series",
+        "zh": "美劇"
+      }
+    },
+    {
+      "title": {
+        "en": "The Big Bang Theory",
+        "zh": "宅男行不行"
+      },
+      "subtitle": {
+        "en": "CBS",
+        "zh": "CBS"
+      },
+      "note": {
+        "en": "Caltech physicists Leonard and Sheldon, their friends, and Penny from across the hall.",
+        "zh": "加州理工的物理學家萊納德和謝爾頓、他們的朋友，還有住對門的潘妮。"
+      },
+      "date": "2007",
+      "image": "https://static.tvmaze.com/uploads/images/medium_portrait/173/433868.jpg",
+      "imageCredit": {
+        "text": "Poster: TVmaze",
+        "href": "https://www.tvmaze.com/shows/66/the-big-bang-theory"
+      },
+      "category": {
+        "en": "US series",
+        "zh": "美劇"
+      }
+    },
+    {
+      "title": {
+        "en": "Lucifer",
+        "zh": "路西法"
+      },
+      "subtitle": {
+        "en": "Fox · Netflix",
+        "zh": "Fox · Netflix"
+      },
+      "note": {
+        "en": "Bored of Hell, Lucifer Morningstar opens a nightclub in Los Angeles and starts consulting for the LAPD.",
+        "zh": "厭倦地獄的路西法來到洛杉磯開夜店，還當起了洛杉磯警局的顧問。"
+      },
+      "date": "2016",
+      "image": "https://static.tvmaze.com/uploads/images/medium_portrait/346/865655.jpg",
+      "imageCredit": {
+        "text": "Poster: TVmaze",
+        "href": "https://www.tvmaze.com/shows/1859/lucifer"
+      },
+      "category": {
+        "en": "US series",
+        "zh": "美劇"
+      }
+    },
+    {
+      "title": {
+        "en": "Designated Survivor",
+        "zh": "指定倖存者"
+      },
+      "subtitle": {
+        "en": "ABC · Netflix",
+        "zh": "ABC · Netflix"
+      },
+      "note": {
+        "en": "After an attack destroys the Capitol, low-ranking cabinet member Tom Kirkman suddenly becomes President.",
+        "zh": "國會大廈遭到攻擊後，原本不起眼的內閣部長湯姆・柯克曼突然成為美國總統。"
+      },
+      "date": "2016",
+      "image": "https://static.tvmaze.com/uploads/images/medium_portrait/194/486246.jpg",
+      "imageCredit": {
+        "text": "Poster: TVmaze",
+        "href": "https://www.tvmaze.com/shows/8167/designated-survivor"
+      },
+      "category": {
+        "en": "US series",
+        "zh": "美劇"
+      }
+    },
+    {
+      "title": {
+        "en": "Money Heist (La Casa de Papel)",
+        "zh": "紙房子"
+      },
+      "subtitle": {
+        "en": "Antena 3 · Netflix",
+        "zh": "Antena 3 · Netflix"
+      },
+      "note": {
+        "en": "“The Professor” leads a crew code-named after cities in a heist on Spain’s Royal Mint.",
+        "zh": "「教授」率領一群以城市為代號的搶匪，挾持西班牙皇家造幣廠。"
+      },
+      "date": "2017",
+      "image": "https://static.tvmaze.com/uploads/images/medium_portrait/376/940830.jpg",
+      "imageCredit": {
+        "text": "Poster: TVmaze",
+        "href": "https://www.tvmaze.com/shows/27436/la-casa-de-papel"
+      },
+      "category": {
+        "en": "US series",
+        "zh": "美劇"
+      }
+    },
+    {
+      "title": {
+        "en": "The Queen’s Gambit",
+        "zh": "后翼棄兵"
+      },
+      "subtitle": {
+        "en": "Netflix",
+        "zh": "Netflix"
+      },
+      "note": {
+        "en": "Beth Harmon, raised in an orphanage, becomes a chess prodigy.",
+        "zh": "在孤兒院長大的貝絲・哈蒙，成為西洋棋天才。"
+      },
+      "date": "2020",
+      "image": "https://static.tvmaze.com/uploads/images/medium_portrait/510/1275203.jpg",
+      "imageCredit": {
+        "text": "Poster: TVmaze",
+        "href": "https://www.tvmaze.com/shows/41428/the-queens-gambit"
+      },
+      "category": {
+        "en": "US series",
+        "zh": "美劇"
+      }
+    },
+    {
+      "title": {
+        "en": "Young Sheldon",
+        "zh": "少年謝爾頓"
+      },
+      "subtitle": {
+        "en": "CBS",
+        "zh": "CBS"
+      },
+      "note": {
+        "en": "Nine-year-old genius Sheldon Cooper starts high school in East Texas.",
+        "zh": "九歲的天才謝爾頓・庫柏，在德州東部讀高中。"
+      },
+      "date": "2017",
+      "image": "https://static.tvmaze.com/uploads/images/medium_portrait/513/1283060.jpg",
+      "imageCredit": {
+        "text": "Poster: TVmaze",
+        "href": "https://www.tvmaze.com/shows/26020/young-sheldon"
+      },
+      "category": {
+        "en": "US series",
+        "zh": "美劇"
+      }
+    },
+    {
+      "title": {
+        "en": "Dr. Romantic",
+        "zh": "浪漫醫生金師傅"
+      },
+      "subtitle": {
+        "en": "SBS",
+        "zh": "SBS"
+      },
+      "note": {
+        "en": "At a small hospital far from the city, genius surgeon “Teacher Kim” trains young doctors.",
+        "zh": "在偏遠的小醫院裡，天才外科醫師「金師傅」帶領年輕醫生成長。"
+      },
+      "date": "2016",
+      "image": "https://static.tvmaze.com/uploads/images/medium_portrait/458/1146656.jpg",
+      "imageCredit": {
+        "text": "Poster: TVmaze",
+        "href": "https://www.tvmaze.com/shows/19333/romantic-doctor-teacher-kim"
+      },
+      "category": {
+        "en": "Korean dramas",
+        "zh": "韓劇"
+      }
+    },
+    {
+      "title": {
+        "en": "Hospital Playlist",
+        "zh": "機智醫生生活"
+      },
+      "subtitle": {
+        "en": "tvN",
+        "zh": "tvN"
+      },
+      "note": {
+        "en": "Five friends from medical school work at the same hospital, and play in a band together.",
+        "zh": "五個醫學院時期的好朋友在同一間醫院工作，還一起組了樂團。"
+      },
+      "date": "2020",
+      "image": "https://static.tvmaze.com/uploads/images/medium_portrait/323/807792.jpg",
+      "imageCredit": {
+        "text": "Poster: TVmaze",
+        "href": "https://www.tvmaze.com/shows/46260/hospital-playlist"
+      },
+      "category": {
+        "en": "Korean dramas",
+        "zh": "韓劇"
+      }
+    },
+    {
+      "title": {
+        "en": "Crash Landing on You",
+        "zh": "愛的迫降"
+      },
+      "subtitle": {
+        "en": "tvN",
+        "zh": "tvN"
+      },
+      "note": {
+        "en": "A paragliding accident lands South Korean heiress Yoon Se-ri in North Korea, where she meets officer Ri Jeong-hyeok.",
+        "zh": "南韓財閥千金尹世理玩滑翔傘時意外降落北韓，遇見軍官李正赫。"
+      },
+      "date": "2019",
+      "image": "https://static.tvmaze.com/uploads/images/medium_portrait/235/588087.jpg",
+      "imageCredit": {
+        "text": "Poster: TVmaze",
+        "href": "https://www.tvmaze.com/shows/42756/crash-landing-on-you"
+      },
+      "category": {
+        "en": "Korean dramas",
+        "zh": "韓劇"
+      }
+    },
+    {
+      "title": {
+        "en": "Extraordinary Attorney Woo",
+        "zh": "非常律師禹英禑"
+      },
+      "subtitle": {
+        "en": "ENA",
+        "zh": "ENA"
+      },
+      "note": {
+        "en": "Woo Young-woo, a brilliant rookie lawyer on the autism spectrum, takes on case after case.",
+        "zh": "有自閉症類群障礙的天才新人律師禹英禑，接下一件又一件案子。"
+      },
+      "date": "2022",
+      "image": "https://static.tvmaze.com/uploads/images/medium_portrait/414/1035908.jpg",
+      "imageCredit": {
+        "text": "Poster: TVmaze",
+        "href": "https://www.tvmaze.com/shows/62357/extraordinary-attorney-woo"
+      },
+      "category": {
+        "en": "Korean dramas",
+        "zh": "韓劇"
+      }
+    },
+    {
+      "title": {
+        "en": "Queen of Tears",
+        "zh": "淚之女王"
+      },
+      "subtitle": {
+        "en": "tvN",
+        "zh": "tvN"
+      },
+      "note": {
+        "en": "Chaebol heiress Hong Hae-in and her husband Baek Hyun-woo, a boy from the countryside, in a marriage in crisis.",
+        "zh": "財閥千金洪海仁與出身鄉下的丈夫白賢祐，面臨婚姻危機。"
+      },
+      "date": "2024",
+      "image": "https://static.tvmaze.com/uploads/images/medium_portrait/507/1269260.jpg",
+      "imageCredit": {
+        "text": "Poster: TVmaze",
+        "href": "https://www.tvmaze.com/shows/67633/queen-of-tears"
+      },
+      "category": {
+        "en": "Korean dramas",
+        "zh": "韓劇"
+      }
+    },
+    {
+      "title": {
+        "en": "Joy of Life",
+        "zh": "慶餘年"
+      },
+      "subtitle": {
+        "en": "Tencent Video · iQIYI",
+        "zh": "Tencent Video · iQIYI"
+      },
+      "note": {
+        "en": "Based on Mao Ni’s novel: Fan Xian grows up in an ancient kingdom with the memories of a modern man.",
+        "zh": "改編自貓膩的小說：帶著現代人記憶的范閑，在古代王朝長大。"
+      },
+      "date": "2019",
+      "image": "https://static.tvmaze.com/uploads/images/medium_portrait/579/1448260.jpg",
+      "imageCredit": {
+        "text": "Poster: TVmaze",
+        "href": "https://www.tvmaze.com/shows/45302/joy-of-life"
+      },
+      "category": {
+        "en": "Chinese dramas",
+        "zh": "陸劇"
+      }
+    },
+    {
+      "title": {
+        "en": "Nirvana in Fire",
+        "zh": "琅琊榜"
+      },
+      "subtitle": {
+        "en": "Beijing TV · Dragon TV",
+        "zh": "Beijing TV · Dragon TV"
+      },
+      "note": {
+        "en": "Based on Hai Yan’s novel: Mei Changsu returns to the capital under a new name to right an old injustice.",
+        "zh": "改編自海宴的小說：梅長蘇化名重回金陵，為舊案翻案。"
+      },
+      "date": "2015",
+      "image": "https://static.tvmaze.com/uploads/images/medium_portrait/69/174608.jpg",
+      "imageCredit": {
+        "text": "Poster: TVmaze",
+        "href": "https://www.tvmaze.com/shows/7135/nirvana-in-fire"
+      },
+      "category": {
+        "en": "Chinese dramas",
+        "zh": "陸劇"
+      }
+    },
+    {
+      "title": {
+        "en": "The Story of Rose",
+        "zh": "玫瑰的故事"
+      },
+      "subtitle": {
+        "en": "Tencent Video",
+        "zh": "Tencent Video"
+      },
+      "note": {
+        "en": "Liu Yifei as Huang Yimei, through love and life from university to middle age.",
+        "zh": "劉亦菲飾演黃亦玫，從大學到中年的愛情與人生。"
+      },
+      "date": "2024",
+      "image": "https://static.tvmaze.com/uploads/images/medium_portrait/522/1305852.jpg",
+      "imageCredit": {
+        "text": "Poster: TVmaze",
+        "href": "https://www.tvmaze.com/shows/71197/full-bloom"
+      },
+      "category": {
+        "en": "Chinese dramas",
+        "zh": "陸劇"
+      }
+    },
+    {
+      "title": {
+        "en": "Three Kingdoms",
+        "zh": "三國"
+      },
+      "subtitle": {
+        "en": "Jiangsu TV",
+        "zh": "Jiangsu TV"
+      },
+      "note": {
+        "en": "An adaptation of Romance of the Three Kingdoms, from the end of the Han to the unification under Jin.",
+        "zh": "改編自《三國演義》，從東漢末年一直到三國歸晉。"
+      },
+      "date": "2010",
+      "image": "https://static.tvmaze.com/uploads/images/medium_portrait/70/176628.jpg",
+      "imageCredit": {
+        "text": "Poster: TVmaze",
+        "href": "https://www.tvmaze.com/shows/20016/three-kingdoms"
+      },
+      "category": {
+        "en": "Chinese dramas",
+        "zh": "陸劇"
+      }
+    },
+    {
+      "title": {
+        "en": "King’s War",
+        "zh": "楚漢傳奇"
+      },
+      "subtitle": {
+        "en": "Hunan TV",
+        "zh": "Hunan TV"
+      },
+      "note": {
+        "en": "The struggle between Liu Bang and Xiang Yu after the fall of the Qin.",
+        "zh": "秦朝滅亡後，劉邦與項羽的楚漢相爭。"
+      },
+      "date": "2012",
+      "image": "https://upload.wikimedia.org/wikipedia/en/a/ab/Kingswar.jpg",
+      "imageCredit": {
+        "text": "Poster: Wikipedia",
+        "href": "https://en.wikipedia.org/wiki/King%27s_War"
+      },
+      "category": {
+        "en": "Chinese dramas",
+        "zh": "陸劇"
+      }
+    },
+    {
+      "title": {
+        "en": "Mobius",
+        "zh": "不眠日"
+      },
+      "subtitle": {
+        "en": "iQIYI",
+        "zh": "iQIYI"
+      },
+      "note": {
+        "en": "A detective who can relive the same day five times races to solve a case.",
+        "zh": "擁有一天能重來五次的能力，刑警丁奇在循環中追查真相。"
+      },
+      "date": "2025",
+      "image": "https://static.tvmaze.com/uploads/images/medium_portrait/587/1468669.jpg",
+      "imageCredit": {
+        "text": "Poster: TVmaze",
+        "href": "https://www.tvmaze.com/shows/81452/mobius"
+      },
+      "category": {
+        "en": "Chinese dramas",
+        "zh": "陸劇"
+      }
+    },
+    {
+      "title": {
+        "en": "Love Like the Galaxy",
+        "zh": "星漢燦爛"
+      },
+      "subtitle": {
+        "en": "Tencent Video",
+        "zh": "Tencent Video"
+      },
+      "note": {
+        "en": "Cheng Shaoshang and General Ling Buyi, a love story set in an ancient court.",
+        "zh": "程少商與凌不疑，古代宮廷裡的愛情故事。"
+      },
+      "date": "2022",
+      "image": "https://static.tvmaze.com/uploads/images/medium_portrait/415/1038524.jpg",
+      "imageCredit": {
+        "text": "Poster: TVmaze",
+        "href": "https://www.tvmaze.com/shows/62994/love-like-the-galaxy"
+      },
+      "category": {
+        "en": "Chinese dramas",
+        "zh": "陸劇"
+      }
+    },
+    {
+      "title": {
+        "en": "Grand Maison Tokyo",
+        "zh": "東京大飯店"
+      },
+      "subtitle": {
+        "en": "TBS",
+        "zh": "TBS"
+      },
+      "note": {
+        "en": "After a fall from grace in Paris, chef Natsuki Obana (Takuya Kimura) sets out to build a three-Michelin-star restaurant in Tokyo with Rinko Hayami.",
+        "zh": "在巴黎失勢的主廚尾花夏樹（木村拓哉），與早見倫子在東京打造目標米其林三星的餐廳。"
+      },
+      "date": "2019",
+      "image": "https://static.tvmaze.com/uploads/images/medium_portrait/250/626645.jpg",
+      "imageCredit": {
+        "text": "Poster: TVmaze",
+        "href": "https://www.tvmaze.com/shows/47126/grand-maison-tokyo"
+      },
+      "category": {
+        "en": "Japanese dramas",
+        "zh": "日劇"
+      }
+    }
+  ],
+  "movies": [
+    {
+      "title": {
+        "en": "The Shawshank Redemption",
+        "zh": "刺激1995"
+      },
+      "subtitle": {
+        "en": "Frank Darabont",
+        "zh": "法蘭克・戴拉邦特"
+      },
+      "note": {
+        "en": "Andy Dufresne, a banker wrongly jailed for murder, never gives up hope inside Shawshank prison.",
+        "zh": "被冤枉殺人入獄的銀行家安迪，在肖申克監獄裡從沒放棄希望。"
+      },
+      "date": "1994",
+      "image": "https://upload.wikimedia.org/wikipedia/en/8/81/ShawshankRedemptionMoviePoster.jpg",
+      "imageCredit": {
+        "text": "Poster: Wikipedia",
+        "href": "https://en.wikipedia.org/wiki/The_Shawshank_Redemption"
+      },
+      "rank": 1
+    },
+    {
+      "title": {
+        "en": "Lost on Journey",
+        "zh": "人在囧途"
+      },
+      "subtitle": {
+        "en": "Raymond Yip",
+        "zh": "葉偉民"
+      },
+      "note": {
+        "en": "A businessman and a milk-factory worker share one disaster after another on the Chinese New Year trip home.",
+        "zh": "春運返鄉的路上，老闆李成功和擠奶工牛耿一路狀況不斷。"
+      },
+      "date": "2010",
+      "image": "https://upload.wikimedia.org/wikipedia/en/b/b9/Lost_on_Journey_poster.jpg",
+      "imageCredit": {
+        "text": "Poster: Wikipedia",
+        "href": "https://en.wikipedia.org/wiki/Lost_on_Journey"
+      },
+      "rank": 2
+    },
+    {
+      "title": {
+        "en": "3 Idiots",
+        "zh": "三個傻瓜"
+      },
+      "subtitle": {
+        "en": "Rajkumar Hirani",
+        "zh": "拉庫馬・希拉尼"
+      },
+      "note": {
+        "en": "Three friends at an engineering college, and Rancho’s rebellion against learning by rote.",
+        "zh": "工程學院裡的三個好朋友，和藍丘對填鴨式教育的反叛。"
+      },
+      "date": "2009",
+      "image": "https://upload.wikimedia.org/wikipedia/en/d/df/3_idiots_poster.jpg",
+      "imageCredit": {
+        "text": "Poster: Wikipedia",
+        "href": "https://en.wikipedia.org/wiki/3_Idiots"
+      },
+      "rank": 3
+    },
+    {
+      "title": {
+        "en": "Green Book",
+        "zh": "幸福綠皮書"
+      },
+      "subtitle": {
+        "en": "Peter Farrelly",
+        "zh": "彼得・法拉利"
+      },
+      "note": {
+        "en": "In 1962, driver Tony Lip takes pianist Don Shirley on a concert tour of the Deep South.",
+        "zh": "1962 年，司機東尼載著黑人鋼琴家唐・雪利到美國南方巡演。"
+      },
+      "date": "2018",
+      "image": "https://upload.wikimedia.org/wikipedia/en/5/5b/Green_Book_%282018_poster%29.png",
+      "imageCredit": {
+        "text": "Poster: Wikipedia",
+        "href": "https://en.wikipedia.org/wiki/Green_Book_(film)"
+      },
+      "rank": 4
+    },
+    {
+      "title": {
+        "en": "Oppenheimer",
+        "zh": "奧本海默"
+      },
+      "subtitle": {
+        "en": "Christopher Nolan",
+        "zh": "克里斯多福・諾蘭"
+      },
+      "note": {
+        "en": "J. Robert Oppenheimer and the Manhattan Project.",
+        "zh": "「原子彈之父」羅伯特・奧本海默與曼哈頓計畫。"
+      },
+      "date": "2023",
+      "image": "https://upload.wikimedia.org/wikipedia/en/4/4a/Oppenheimer_%28film%29.jpg",
+      "imageCredit": {
+        "text": "Poster: Wikipedia",
+        "href": "https://en.wikipedia.org/wiki/Oppenheimer_(film)"
+      },
+      "rank": 5
+    },
+    {
+      "title": {
+        "en": "Star Wars",
+        "zh": "星際大戰"
+      },
+      "subtitle": {
+        "en": "George Lucas",
+        "zh": "喬治・盧卡斯"
+      },
+      "note": {
+        "en": "Luke Skywalker, Princess Leia, and Han Solo take on the Galactic Empire.",
+        "zh": "路克・天行者、莉亞公主與韓・索羅對抗銀河帝國。"
+      },
+      "date": "1977",
+      "image": "https://upload.wikimedia.org/wikipedia/en/8/87/StarWarsMoviePoster1977.jpg",
+      "imageCredit": {
+        "text": "Poster: Wikipedia",
+        "href": "https://en.wikipedia.org/wiki/Star_Wars_(film)"
+      },
+      "rank": 6
     }
   ],
   "travel": [
@@ -335,7 +1779,12 @@
       },
       "lat": 23.7,
       "lon": 121.0,
-      "home": true
+      "home": true,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ea/Taipei_Skyline_2022.06.29.jpg/960px-Taipei_Skyline_2022.06.29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Taipei — 毛貓大少爺, CC BY-SA 2.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Taipei_Skyline_2022.06.29.jpg"
+      }
     },
     {
       "title": {
@@ -348,7 +1797,12 @@
       },
       "lat": 47.61,
       "lon": -122.33,
-      "home": true
+      "home": true,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/23/Space_Needle_2011-07-04.jpg/960px-Space_Needle_2011-07-04.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Space Needle — Jordon Kalilich, Public domain (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Space_Needle_2011-07-04.jpg"
+      }
     },
     {
       "title": {
@@ -360,7 +1814,12 @@
         "zh": "日本"
       },
       "lat": 34.69,
-      "lon": 135.5
+      "lon": 135.5,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/ca/Osaka_Castle_03bs3200.jpg/960px-Osaka_Castle_03bs3200.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Osaka Castle — 663highland, CC BY 2.5 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Osaka_Castle_03bs3200.jpg"
+      }
     },
     {
       "title": {
@@ -372,7 +1831,12 @@
         "zh": "日本"
       },
       "lat": 35.01,
-      "lon": 135.77
+      "lon": 135.77,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0e/Torii_path_with_lantern_at_Fushimi_Inari_Taisha_Shrine%2C_Kyoto%2C_Japan.jpg/960px-Torii_path_with_lantern_at_Fushimi_Inari_Taisha_Shrine%2C_Kyoto%2C_Japan.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Fushimi Inari-taisha — Basile Morin, CC BY-SA 4.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Torii_path_with_lantern_at_Fushimi_Inari_Taisha_Shrine,_Kyoto,_Japan.jpg"
+      }
     },
     {
       "title": {
@@ -384,7 +1848,12 @@
         "zh": "日本"
       },
       "lat": 35.68,
-      "lon": 139.69
+      "lon": 139.69,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/58/Tokyo_Tower_2023.jpg/960px-Tokyo_Tower_2023.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Tokyo Tower — Akonnchiroll, CC BY-SA 4.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Tokyo_Tower_2023.jpg"
+      }
     },
     {
       "title": {
@@ -396,7 +1865,12 @@
         "zh": "日本"
       },
       "lat": 43.06,
-      "lon": 141.35
+      "lon": 141.35,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/08/Otaru_Montage.jpg/960px-Otaru_Montage.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Otaru — Komatta, CC BY-SA 3.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Otaru_Montage.jpg"
+      }
     },
     {
       "title": {
@@ -408,7 +1882,12 @@
         "zh": "日本"
       },
       "lat": 26.21,
-      "lon": 127.68
+      "lon": 127.68,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/Naha_Okinawa_Japan_Shuri-Castle-01.jpg/960px-Naha_Okinawa_Japan_Shuri-Castle-01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Shuri Castle — CEphoto, Uwe Aranas, CC BY-SA 3.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Naha_Okinawa_Japan_Shuri-Castle-01.jpg"
+      }
     },
     {
       "title": {
@@ -420,7 +1899,12 @@
         "zh": "韓國"
       },
       "lat": 37.57,
-      "lon": 126.98
+      "lon": 126.98,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/63/%EA%B4%91%ED%99%94%EB%AC%B8_%EC%9B%94%EB%8C%80.jpg/960px-%EA%B4%91%ED%99%94%EB%AC%B8_%EC%9B%94%EB%8C%80.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Gyeongbokgung — 서울관광 아카이브, KOGL Type 1 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:%EA%B4%91%ED%99%94%EB%AC%B8_%EC%9B%94%EB%8C%80.jpg"
+      }
     },
     {
       "title": {
@@ -432,7 +1916,12 @@
         "zh": "韓國"
       },
       "lat": 35.18,
-      "lon": 129.08
+      "lon": 129.08,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ee/Gamcheon_Houses%2C_2024.jpg/960px-Gamcheon_Houses%2C_2024.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Gamcheon Culture Village — Bl00dnFl4mes, CC BY-SA 4.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Gamcheon_Houses,_2024.jpg"
+      }
     },
     {
       "title": {
@@ -444,7 +1933,12 @@
         "zh": "中國"
       },
       "lat": 39.9,
-      "lon": 116.4
+      "lon": 116.4,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ef/The_Forbidden_City_-_View_from_Coal_Hill.jpg/960px-The_Forbidden_City_-_View_from_Coal_Hill.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Forbidden City — Pixelflake, CC BY-SA 3.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:The_Forbidden_City_-_View_from_Coal_Hill.jpg"
+      }
     },
     {
       "title": {
@@ -456,7 +1950,12 @@
         "zh": "中國"
       },
       "lat": 31.23,
-      "lon": 121.47
+      "lon": 121.47,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5a/The_Bund_2.jpg/960px-The_Bund_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: The Bund — 钉钉, CC BY-SA 4.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:The_Bund_2.jpg"
+      }
     },
     {
       "title": {
@@ -468,7 +1967,12 @@
         "zh": "中國"
       },
       "lat": 34.34,
-      "lon": 108.94
+      "lon": 108.94,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/88/51714-Terracota-Army.jpg/960px-51714-Terracota-Army.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Terracotta Army — xiquinhosilva, CC BY 2.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:51714-Terracota-Army.jpg"
+      }
     },
     {
       "title": {
@@ -480,7 +1984,12 @@
         "zh": "中國"
       },
       "lat": 36.67,
-      "lon": 117.0
+      "lon": 117.0,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/71/50304-Taishan_%2849055660366%29.jpg/960px-50304-Taishan_%2849055660366%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Mount Tai — xiquinhosilva, CC BY 2.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:50304-Taishan_(49055660366).jpg"
+      }
     },
     {
       "title": {
@@ -492,7 +2001,12 @@
         "zh": "泰國"
       },
       "lat": 13.76,
-      "lon": 100.5
+      "lon": 100.5,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2a/%E0%B9%80%E0%B8%88%E0%B8%94%E0%B8%B5%E0%B8%A2%E0%B9%8C%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%98%E0%B8%B2%E0%B8%99%E0%B8%97%E0%B8%A3%E0%B8%87%E0%B8%9B%E0%B8%A3%E0%B8%B2%E0%B8%87%E0%B8%84%E0%B9%8C%E0%B8%A7%E0%B8%B1%E0%B8%94%E0%B8%AD%E0%B8%A3%E0%B8%B8%E0%B8%932.jpg/960px-%E0%B9%80%E0%B8%88%E0%B8%94%E0%B8%B5%E0%B8%A2%E0%B9%8C%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%98%E0%B8%B2%E0%B8%99%E0%B8%97%E0%B8%A3%E0%B8%87%E0%B8%9B%E0%B8%A3%E0%B8%B2%E0%B8%87%E0%B8%84%E0%B9%8C%E0%B8%A7%E0%B8%B1%E0%B8%94%E0%B8%AD%E0%B8%A3%E0%B8%B8%E0%B8%932.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Wat Arun — Mastertongapollo, CC BY-SA 4.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:%E0%B9%80%E0%B8%88%E0%B8%94%E0%B8%B5%E0%B8%A2%E0%B9%8C%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%98%E0%B8%B2%E0%B8%99%E0%B8%97%E0%B8%A3%E0%B8%87%E0%B8%9B%E0%B8%A3%E0%B8%B2%E0%B8%87%E0%B8%84%E0%B9%8C%E0%B8%A7%E0%B8%B1%E0%B8%94%E0%B8%AD%E0%B8%A3%E0%B8%B8%E0%B8%932.jpg"
+      }
     },
     {
       "title": {
@@ -504,7 +2018,12 @@
         "zh": "新加坡"
       },
       "lat": 1.35,
-      "lon": 103.82
+      "lon": 103.82,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c7/Marina_Bay_Sands_%28I%29.jpg/960px-Marina_Bay_Sands_%28I%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Marina Bay Sands — This Photo was taken by Supanut Arunoprayote. Feel free t…, CC BY 4.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Marina_Bay_Sands_(I).jpg"
+      }
     },
     {
       "title": {
@@ -516,7 +2035,12 @@
         "zh": "馬來西亞"
       },
       "lat": 3.14,
-      "lon": 101.69
+      "lon": 101.69,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1a/Bukit_Bintang_junction_in_2024_2.jpg/960px-Bukit_Bintang_junction_in_2024_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Kuala Lumpur — Renek78, CC0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Bukit_Bintang_junction_in_2024_2.jpg"
+      }
     },
     {
       "title": {
@@ -528,7 +2052,12 @@
         "zh": "香港"
       },
       "lat": 22.32,
-      "lon": 114.17
+      "lon": 114.17,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/High_West_and_Victoria_Peak_from_Victoria_Gap_%28crop1%29.jpg/960px-High_West_and_Victoria_Peak_from_Victoria_Gap_%28crop1%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Victoria Peak — Daniel Case, CC BY-SA 3.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:High_West_and_Victoria_Peak_from_Victoria_Gap_(crop1).jpg"
+      }
     },
     {
       "title": {
@@ -540,7 +2069,12 @@
         "zh": "澳門"
       },
       "lat": 22.2,
-      "lon": 113.54
+      "lon": 113.54,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fc/%E5%A4%A7%E4%B8%89%E5%B7%B4%E7%89%8C%E5%9D%8A.jpg/960px-%E5%A4%A7%E4%B8%89%E5%B7%B4%E7%89%8C%E5%9D%8A.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Ruins of St. Paul's — GG001213, CC0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:%E5%A4%A7%E4%B8%89%E5%B7%B4%E7%89%8C%E5%9D%8A.jpg"
+      }
     },
     {
       "title": {
@@ -552,7 +2086,12 @@
         "zh": "阿拉伯聯合大公國"
       },
       "lat": 25.2,
-      "lon": 55.27
+      "lon": 55.27,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/90/Burj_Khalifa_%28worlds_tallest_building%29_and_the_Dubai_skyline_%2825781049892%29.jpg/960px-Burj_Khalifa_%28worlds_tallest_building%29_and_the_Dubai_skyline_%2825781049892%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Burj Khalifa — imran shahabuddin, CC BY 2.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Burj_Khalifa_(worlds_tallest_building)_and_the_Dubai_skyline_(25781049892).jpg"
+      }
     },
     {
       "title": {
@@ -564,7 +2103,12 @@
         "zh": "土耳其"
       },
       "lat": 41.01,
-      "lon": 28.98
+      "lon": 28.98,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/Hagia_Sophia_%28228968325%29.jpeg/960px-Hagia_Sophia_%28228968325%29.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Hagia Sophia — Adli Wahid, CC BY-SA 3.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Hagia_Sophia_(228968325).jpeg"
+      }
     },
     {
       "title": {
@@ -576,7 +2120,12 @@
         "zh": "德國"
       },
       "lat": 51.17,
-      "lon": 10.45
+      "lon": 10.45,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/Brandenburger_Tor_abends.jpg/960px-Brandenburger_Tor_abends.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Brandenburg Gate — Thomas Wolf, www.foto-tw.de, CC BY-SA 3.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Brandenburger_Tor_abends.jpg"
+      }
     },
     {
       "title": {
@@ -588,7 +2137,12 @@
         "zh": "荷蘭"
       },
       "lat": 52.37,
-      "lon": 4.9
+      "lon": 4.9,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/ff/KinderdijkMolens02.jpg/960px-KinderdijkMolens02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Kinderdijk — Lucas Hirschegger, CC BY-SA 3.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:KinderdijkMolens02.jpg"
+      }
     },
     {
       "title": {
@@ -600,7 +2154,12 @@
         "zh": "比利時"
       },
       "lat": 50.85,
-      "lon": 4.35
+      "lon": 4.35,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/26/Grand-Place%2C_Brussels_-_panorama%2C_June_2018.jpg/960px-Grand-Place%2C_Brussels_-_panorama%2C_June_2018.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Grand-Place — Celuici, CC BY-SA 4.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Grand-Place,_Brussels_-_panorama,_June_2018.jpg"
+      }
     },
     {
       "title": {
@@ -612,7 +2171,12 @@
         "zh": "奧地利"
       },
       "lat": 48.21,
-      "lon": 16.37
+      "lon": 16.37,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c9/Wien_-_Schloss_Sch%C3%B6nbrunn.JPG/960px-Wien_-_Schloss_Sch%C3%B6nbrunn.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Schönbrunn Palace — C.Stadler/Bwag, CC BY-SA 4.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Wien_-_Schloss_Sch%C3%B6nbrunn.JPG"
+      }
     },
     {
       "title": {
@@ -624,7 +2188,12 @@
         "zh": "俄羅斯"
       },
       "lat": 55.76,
-      "lon": 37.62
+      "lon": 37.62,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/18/Saint_Basil%27s_Cathedral_in_Moscow.jpg/960px-Saint_Basil%27s_Cathedral_in_Moscow.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Saint Basil's Cathedral — Tsy1980, CC BY-SA 4.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Saint_Basil%27s_Cathedral_in_Moscow.jpg"
+      }
     },
     {
       "title": {
@@ -636,7 +2205,12 @@
         "zh": "捷克"
       },
       "lat": 50.08,
-      "lon": 14.44
+      "lon": 14.44,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/22/Prague_07-2016_view_from_Lesser_Town_Tower_of_Charles_Bridge_img3.jpg/960px-Prague_07-2016_view_from_Lesser_Town_Tower_of_Charles_Bridge_img3.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Charles Bridge — A.Savin, FAL (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Prague_07-2016_view_from_Lesser_Town_Tower_of_Charles_Bridge_img3.jpg"
+      }
     },
     {
       "title": {
@@ -648,7 +2222,12 @@
         "zh": "瑞士"
       },
       "lat": 46.82,
-      "lon": 8.23
+      "lon": 8.23,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/Matterhorn_from_Domh%C3%BCtte_-_2.jpg/960px-Matterhorn_from_Domh%C3%BCtte_-_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Matterhorn — chil (Camptocamp.org), CC BY-SA 3.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Matterhorn_from_Domh%C3%BCtte_-_2.jpg"
+      }
     },
     {
       "title": {
@@ -660,7 +2239,12 @@
         "zh": "挪威"
       },
       "lat": 59.91,
-      "lon": 10.75
+      "lon": 10.75,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/46/Geirangerfjord_.jpg/960px-Geirangerfjord_.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Geirangerfjord — Andreas Trepte, CC BY-SA 2.5 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Geirangerfjord_.jpg"
+      }
     },
     {
       "title": {
@@ -672,7 +2256,12 @@
         "zh": "瑞典"
       },
       "lat": 59.33,
-      "lon": 18.07
+      "lon": 18.07,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8a/Gamla_stan_September_2014_01.jpg/960px-Gamla_stan_September_2014_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Gamla stan — Arild Vågen, CC BY-SA 4.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Gamla_stan_September_2014_01.jpg"
+      }
     },
     {
       "title": {
@@ -684,7 +2273,12 @@
         "zh": "丹麥"
       },
       "lat": 55.68,
-      "lon": 12.57
+      "lon": 12.57,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ad/The_Nyhavn_Canal_3.jpg/960px-The_Nyhavn_Canal_3.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Nyhavn — European Commission, CC BY 4.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:The_Nyhavn_Canal_3.jpg"
+      }
     },
     {
       "title": {
@@ -696,7 +2290,12 @@
         "zh": "芬蘭"
       },
       "lat": 60.17,
-      "lon": 24.94
+      "lon": 24.94,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/Kirkko3.png/960px-Kirkko3.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Helsinki Cathedral — Manster323, CC0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Kirkko3.png"
+      }
     },
     {
       "title": {
@@ -708,7 +2307,12 @@
         "zh": "美國"
       },
       "lat": 40.71,
-      "lon": -74.01
+      "lon": -74.01,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/Front_view_of_Statue_of_Liberty_%28cropped%29.jpg/960px-Front_view_of_Statue_of_Liberty_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Statue of Liberty — AskALotl, CC0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Front_view_of_Statue_of_Liberty_(cropped).jpg"
+      }
     },
     {
       "title": {
@@ -720,7 +2324,12 @@
         "zh": "美國"
       },
       "lat": 37.77,
-      "lon": -122.42
+      "lon": -122.42,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bf/Golden_Gate_Bridge_as_seen_from_Battery_East.jpg/960px-Golden_Gate_Bridge_as_seen_from_Battery_East.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Golden Gate Bridge — Frank Schulenburg, CC BY-SA 4.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Golden_Gate_Bridge_as_seen_from_Battery_East.jpg"
+      }
     },
     {
       "title": {
@@ -732,7 +2341,12 @@
         "zh": "美國"
       },
       "lat": 34.05,
-      "lon": -118.24
+      "lon": -118.24,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2f/Hollywood_sign_%288485145044%29.jpg/960px-Hollywood_sign_%288485145044%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Hollywood Sign — Gnaphron, CC BY-SA 2.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Hollywood_sign_(8485145044).jpg"
+      }
     },
     {
       "title": {
@@ -744,7 +2358,12 @@
         "zh": "美國"
       },
       "lat": 32.72,
-      "lon": -117.16
+      "lon": -117.16,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ea/La_Jolla_Shores_view_%28cropped%29.jpg/960px-La_Jolla_Shores_view_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: San Diego — Dirk Hansen, CC BY-SA 3.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:La_Jolla_Shores_view_(cropped).jpg"
+      }
     },
     {
       "title": {
@@ -756,7 +2375,12 @@
         "zh": "美國"
       },
       "lat": 42.36,
-      "lon": -71.06
+      "lon": -71.06,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/46/Boston_Common_Lake_April_2025.jpg/960px-Boston_Common_Lake_April_2025.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Boston Public Garden — Gaby Azeem, CC0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Boston_Common_Lake_April_2025.jpg"
+      }
     },
     {
       "title": {
@@ -768,7 +2392,12 @@
         "zh": "美國"
       },
       "lat": 45.52,
-      "lon": -122.68
+      "lon": -122.68,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a9/Japanese_Garden_-1.jpg/960px-Japanese_Garden_-1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Portland Japanese Garden — Adonelson, CC BY-SA 3.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Japanese_Garden_-1.jpg"
+      }
     },
     {
       "title": {
@@ -780,7 +2409,12 @@
         "zh": "美國"
       },
       "lat": 21.31,
-      "lon": -157.86
+      "lon": -157.86,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/93/Diamond_Head_Hawaii_From_Round_Top_Rd.JPG/960px-Diamond_Head_Hawaii_From_Round_Top_Rd.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Diamond Head, Hawaii — mar1865, CC BY-SA 3.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Diamond_Head_Hawaii_From_Round_Top_Rd.JPG"
+      }
     },
     {
       "title": {
@@ -792,7 +2426,12 @@
         "zh": "加拿大"
       },
       "lat": 49.28,
-      "lon": -123.12
+      "lon": -123.12,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/Moraine_Lake_17092005.jpg/960px-Moraine_Lake_17092005.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Moraine Lake — Gorgo, Public domain (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Moraine_Lake_17092005.jpg"
+      }
     },
     {
       "title": {
@@ -804,7 +2443,12 @@
         "zh": "澳洲"
       },
       "lat": -33.87,
-      "lon": 151.21
+      "lon": 151.21,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/Sydney_Australia._%2821339175489%29.jpg/960px-Sydney_Australia._%2821339175489%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Sydney Opera House — Bernard Spragg. NZ from Christchurch, New Zealand, CC0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Sydney_Australia._(21339175489).jpg"
+      }
     },
     {
       "title": {
@@ -816,7 +2460,12 @@
         "zh": "紐西蘭"
       },
       "lat": -36.85,
-      "lon": 174.76
+      "lon": 174.76,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b6/Milford_Sound_%28New_Zealand%29.JPG/960px-Milford_Sound_%28New_Zealand%29.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Milford Sound — Maros M r a z (Maros), CC BY-SA 3.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Milford_Sound_(New_Zealand).JPG"
+      }
     }
   ],
   "sports": [

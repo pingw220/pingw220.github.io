@@ -31,7 +31,7 @@ export interface Engine {
 }
 
 const SPEED = 3.6;
-const RADIUS = 0.4; // Mochi's size, for bumping into furniture
+const RADIUS = 0.4; // Joy's size, for bumping into furniture
 const NEAR_DISTANCE = 1.5;
 const AIM_RANGE = 7; // how far the crosshair can pick things
 const LOOK_SPEED = 0.0024;
@@ -58,7 +58,7 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
 
   const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 300);
   const gradientMap = toonGradient();
-  const mochi = buildMascot(gradientMap);
+  const joy = buildMascot(gradientMap);
 
   const built = new Map<WorldId, World>();
   const getWorld = (id: WorldId) => {
@@ -102,9 +102,9 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
   let near: Interactable | null = null; // what the prompt is about (aimed, or closest)
   let paused = false;
   let switching = false;
-  const pos = mochi.group.position;
+  const pos = joy.group.position;
 
-  // Orbit camera: yaw/pitch around Mochi, distance from Mochi.
+  // Orbit camera: yaw/pitch around Joy, distance from Joy.
   let yaw = 0;
   let pitch = 0.35;
   // Extra height the camera looks at, e.g. up at the fireworks.
@@ -127,22 +127,22 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
     yaw = facing + Math.PI;
   }
 
-  function placeMochi(arriveAt?: string) {
+  function placeJoy(arriveAt?: string) {
     const item = arriveAt ? world.items.find((i) => i.id === arriveAt) : undefined;
     if (item) {
       pos.copy(item.front);
-      mochi.group.rotation.y = item.facing + Math.PI; // turned away from the thing we just left
+      joy.group.rotation.y = item.facing + Math.PI; // turned away from the thing we just left
     } else {
       pos.copy(world.spawn);
-      mochi.group.rotation.y = world.spawnFacing;
+      joy.group.rotation.y = world.spawnFacing;
     }
     clamp(pos);
-    lookBehind(mochi.group.rotation.y);
+    lookBehind(joy.group.rotation.y);
   }
 
   function activateWorld(next: World, arriveAt?: string) {
     world = next;
-    world.scene.add(mochi.group);
+    world.scene.add(joy.group);
     renderPass.scene = world.scene;
     const b = world.bloom ?? DEFAULT_BLOOM;
     bloom.strength = b.strength;
@@ -158,7 +158,7 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
     near?.setNear?.(false);
     near = null;
     options.onNear(null, world.id);
-    placeMochi(arriveAt);
+    placeJoy(arriveAt);
     snapCamera = true;
     options.onWorldChange(world.id);
   }
@@ -261,7 +261,7 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
     { passive: false },
   );
 
-  /** Use an item: open it if Mochi is close, otherwise walk there first. */
+  /** Use an item: open it if Joy is close, otherwise walk there first. */
   function use(item: Interactable) {
     const d = Math.hypot(item.front.x - pos.x, item.front.z - pos.z);
     if (d < NEAR_DISTANCE + 0.6) trigger(item);
@@ -326,7 +326,7 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
         if (targetItem) {
           const item = targetItem;
           targetItem = null;
-          mochi.group.rotation.y = item.facing;
+          joy.group.rotation.y = item.facing;
           trigger(item);
         }
       }
@@ -335,7 +335,7 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
     if (move.lengthSq() > 0) {
       const step = Math.min(SPEED * dt, move.length());
       move.normalize();
-      // Move each axis separately so Mochi slides along furniture instead of stopping.
+      // Move each axis separately so Joy slides along furniture instead of stopping.
       const blocked = (x: number, z: number) =>
         (world.obstacles ?? []).some((o) => x > o.minX - RADIUS && x < o.maxX + RADIUS && z > o.minZ - RADIUS && z < o.maxZ + RADIUS);
       const nx = pos.x + move.x * step;
@@ -351,13 +351,13 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
       clamp(pos);
       speed = step / dt;
       const want = Math.atan2(move.x, move.z);
-      let diff = want - mochi.group.rotation.y;
+      let diff = want - joy.group.rotation.y;
       diff = Math.atan2(Math.sin(diff), Math.cos(diff));
-      mochi.group.rotation.y += diff * Math.min(1, dt * 10);
+      joy.group.rotation.y += diff * Math.min(1, dt * 10);
     }
-    mochi.update(t, dt, speed);
+    joy.update(t, dt, speed);
 
-    // Camera: orbit around Mochi.
+    // Camera: orbit around Joy.
     tmp.set(pos.x, 1.25, pos.z);
     if (snapCamera) follow.copy(tmp);
     else follow.lerp(tmp, 1 - Math.exp(-dt * 12));

@@ -19,16 +19,33 @@ const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
 // Stalls along the lane (left/right alternate, entrance first). `world` is where each leads;
 // `panel` is its list view.
 const STALLS = [
-  { world: 'studio', panel: 'music', emoji: '🎻', color: '#e76f51', side: -1, z: 3 },
-  { world: 'writing', panel: 'posts', emoji: '📝', color: '#2a9d8f', side: 1, z: -2 },
-  { world: 'library', panel: 'novels', emoji: '📚', color: '#9b5de5', side: -1, z: -7 },
-  { world: 'theater', panel: 'anime', emoji: '📺', color: '#f15bb5', side: 1, z: -12 },
-  { world: 'station', panel: 'travel', emoji: '✈️', color: '#3fa7d6', side: -1, z: -17 },
-  { world: 'sports', panel: 'sports', emoji: '🏆', color: '#ffb703', side: 1, z: -22 },
-  { world: 'postoffice', panel: 'messages', emoji: '💌', color: '#d62828', side: -1, z: -27 },
+  { world: 'postoffice', panel: 'messages', emoji: '💌', color: '#d62828', side: -1, z: 3 },
+  { world: 'studio', panel: 'music', emoji: '🎻', color: '#e76f51', side: 1, z: -2 },
+  { world: 'writing', panel: 'posts', emoji: '📝', color: '#2a9d8f', side: -1, z: -7 },
+  { world: 'library', panel: 'novels', emoji: '📚', color: '#9b5de5', side: 1, z: -12 },
+  { world: 'theater', panel: 'anime', emoji: '🌸', color: '#f15bb5', side: -1, z: -17 },
+  { world: 'dramas', panel: 'dramas', emoji: '📺', color: '#2a9d8f', side: 1, z: -22 },
+  { world: 'movies', panel: 'movies', emoji: '🎬', color: '#e9c46a', side: -1, z: -27 },
+  { world: 'flight', panel: 'travel', emoji: '✈️', color: '#3fa7d6', side: 1, z: -32 },
+  { world: 'sports', panel: 'sports', emoji: '🏆', color: '#ffb703', side: -1, z: -37 },
 ] as const;
 const stalls = STALLS.map((s) => ({ ...s, label: ui[`stall.${s.panel}`], blurb: ui[`stall.${s.panel}.blurb`] }));
-const shelves: LibraryShelf[] = ['novels', 'anime', 'travel', 'sports'];
+const shelves: LibraryShelf[] = ['novels', 'anime', 'dramas', 'movies', 'travel', 'sports'];
+type Item = (typeof LIBRARY)['novels'][number];
+/** Ranked favorites first, then one group per category (in the order they first appear). */
+function groupsOf(list: Item[]) {
+  const ranked = list.filter((i) => i.rank).sort((a, b) => a.rank! - b.rank!);
+  const groups: { title: string; top?: boolean; items: Item[] }[] = [];
+  if (ranked.length) groups.push({ title: ui['pg.allTimeTop'].replace('{n}', String(ranked.length)), top: true, items: ranked });
+  for (const item of list) {
+    if (item.rank) continue;
+    const title = item.category ? tr(item.category, lang) : '';
+    let g = groups.find((x) => !x.top && x.title === title);
+    if (!g) groups.push((g = { title, items: [] }));
+    g.items.push(item);
+  }
+  return groups;
+}
 // Full dates (YYYY-MM-DD) are formatted; '2025' or '2025-08' are shown as written.
 const showDate = (date: string) => (/^\d{4}-\d{2}-\d{2}$/.test(date) ? formatDate(date, lang) : date);
 
@@ -42,6 +59,7 @@ const card = (item: (typeof LIBRARY)['novels'][number]) => ({
   imageCredit: item.imageCredit,
   rating: item.rating,
   love: item.love,
+  rank: item.rank,
   category: item.category ? tr(item.category, lang) || undefined : undefined,
   review: item.review ? tr(item.review, lang) || undefined : undefined,
   lat: item.lat,
@@ -58,6 +76,8 @@ const data: PlaygroundData = {
   })),
   novels: LIBRARY.novels.map(card),
   anime: LIBRARY.anime.map(card),
+  dramas: (LIBRARY.dramas ?? []).map(card),
+  movies: (LIBRARY.movies ?? []).map(card),
   travel: LIBRARY.travel.map(card),
   sports: (LIBRARY.sports ?? []).map(card),
   messagesApi: SITE.visitorApi,
@@ -66,6 +86,9 @@ const data: PlaygroundData = {
     back: ui['pg.back'],
     nowShowing: ui['pg.nowShowing'],
     moreBooks: ui['pg.moreBooks'],
+    moreItems: ui['pg.moreItems'],
+    allTimeTop: ui['pg.allTimeTop'],
+    cardRank: ui['pg.card.rank'],
     postOffice: ui['pg.postOffice'],
     mailbox: ui['pg.mailbox'],
     noLetters: ui['pg.noLetters'],
@@ -109,7 +132,7 @@ const data: PlaygroundData = {
     helpKeysWorld: ui['pg.helpKeysWorld'],
     helpTouchWorld: ui['pg.helpTouchWorld'],
     ...Object.fromEntries(
-      (['studio', 'writing', 'library', 'theater', 'station', 'sports', 'postoffice'] as const).flatMap((w) => [
+      (['postoffice', 'studio', 'writing', 'library', 'theater', 'dramas', 'movies', 'flight', 'sports'] as const).flatMap((w) => [
         [`world.${w}`, ui[`pg.world.${w}`]],
         [`world.${w}.hint`, ui[`pg.world.${w}.hint`]],
       ]),
@@ -119,8 +142,8 @@ const data: PlaygroundData = {
 
 const description =
   lang === 'zh'
-    ? '王平的夜市遊樂場：跟著柴犬麻糬逛逛音樂工作室、書房、圖書館、動畫劇場、旅行車站、運動名人堂與郵局，最後在盡頭放煙火。'
-    : 'Ping Wang’s night-market playground: walk around with Mochi the Shiba and step into a music studio, a writing room, a library, an anime theater, a travel station, a hall of sports GOATs, and a post office, then set off fireworks at the end of the lane.';
+    ? '王平的夜市遊樂場：跟著秋田犬 Joy 逛逛郵局、音樂工作室、書房、圖書館、動畫劇場、影集客廳、電影院、旅行飛機與運動名人堂，最後在盡頭放煙火。'
+    : 'Ping Wang’s night-market playground: walk around with Joy the Akita and step into a post office, a music studio, a writing room, a library, an anime theater, a TV lounge, a cinema, an airplane full of travels, and a hall of sports GOATs, then set off fireworks at the end of the lane.';
 ---
 
 <BaseLayout title={ui['nav.playground']} {description}>
@@ -289,32 +312,45 @@ const description =
             ))}
           {shelves.includes(s.panel as LibraryShelf) &&
             (LIBRARY[s.panel as LibraryShelf].length ? (
-              <ul class="grid gap-4 sm:grid-cols-2">
-                {LIBRARY[s.panel as LibraryShelf].map((item) => (
-                  <li class="overflow-hidden rounded-xl border border-border bg-card">
-                    {item.image && <img src={item.image} alt="" loading="lazy" class="aspect-[4/3] w-full object-cover" />}
-                    <div class="p-4">
-                      <h3 class="font-semibold leading-snug">
-                        {item.link ? (
-                          <a href={item.link} class="hover:text-accent-violet" target="_blank" rel="noopener noreferrer">
-                            {tr(item.title, lang)} ↗
-                          </a>
-                        ) : (
-                          tr(item.title, lang)
-                        )}
+              <div class="space-y-8">
+                {groupsOf(LIBRARY[s.panel as LibraryShelf]).map((group) => (
+                  <section>
+                    {group.title && (
+                      <h3 class="mb-3 text-base font-semibold">
+                        {group.top ? '🏆 ' : ''}
+                        {group.title} <span class="font-normal text-muted">· {group.items.length}</span>
                       </h3>
-                      {(item.subtitle || item.date) && (
-                        <p class="mt-1 text-sm text-muted">
-                          {item.subtitle && tr(item.subtitle, lang)}
-                          {item.subtitle && item.date && ' · '}
-                          {item.date && <span class="font-mono text-xs">{showDate(item.date)}</span>}
-                        </p>
-                      )}
-                      {item.note && tr(item.note, lang) && <p class="mt-2 text-sm leading-relaxed text-muted">{tr(item.note, lang)}</p>}
-                    </div>
-                  </li>
+                    )}
+                    <ul class="grid gap-4 sm:grid-cols-2">
+                      {group.items.map((item) => (
+                        <li class="overflow-hidden rounded-xl border border-border bg-card">
+                          {item.image && <img src={item.image} alt="" loading="lazy" class={`w-full object-cover ${s.panel === 'travel' || s.panel === 'sports' ? 'aspect-[4/3]' : 'aspect-[3/4] max-h-80'}`} />}
+                          <div class="p-4">
+                            <h3 class="font-semibold leading-snug">
+                              {item.rank && <span class="mr-1.5 rounded-full bg-[#ffd166] px-2 py-0.5 text-xs font-bold text-[#3a2410]">#{item.rank}</span>}
+                              {item.link ? (
+                                <a href={item.link} class="hover:text-accent-violet" target="_blank" rel="noopener noreferrer">
+                                  {tr(item.title, lang)} ↗
+                                </a>
+                              ) : (
+                                tr(item.title, lang)
+                              )}
+                            </h3>
+                            {(item.subtitle || item.date) && (
+                              <p class="mt-1 text-sm text-muted">
+                                {item.subtitle && tr(item.subtitle, lang)}
+                                {item.subtitle && item.date && ' · '}
+                                {item.date && <span class="font-mono text-xs">{showDate(item.date)}</span>}
+                              </p>
+                            )}
+                            {item.note && tr(item.note, lang) && <p class="mt-2 text-sm leading-relaxed text-muted">{tr(item.note, lang)}</p>}
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
                 ))}
-              </ul>
+              </div>
             ) : (
               <p class="rounded-xl border border-dashed border-border p-6 text-sm text-muted">🌙 {ui['pg.empty']}</p>
             ))}
@@ -371,7 +407,7 @@ const description =
   const panelFor: Record<string, string> = JSON.parse(root.dataset.panels ?? '{}');
   const S = data.strings;
   const touch = matchMedia('(pointer: coarse)').matches;
-  const WORLDS: WorldId[] = ['market', 'studio', 'writing', 'library', 'theater', 'station', 'sports', 'postoffice'];
+  const WORLDS: WorldId[] = ['market', 'postoffice', 'studio', 'writing', 'library', 'theater', 'dramas', 'movies', 'flight', 'sports'];
   const crosshair = root.querySelector<HTMLElement>('.market-crosshair')!;
   const lookHint = root.querySelector<HTMLElement>('.market-lookhint')!;
 
@@ -415,11 +451,12 @@ const description =
   document.querySelectorAll<HTMLButtonElement>('[data-panel-open]').forEach((b) => b.addEventListener('click', () => openPanel(b.dataset.panelOpen!)));
 
   /** Fill and show the item card. */
-  type Facts = { rating?: number; love?: number; category?: string; review?: string };
+  type Facts = { rank?: number; rating?: number; love?: number; category?: string; review?: string };
   function showCard(o: { title: string; subtitle?: string; note?: string; media?: HTMLElement | null; link?: { href: string; label: string; external?: boolean }; facts?: Facts; credit?: { text: string; href?: string } }) {
     const facts = itemCard.querySelector<HTMLElement>('.item-facts')!;
     const rows: [string, string][] = [];
     const f = o.facts ?? {};
+    if (typeof f.rank === 'number') rows.push([S.cardRank, `🏆 #${f.rank}`]);
     if (typeof f.rating === 'number') rows.push([S.cardRating, `${'★'.repeat(Math.floor(f.rating))}${f.rating % 1 >= 0.5 ? '½' : ''}${'☆'.repeat(Math.max(0, 5 - Math.ceil(f.rating)))} ${f.rating}/5`]);
     if (typeof f.love === 'number') rows.push([S.cardLove, '♥'.repeat(Math.round(f.love)) + '♡'.repeat(Math.max(0, 5 - Math.round(f.love)))]);
     if (f.category) rows.push([S.cardCategory, f.category]);
@@ -485,14 +522,22 @@ const description =
   }
   const meta = (...parts: (string | undefined)[]) => parts.filter(Boolean).join(' · ');
 
+  const shelfOf: Record<string, () => PlaygroundData['novels']> = {
+    book: () => data.novels,
+    anime: () => data.anime,
+    drama: () => data.dramas,
+    movie: () => data.movies,
+    place: () => data.travel,
+    athlete: () => data.sports,
+  };
   function openItem(item: Interactable) {
     const [kind, raw] = item.id.split(':');
     const i = Number(raw);
     if (kind === 'video') {
       const video = data.music.flatMap((s) => s.videos.map((v) => ({ ...v, section: s.title }))).find((v) => v.id === raw);
       if (video) showCard({ title: video.title, subtitle: meta(video.detail, video.date), media: youtube(video.id, video.title), link: { href: `https://www.youtube.com/watch?v=${video.id}`, label: S.watch, external: true } });
-    } else if (kind === 'book' || kind === 'anime' || kind === 'place' || kind === 'athlete') {
-      const c = (kind === 'book' ? data.novels : kind === 'anime' ? data.anime : kind === 'place' ? data.travel : data.sports)[i];
+    } else if (kind in shelfOf) {
+      const c = shelfOf[kind]()[i];
       if (c)
         showCard({
           title: `${kind === 'place' ? (c.home ? '🏠 ' : '📍 ') : ''}${c.title}`,
@@ -500,7 +545,7 @@ const description =
           note: c.note,
           media: image(c.image),
           link: c.link ? { href: c.link, label: S.open, external: true } : undefined,
-          facts: { rating: c.rating, love: c.love, category: c.category, review: c.review },
+          facts: { rank: c.rank, rating: c.rating, love: c.love, category: c.category, review: c.review },
           credit: c.imageCredit,
         });
     } else if (kind === 'msg') {
@@ -665,7 +710,7 @@ const description =
     root.classList.remove('hidden');
     fallback.classList.add('hidden');
     try {
-      const [{ startEngine }, { marketWorld }, { studioWorld }, { writingWorld }, { libraryWorld }, { theaterWorld }, { stationWorld }, { sportsWorld }, { postOfficeWorld }] =
+      const [{ startEngine }, { marketWorld }, { studioWorld }, { writingWorld }, { libraryWorld }, { theaterWorld }, { dramasWorld, moviesWorld }, { flightWorld }, { sportsWorld }, { postOfficeWorld }] =
         await Promise.all([
           import('../scripts/playground/engine'),
           import('../scripts/playground/worlds/market'),
@@ -673,7 +718,8 @@ const description =
           import('../scripts/playground/worlds/writing'),
           import('../scripts/playground/worlds/library'),
           import('../scripts/playground/worlds/theater'),
-          import('../scripts/playground/worlds/station'),
+          import('../scripts/playground/worlds/screens'),
+          import('../scripts/playground/worlds/flight'),
           import('../scripts/playground/worlds/sports'),
           import('../scripts/playground/worlds/postoffice'),
         ]);
@@ -689,7 +735,9 @@ const description =
             writing: writingWorld(data),
             library: libraryWorld(data),
             theater: theaterWorld(data),
-            station: stationWorld(data),
+            dramas: dramasWorld(data),
+            movies: moviesWorld(data),
+            flight: flightWorld(data),
             sports: sportsWorld(data),
             postoffice: postOfficeWorld(data),
           },

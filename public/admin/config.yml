@@ -493,7 +493,7 @@ collections:
                       - { name: zh, label: 中文, widget: string, required: false }
 
       - name: library
-        label: Playground library (Novels · Anime · Travel · Sports)
+        label: Playground library (Novels · Anime · Dramas · Movies · Travel · Sports)
         file: /src/data/library.json
         fields:
           - name: novels
@@ -501,7 +501,7 @@ collections:
             label_singular: Item
             widget: list
             required: false
-            summary: '{{fields.title.en}}'
+            summary: '{{fields.rank}} {{fields.title.en}} · {{fields.category.en}}'
             fields:
               - name: title
                 label: Title
@@ -538,15 +538,16 @@ collections:
                   - { name: text, label: Text, widget: string, required: false }
                   - { name: href, label: Link, widget: string, required: false }
               - { name: link, label: Link, widget: string, required: false }
-              - { name: rating, label: 'Rating (0–5, halves OK)', widget: number, value_type: float, min: 0, max: 5, step: 0.5, required: false }
-              - { name: love, label: 'How much I love it (1–5 hearts)', widget: number, value_type: int, min: 1, max: 5, required: false }
+              - { name: rank, label: 'All-time rank (1 = favorite; leave empty if unranked)', widget: number, value_type: int, min: 1, required: false }
               - name: category
-                label: Category / genre
+                label: Category / group (items are grouped by this)
                 widget: object
                 required: false
                 fields:
                   - { name: en, label: English, widget: string, required: false }
                   - { name: zh, label: 中文, widget: string, required: false }
+              - { name: rating, label: 'Rating (0–5, halves OK)', widget: number, value_type: float, min: 0, max: 5, step: 0.5, required: false }
+              - { name: love, label: 'How much I love it (1–5 hearts)', widget: number, value_type: int, min: 1, max: 5, required: false }
               - name: review
                 label: My thoughts
                 widget: object
@@ -555,11 +556,11 @@ collections:
                   - { name: en, label: English, widget: text, required: false }
                   - { name: zh, label: 中文, widget: text, required: false }
           - name: anime
-            label: Anime Library
+            label: Anime Theater
             label_singular: Item
             widget: list
             required: false
-            summary: '{{fields.title.en}}'
+            summary: '{{fields.rank}} {{fields.title.en}} · {{fields.category.en}}'
             fields:
               - name: title
                 label: Title
@@ -596,15 +597,134 @@ collections:
                   - { name: text, label: Text, widget: string, required: false }
                   - { name: href, label: Link, widget: string, required: false }
               - { name: link, label: Link, widget: string, required: false }
-              - { name: rating, label: 'Rating (0–5, halves OK)', widget: number, value_type: float, min: 0, max: 5, step: 0.5, required: false }
-              - { name: love, label: 'How much I love it (1–5 hearts)', widget: number, value_type: int, min: 1, max: 5, required: false }
+              - { name: rank, label: 'All-time rank (1 = favorite; leave empty if unranked)', widget: number, value_type: int, min: 1, required: false }
               - name: category
-                label: Category / genre
+                label: Category / group (items are grouped by this)
                 widget: object
                 required: false
                 fields:
                   - { name: en, label: English, widget: string, required: false }
                   - { name: zh, label: 中文, widget: string, required: false }
+              - { name: rating, label: 'Rating (0–5, halves OK)', widget: number, value_type: float, min: 0, max: 5, step: 0.5, required: false }
+              - { name: love, label: 'How much I love it (1–5 hearts)', widget: number, value_type: int, min: 1, max: 5, required: false }
+              - name: review
+                label: My thoughts
+                widget: object
+                required: false
+                fields:
+                  - { name: en, label: English, widget: text, required: false }
+                  - { name: zh, label: 中文, widget: text, required: false }
+          - name: dramas
+            label: TV Dramas
+            label_singular: Item
+            widget: list
+            required: false
+            summary: '{{fields.rank}} {{fields.title.en}} · {{fields.category.en}}'
+            fields:
+              - name: title
+                label: Title
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - name: subtitle
+                label: 'Network'
+                widget: object
+                required: false
+                fields:
+                  - { name: en, label: English, widget: string, required: false }
+                  - { name: zh, label: 中文, widget: string, required: false }
+              - name: note
+                label: Note
+                widget: object
+                required: false
+                fields:
+                  - { name: en, label: English, widget: text, required: false }
+                  - { name: zh, label: 中文, widget: text, required: false }
+              - { name: date, label: 'Date (e.g. 2025 or 2025-08-14)', widget: string, required: false }
+              - name: image
+                label: Image (photo / cover)
+                widget: image
+                required: false
+                media_folder: /public/media/uploads
+                public_folder: /media/uploads
+              - name: imageCredit
+                label: Image credit
+                widget: object
+                required: false
+                fields:
+                  - { name: text, label: Text, widget: string, required: false }
+                  - { name: href, label: Link, widget: string, required: false }
+              - { name: link, label: Link, widget: string, required: false }
+              - { name: rank, label: 'All-time rank (1 = favorite; leave empty if unranked)', widget: number, value_type: int, min: 1, required: false }
+              - name: category
+                label: Category / group (items are grouped by this)
+                widget: object
+                required: false
+                fields:
+                  - { name: en, label: English, widget: string, required: false }
+                  - { name: zh, label: 中文, widget: string, required: false }
+              - { name: rating, label: 'Rating (0–5, halves OK)', widget: number, value_type: float, min: 0, max: 5, step: 0.5, required: false }
+              - { name: love, label: 'How much I love it (1–5 hearts)', widget: number, value_type: int, min: 1, max: 5, required: false }
+              - name: review
+                label: My thoughts
+                widget: object
+                required: false
+                fields:
+                  - { name: en, label: English, widget: text, required: false }
+                  - { name: zh, label: 中文, widget: text, required: false }
+          - name: movies
+            label: Movies
+            label_singular: Item
+            widget: list
+            required: false
+            summary: '{{fields.rank}} {{fields.title.en}} · {{fields.category.en}}'
+            fields:
+              - name: title
+                label: Title
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - name: subtitle
+                label: 'Director'
+                widget: object
+                required: false
+                fields:
+                  - { name: en, label: English, widget: string, required: false }
+                  - { name: zh, label: 中文, widget: string, required: false }
+              - name: note
+                label: Note
+                widget: object
+                required: false
+                fields:
+                  - { name: en, label: English, widget: text, required: false }
+                  - { name: zh, label: 中文, widget: text, required: false }
+              - { name: date, label: 'Date (e.g. 2025 or 2025-08-14)', widget: string, required: false }
+              - name: image
+                label: Image (photo / cover)
+                widget: image
+                required: false
+                media_folder: /public/media/uploads
+                public_folder: /media/uploads
+              - name: imageCredit
+                label: Image credit
+                widget: object
+                required: false
+                fields:
+                  - { name: text, label: Text, widget: string, required: false }
+                  - { name: href, label: Link, widget: string, required: false }
+              - { name: link, label: Link, widget: string, required: false }
+              - { name: rank, label: 'All-time rank (1 = favorite; leave empty if unranked)', widget: number, value_type: int, min: 1, required: false }
+              - name: category
+                label: Category / group (items are grouped by this)
+                widget: object
+                required: false
+                fields:
+                  - { name: en, label: English, widget: string, required: false }
+                  - { name: zh, label: 中文, widget: string, required: false }
+              - { name: rating, label: 'Rating (0–5, halves OK)', widget: number, value_type: float, min: 0, max: 5, step: 0.5, required: false }
+              - { name: love, label: 'How much I love it (1–5 hearts)', widget: number, value_type: int, min: 1, max: 5, required: false }
               - name: review
                 label: My thoughts
                 widget: object
@@ -613,11 +733,11 @@ collections:
                   - { name: en, label: English, widget: text, required: false }
                   - { name: zh, label: 中文, widget: text, required: false }
           - name: travel
-            label: Travel Map
+            label: Travel (airplane windows)
             label_singular: Item
             widget: list
             required: false
-            summary: '{{fields.title.en}}'
+            summary: '{{fields.rank}} {{fields.title.en}} · {{fields.category.en}}'
             fields:
               - name: title
                 label: Title
@@ -662,7 +782,7 @@ collections:
             label_singular: Item
             widget: list
             required: false
-            summary: '{{fields.title.en}}'
+            summary: '{{fields.rank}} {{fields.title.en}} · {{fields.category.en}}'
             fields:
               - name: title
                 label: Title
@@ -699,15 +819,16 @@ collections:
                   - { name: text, label: Text, widget: string, required: false }
                   - { name: href, label: Link, widget: string, required: false }
               - { name: link, label: Link, widget: string, required: false }
-              - { name: rating, label: 'Rating (0–5, halves OK)', widget: number, value_type: float, min: 0, max: 5, step: 0.5, required: false }
-              - { name: love, label: 'How much I love it (1–5 hearts)', widget: number, value_type: int, min: 1, max: 5, required: false }
+              - { name: rank, label: 'All-time rank (1 = favorite; leave empty if unranked)', widget: number, value_type: int, min: 1, required: false }
               - name: category
-                label: Category / genre
+                label: Category / group (items are grouped by this)
                 widget: object
                 required: false
                 fields:
                   - { name: en, label: English, widget: string, required: false }
                   - { name: zh, label: 中文, widget: string, required: false }
+              - { name: rating, label: 'Rating (0–5, halves OK)', widget: number, value_type: float, min: 0, max: 5, step: 0.5, required: false }
+              - { name: love, label: 'How much I love it (1–5 hearts)', widget: number, value_type: int, min: 1, max: 5, required: false }
               - name: review
                 label: My thoughts
                 widget: object

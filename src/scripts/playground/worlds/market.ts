@@ -10,7 +10,9 @@ const PROPS: Record<string, StallKind> = {
   writing: 'posts',
   library: 'novels',
   theater: 'anime',
-  station: 'travel',
+  dramas: 'dramas',
+  movies: 'movies',
+  flight: 'travel',
   sports: 'sports',
   postoffice: 'mail',
 };

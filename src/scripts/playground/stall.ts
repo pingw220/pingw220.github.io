@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { awningTexture, bannerTexture, signTexture } from './textures';
 import { STREET } from './world';
 
-export type StallKind = 'music' | 'posts' | 'novels' | 'anime' | 'travel' | 'sports' | 'mail';
+export type StallKind = 'music' | 'posts' | 'novels' | 'anime' | 'dramas' | 'movies' | 'travel' | 'sports' | 'mail';
 
 export interface StallDef {
   /** The world this stall leads into. */
@@ -20,7 +20,7 @@ export interface StallDef {
 export interface Stall {
   id: string;
   group: THREE.Group;
-  /** Where Mochi stands to visit the stall (on the lane). */
+  /** Where Joy stands to visit the stall (on the lane). */
   front: THREE.Vector3;
   hits: THREE.Object3D[];
   setNear(near: boolean): void;
@@ -272,6 +272,48 @@ function buildProps(kind: StallKind, group: THREE.Group, toon: Toon, animated: (
     const heart = sphere(0.09, 0xff6b9a, { emissive: new THREE.Color(0xff6b9a), emissiveIntensity: 0.8 });
     put(heart, 0.35, counterTop + 0.35, 0.35);
     animated.push((t) => (heart.position.y = counterTop + 0.35 + Math.sin(t * 2.5) * 0.06));
+  } else if (kind === 'dramas') {
+    // A flat TV on a stand, and a stack of box sets.
+    const tv = new THREE.Group();
+    tv.add(box(0.95, 0.58, 0.06, 0x1d1d26));
+    const screen = new THREE.Mesh(new THREE.PlaneGeometry(0.86, 0.49), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+    screen.position.z = 0.032;
+    tv.add(screen);
+    const foot = box(0.3, 0.04, 0.2, 0x1d1d26);
+    foot.position.y = -0.34;
+    tv.add(foot);
+    put(tv, -0.45, counterTop + 0.37, 0.3);
+    animated.push((t) => (screen.material as THREE.MeshBasicMaterial).color.setHSL((t * 0.05) % 1, 0.7, 0.62).multiplyScalar(1.3));
+    for (let i = 0; i < 4; i++) {
+      const set = box(0.34, 0.08, 0.46, [0xe63946, 0x457b9d, 0x2a9d8f, 0xffb703][i]);
+      set.rotation.y = (i - 1.5) * 0.1;
+      put(set, 0.62, counterTop + 0.04 + i * 0.085, 0.35);
+    }
+  } else if (kind === 'movies') {
+    // A spinning film reel, a clapperboard, and popcorn.
+    const reel = new THREE.Group();
+    reel.add(new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 0.06, 24), toon(0x2b2b33)));
+    for (let k = 0; k < 5; k++) {
+      const a = (k / 5) * Math.PI * 2;
+      const hole = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 0.07, 12), toon(0x9aa0ad));
+      hole.position.set(Math.cos(a) * 0.17, 0.001, Math.sin(a) * 0.17);
+      reel.add(hole);
+    }
+    reel.rotation.x = Math.PI / 2;
+    const reelHolder = new THREE.Group();
+    reelHolder.add(reel);
+    put(reelHolder, -0.6, counterTop + 0.36, 0.3);
+    animated.push((t) => (reel.rotation.y = t * 1.6));
+    const clap = new THREE.Group();
+    clap.add(box(0.46, 0.32, 0.03, 0x1d1d26));
+    const arm = box(0.48, 0.07, 0.035, 0xffffff);
+    arm.position.set(0, 0.2, 0);
+    clap.add(arm);
+    put(clap, 0.05, counterTop + 0.17, 0.4);
+    animated.push((t) => (arm.rotation.z = Math.max(0, Math.sin(t * 2.2)) * 0.35));
+    const bucket = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.12, 0.34, 14), toon(0xe63946));
+    put(bucket, 0.65, counterTop + 0.17, 0.35);
+    for (let k = 0; k < 7; k++) put(sphere(0.06, 0xfff1b5), 0.65 + Math.cos(k) * 0.09, counterTop + 0.37 + (k % 2) * 0.04, 0.35 + Math.sin(k) * 0.09);
   } else if (kind === 'travel') {
     const suitcase = box(0.7, 0.48, 0.25, 0x2f8f8a);
     put(suitcase, -0.6, counterTop + 0.24, 0.35);

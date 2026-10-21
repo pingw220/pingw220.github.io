@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { cobbleTexture, glowTexture } from './textures';
 
 /** Street layout shared by the world, the stalls, and movement. */
-export const STREET = { halfWidth: 2.5, start: 8, end: -40 } as const;
+export const STREET = { halfWidth: 2.5, start: 8, end: -50 } as const;
 
 export interface World {
   update(t: number, dt: number): void;
@@ -79,7 +79,7 @@ export function buildWorld(scene: THREE.Scene, gradientMap: THREE.Texture): Worl
   scene.add(moonLight);
 
   // ── Ground, lane, hills ──────────────────────────────────────────────────
-  const ground = new THREE.Mesh(new THREE.PlaneGeometry(160, 160), toon(0x2c4a45, gradientMap));
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), toon(0x2c4a45, gradientMap));
   ground.rotation.x = -Math.PI / 2;
   ground.name = 'ground';
   scene.add(ground);
@@ -94,7 +94,7 @@ export function buildWorld(scene: THREE.Scene, gradientMap: THREE.Texture): Worl
   scene.add(lane);
 
   const hillMat = toon(0x22383f, gradientMap);
-  for (const [x, z, r] of [[-30, -60, 22], [10, -70, 28], [40, -55, 20], [-55, -30, 18], [55, -20, 16]]) {
+  for (const [x, z, r] of [[-30, -72, 22], [10, -84, 28], [40, -67, 20], [-55, -36, 18], [55, -26, 16]]) {
     const hill = new THREE.Mesh(new THREE.SphereGeometry(r, 24, 12), hillMat);
     hill.scale.y = 0.45;
     hill.position.set(x, -2, z);
