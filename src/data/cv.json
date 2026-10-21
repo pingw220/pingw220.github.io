@@ -1,44 +1,24 @@
 {
   "interests": [
     {
-      "en": "Post-training",
-      "zh": "後訓練"
+      "en": "Human-Aligned Generative Models",
+      "zh": "與人類對齊的生成模型"
+    },
+    {
+      "en": "Preference-Based Post-Training",
+      "zh": "基於偏好的後訓練"
+    },
+    {
+      "en": "Multimodal Learning and Evaluation",
+      "zh": "多模態學習與評估"
     },
     {
       "en": "Reinforcement Learning",
       "zh": "強化學習"
     },
     {
-      "en": "Evaluation of Generative Models",
-      "zh": "生成模型評估"
-    },
-    {
-      "en": "Multimodal Learning",
-      "zh": "多模態學習"
-    },
-    {
-      "en": "Multi-Agent Systems",
-      "zh": "多智能體系統"
-    },
-    {
-      "en": "Generative AI",
-      "zh": "生成式 AI"
-    },
-    {
-      "en": "Music Generation",
-      "zh": "音樂生成"
-    },
-    {
-      "en": "Automatic Music Transcription",
-      "zh": "自動採譜"
-    },
-    {
-      "en": "Audio Representation Learning",
-      "zh": "音訊表徵學習"
-    },
-    {
-      "en": "Symbolic Music Modeling",
-      "zh": "符號音樂建模"
+      "en": "Music and Audio Generation",
+      "zh": "音樂與音訊生成"
     },
     {
       "en": "Music Information Retrieval",
@@ -57,13 +37,25 @@
         "zh": "美國西雅圖"
       },
       "title": {
-        "en": "B.S. in Computer Science, Paul G. Allen School of Computer Science & Engineering",
-        "zh": "資訊工程學士，Paul G. Allen 電腦科學與工程學院"
+        "en": "B.S. in Computer Science, Paul G. Allen School of Computer Science & Engineering · GPA 3.91/4.0",
+        "zh": "資訊工程學士，Paul G. Allen 電腦科學與工程學院 · GPA 3.91/4.0"
       },
       "dates": {
         "en": "Expected Jun 2027",
         "zh": "預計 2027 年 6 月畢業"
-      }
+      },
+      "points": [
+        {
+          "title": {
+            "en": "Relevant coursework",
+            "zh": "相關課程"
+          },
+          "text": {
+            "en": "Machine Learning, Natural Language Processing, Data Structures and Algorithms, Distributed Systems, Operating Systems, and Computer Networks.",
+            "zh": "機器學習、自然語言處理、資料結構與演算法、分散式系統、作業系統、計算機網路。"
+          }
+        }
+      ]
     },
     {
       "org": {
@@ -117,10 +109,20 @@
             "zh": "SheetSage-Pro"
           },
           "text": {
-            "en": "An audio-to-lead-sheet transcription pipeline that extracts melody, chords, beats, downbeats, meter, and song structure from full-song audio.",
-            "zh": "從整首歌曲音訊轉出主旋律譜（lead sheet）的採譜流程，擷取旋律、和弦、拍點、強拍、拍號與歌曲段落結構。"
+            "en": "A bilingual, lyric-aligned audio-to-lead-sheet transcription pipeline that extracts melody, chords, beats, meter, and musical structure from full-song audio, with beat tracking, pitch correction, and rhythm quantization evaluated to improve quality. Accepted for presentation at ISMIR 2026 Late-Breaking/Demo.",
+            "zh": "雙語、歌詞對齊的音訊轉主旋律譜（lead sheet）採譜流程，從整首歌曲擷取旋律、和弦、拍點、拍號與段落結構，並評估拍點追蹤、音高校正與節奏量化以提升採譜品質。已獲 ISMIR 2026 Late-Breaking/Demo 接受發表。"
           },
           "href": "/projects/sheetsage-pro"
+        },
+        {
+          "title": {
+            "en": "Lyrics-to-Song Generation with MIDI-LLM and MIDI-SAG",
+            "zh": "以 MIDI-LLM 與 MIDI-SAG 進行歌詞生成歌曲"
+          },
+          "text": {
+            "en": "An end-to-end, lyrics-conditioned song generation pipeline that connects symbolic lead-sheet generation with arrangement and audio synthesis. Fine-tuning language models to generate melody, chords, rhythm, and lyric-aligned symbolic representations, including syllable-level lyric pointers, phonetic information, rests, breaths, and many-to-many lyric–note alignment for controllable generation.",
+            "zh": "端到端、以歌詞為條件的歌曲生成流程，串接符號主旋律譜生成、編曲與音訊合成。微調語言模型以生成旋律、和弦、節奏與歌詞對齊的符號表示，包含音節層級的歌詞指標、發音資訊、休止、換氣，以及多對多的歌詞與音符對齊，以實現可控生成。"
+          }
         }
       ]
     },
@@ -156,8 +158,8 @@
             "zh": "A Dual Evaluation for Music Transcription"
           },
           "text": {
-            "en": "Evaluating transcriptions for both notation accuracy and playback fidelity across 24 pipelines, validated with a listening study of 106 participants and 3,180 pairwise judgments.",
-            "zh": "同時從樂譜正確性與播放擬真度評估 24 種自動採譜流程，並以 106 位受試者、3,180 筆成對比較的聽測實驗驗證。"
+            "en": "A dual evaluation framework for notation accuracy and performance fidelity in automatic music transcription: 24 pipelines (eight audio-to-MIDI models × three MIDI-to-score systems) on 230 piano performances, an audio-only listening study with 106 participants and 3,180 pairwise judgments, and a comparison of human preferences with notation-based, signal-processing, and learned audio similarity metrics.",
+            "zh": "同時評估自動採譜「樂譜正確性」與「演奏擬真度」的雙重評估框架：在 230 段鋼琴演奏上評估 24 種流程（8 個音訊轉 MIDI 模型 × 3 個 MIDI 轉樂譜系統），設計並分析 106 位受試者、3,180 筆成對比較的純音訊聽測，並比較人類偏好與基於樂譜、訊號處理及學習式音訊相似度的指標。"
           },
           "href": "/projects/amt-dual-eval"
         },
@@ -167,8 +169,8 @@
             "zh": "Rubric-Based Optimization for Text-to-Music Generation"
           },
           "text": {
-            "en": "Post-training text-to-music models with rubric-based rewards from audio-language models, using preference optimization and RL.",
-            "zh": "以音訊語言模型的評分標準（rubric）作為獎勵，透過偏好最佳化與強化學習對文字生成音樂模型進行後訓練。"
+            "en": "Structured audio-language-model rubric rewards for text-to-music post-training: preference pairs for DPO on MusicGen-small and ACE-Step v1, and scalar rewards with DiffusionNFT on ACE-Step. Rubric rewards gave broad gains on independent perceptual and objective metrics, while specialized rewards worked better for precise musical attributes.",
+            "zh": "以音訊語言模型的結構化評分標準（rubric）作為文字生成音樂的後訓練獎勵：為 MusicGen-small 與 ACE-Step v1 建構 DPO 偏好資料對，並在 ACE-Step 上以 DiffusionNFT 使用純量獎勵。Rubric 獎勵在獨立的感知與客觀指標上帶來全面提升，而針對精確音樂屬性時，專門的獎勵效果更好。"
           },
           "href": "/projects/music-rl"
         }
@@ -195,25 +197,36 @@
       "points": [
         {
           "title": {
-            "en": "Cough Audio for Health Screening",
-            "zh": "咳嗽音訊健康篩檢"
+            "en": "Embedded Gesture Recognition",
+            "zh": "嵌入式手勢辨識"
           },
           "text": {
-            "en": "Cough-event detection and localization, and tuberculosis risk classification from cough audio with transformer models.",
-            "zh": "咳嗽事件偵測與定位，以及使用 Transformer 模型從咳嗽音訊進行結核病風險分類。"
+            "en": "Lightweight neural networks for real-time gesture recognition on resource-constrained embedded devices, including model quantization and deployment for on-device inference.",
+            "zh": "在資源受限的嵌入式裝置上，以輕量神經網路進行即時手勢辨識，包含模型量化與裝置端推論部署。"
+          },
+          "href": "/projects/embedded-gesture-recognition"
+        },
+        {
+          "title": {
+            "en": "Tuberculosis Screening from Cough Audio",
+            "zh": "以咳嗽音訊篩檢結核病"
+          },
+          "text": {
+            "en": "Transformer-based models, including the Audio Spectrogram Transformer (AST) and MobileViT, for cough-based tuberculosis risk classification.",
+            "zh": "使用 Audio Spectrogram Transformer（AST）與 MobileViT 等 Transformer 架構，從咳嗽音訊進行結核病風險分類。"
           },
           "href": "/projects/cough-audio"
         },
         {
           "title": {
-            "en": "Embedded Gesture Recognition",
-            "zh": "嵌入式手勢辨識"
+            "en": "Cough Detection and Localization",
+            "zh": "咳嗽偵測與定位"
           },
           "text": {
-            "en": "Lightweight, quantized neural networks for real-time gesture recognition on resource-constrained devices.",
-            "zh": "在資源受限的裝置上，以輕量化、量化的神經網路進行即時手勢辨識。"
+            "en": "Machine learning models for detecting cough events and localizing them in time within continuous audio recordings.",
+            "zh": "在連續音訊錄音中偵測咳嗽事件並定位其時間位置的機器學習模型。"
           },
-          "href": "/projects/embedded-gesture-recognition"
+          "href": "/projects/cough-audio"
         }
       ]
     }
@@ -239,12 +252,32 @@
       "points": [
         {
           "title": {
-            "en": "Embedded firmware",
-            "zh": "嵌入式韌體"
+            "en": "Embedded firmware development",
+            "zh": "嵌入式韌體開發"
           },
           "text": {
-            "en": "Firmware for inter-chip communication, camera-module integration, and Wi-Fi validation on smart-home devices, plus automated tests and peripheral mocks.",
-            "zh": "為智慧家庭裝置開發晶片間通訊、相機模組整合與 Wi-Fi 驗證的韌體，並建立自動化測試與周邊模擬框架。"
+            "en": "Designed and implemented firmware for inter-chip communication, camera-module integration, and Wi-Fi connectivity validation on smart-home devices.",
+            "zh": "為智慧家庭裝置設計並實作晶片間通訊、相機模組整合與 Wi-Fi 連線驗證的韌體。"
+          }
+        },
+        {
+          "title": {
+            "en": "Hardware–software integration",
+            "zh": "軟硬體整合"
+          },
+          "text": {
+            "en": "Board-level integration and debugging across embedded hardware, firmware, camera modules, and network interfaces.",
+            "zh": "跨嵌入式硬體、韌體、相機模組與網路介面的板級整合與除錯。"
+          }
+        },
+        {
+          "title": {
+            "en": "Testing infrastructure",
+            "zh": "測試基礎設施"
+          },
+          "text": {
+            "en": "Automated unit tests and peripheral mock frameworks for validating firmware across hardware states, improving test coverage and reducing regression risk.",
+            "zh": "建立自動化單元測試與周邊模擬框架，在各種硬體狀態下驗證韌體，提升測試覆蓋率並降低回歸風險。"
           }
         }
       ]
@@ -273,8 +306,28 @@
             "zh": "大型語言模型記憶體估算"
           },
           "text": {
-            "en": "Estimated LLM memory use (weights and activations) from model configs, analyzing attention architectures and scaling across LLaMA, Mistral, Mixtral, Whisper, and others.",
-            "zh": "根據模型設定檔估算大型語言模型的記憶體用量（權重與激活值），並分析 LLaMA、Mistral、Mixtral、Whisper 等模型的注意力架構與規模。"
+            "en": "A parameter-calculation system that estimates large language model memory use, including weights and activations, directly from model configuration files.",
+            "zh": "直接從模型設定檔估算大型語言模型記憶體用量（含權重與激活值）的參數計算系統。"
+          }
+        },
+        {
+          "title": {
+            "en": "Transformer architecture analysis",
+            "zh": "Transformer 架構分析"
+          },
+          "text": {
+            "en": "Analyzed LLaMA 2/3, CodeLlama, Falcon, Mistral, Mixtral, Breeze, Whisper, and Vicuna, focusing on attention architectures, model scaling, and memory requirements.",
+            "zh": "分析 LLaMA 2/3、CodeLlama、Falcon、Mistral、Mixtral、Breeze、Whisper 與 Vicuna，著重於注意力架構、模型規模與記憶體需求。"
+          }
+        },
+        {
+          "title": {
+            "en": "Large-scale model training",
+            "zh": "大型模型訓練"
+          },
+          "text": {
+            "en": "Worked with multi-GPU Linux infrastructure and Phison AI SSD systems for model training and experimentation.",
+            "zh": "使用多 GPU Linux 環境與群聯 AI SSD 系統進行模型訓練與實驗。"
           }
         }
       ]
@@ -297,8 +350,8 @@
         "zh": "機器學習"
       },
       "items": {
-        "en": "PyTorch, TensorFlow, Transformers, reinforcement learning, diffusion / flow-matching models, LoRA, RAG",
-        "zh": "PyTorch、TensorFlow、Transformers、強化學習、擴散／流匹配模型、LoRA、RAG"
+        "en": "PyTorch, Transformers, preference optimization (DPO), reinforcement learning, diffusion / flow-matching models, LoRA",
+        "zh": "PyTorch、Transformers、偏好最佳化（DPO）、強化學習、擴散／流匹配模型、LoRA"
       }
     },
     {
@@ -307,18 +360,18 @@
         "zh": "音樂與音訊"
       },
       "items": {
-        "en": "Automatic music transcription, music generation, audio representation learning, symbolic music, MIDI, MusicXML",
-        "zh": "自動採譜、音樂生成、音訊表徵學習、符號音樂、MIDI、MusicXML"
+        "en": "Automatic music transcription, music generation, audio representation learning, symbolic music modeling, MIDI, MusicXML",
+        "zh": "自動採譜、音樂生成、音訊表徵學習、符號音樂建模、MIDI、MusicXML"
       }
     },
     {
       "area": {
-        "en": "Systems",
-        "zh": "系統"
+        "en": "Systems & tools",
+        "zh": "系統與工具"
       },
       "items": {
-        "en": "Linux, Git, distributed and multi-GPU training, embedded systems, FPGA",
-        "zh": "Linux、Git、分散式與多 GPU 訓練、嵌入式系統、FPGA"
+        "en": "Linux, Git, distributed training, multi-GPU computing, embedded systems, FPGA",
+        "zh": "Linux、Git、分散式訓練、多 GPU 運算、嵌入式系統、FPGA"
       }
     }
   ]
