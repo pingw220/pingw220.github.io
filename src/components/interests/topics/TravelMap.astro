@@ -1,0 +1,271 @@
+---
+/**
+ * Travel as a storybook map: a wavy ocean with sea creatures and drifting clouds, dashed flight
+ * routes from home (Taiwan or Seattle) to every place, little planes in the air, and a passport
+ * page with a stamp for each place. Pins and stamps open the detail card.
+ */
+import { feature } from 'topojson-client';
+import type { GeometryCollection, Topology } from 'topojson-specification';
+import landTopo from 'world-atlas/land-110m.json';
+import type { LibraryItem } from '../../../config/library';
+import { getLang, t, tr } from '../../../i18n';
+
+interface Props {
+  items: LibraryItem[];
+}
+
+const lang = getLang(Astro.url);
+const ui = t(lang);
+const items = Astro.props.items;
+
+// Equirectangular projection, cropped to 80°N–58°S.
+const TOP = 10;
+const H = 138;
+const X = (lon: number) => lon + 180;
+const Y = (lat: number) => 90 - lat - TOP;
+const topo = landTopo as unknown as Topology<{ land: GeometryCollection }>;
+const land = feature(topo, topo.objects.land) as unknown as { features: { geometry: { type: string; coordinates: number[][][] | number[][][][] } }[] };
+const landPath = land.features
+  .flatMap((f) => (f.geometry.type === 'Polygon' ? [f.geometry.coordinates as number[][][]] : (f.geometry.coordinates as number[][][][])))
+  .flatMap((poly) =>
+    poly.map((ring) =>
+      ring
+        // Lift the pen where a ring wraps around the 180° meridian.
+        .map((p, i) => `${i === 0 || Math.abs(p[0] - ring[i - 1][0]) > 180 ? 'M' : 'L'}${X(p[0]).toFixed(1)} ${Y(p[1]).toFixed(1)}`)
+        .join(''),
+    ),
+  )
+  .join('');
+
+type Region = 'americas' | 'europe' | 'mideast' | 'asia' | 'oceania';
+const regionOf = (lat: number, lon: number): Region =>
+  lon < -30 ? 'americas' : lon < 45 ? 'europe' : lon < 62 ? 'mideast' : lat < -10 ? 'oceania' : 'asia';
+const COLOR: Record<Region, string> = { americas: '#e76f51', europe: '#9b5de5', mideast: '#f4a261', asia: '#e63946', oceania: '#2a9d8f' };
+const EMOJI: Record<string, string> = {
+  Hawaii: '🌺', Canada: '🍁', Portland: '🌲', 'Bay Area': '🌉', Seattle: '☕', 'Los Angeles': '🎬', 'San Diego': '🏖️', 'New York': '🗽', Boston: '🦞',
+  Belgium: '🧇', Netherlands: '🌷', Switzerland: '🏔️', Germany: '🥨', Norway: '🌌', Denmark: '🧜', 'Czech Republic': '🏰', Vienna: '🎻', Sweden: '🦌', Finland: '🎅',
+  Turkey: '🎈', Russia: '🪆', Dubai: '🏙️', Thailand: '🐘', Malaysia: '🌴', Singapore: '🦁', "Xi'an": '🏺', Macau: '⛪', 'Hong Kong': '🌃', Beijing: '🏯',
+  Shandong: '⛰️', Taiwan: '🧋', Shanghai: '🌆', Seoul: '🎤', Okinawa: '🐠', Busan: '🌊', Osaka: '🐙', Kyoto: '⛩️', Tokyo: '🗼', Hokkaido: '❄️',
+  Australia: '🦘', 'New Zealand': '🥝',
+};
+
+const homes = items.filter((p) => p.home && typeof p.lat === 'number');
+const places = items
+  .map((item, index) => {
+    const en = tr(item.title, 'en');
+    const parts = tr(item.subtitle ?? '', lang).split(' · ');
+    const partsEn = tr(item.subtitle ?? '', 'en').split(' · ');
+    const tz = partsEn.find((s) => s.startsWith('UTC')) ?? '';
+    const country = parts.filter((s) => !s.startsWith('UTC') && s !== '家' && s !== 'Home').join(' · ');
+    const countryEn = partsEn.filter((s) => !s.startsWith('UTC') && s !== 'Home').join(' · ') || en;
+    const lat = item.lat ?? 0;
+    const lon = item.lon ?? 0;
+    const region = regionOf(lat, lon);
+    // Fly from the nearer home: Seattle for the Americas, Taiwan for everywhere else.
+    const from = homes.find((h) => (region === 'americas') === ((h.lon ?? 0) < -30));
+    return { item, index, en, tz, country, countryEn, x: X(lon), y: Y(lat), region, emoji: EMOJI[en] ?? '✈️', from };
+  });
+const route = (p: (typeof places)[number]) => {
+  if (!p.from || p.item.home) return '';
+  const x1 = X(p.from.lon!);
+  const y1 = Y(p.from.lat!);
+  const mx = (x1 + p.x) / 2;
+  const my = (y1 + p.y) / 2 - Math.min(26, Math.hypot(p.x - x1, p.y - y1) * 0.28);
+  return `M${x1.toFixed(1)} ${y1.toFixed(1)}Q${mx.toFixed(1)} ${my.toFixed(1)} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`;
+};
+const longest = (region: Region) =>
+  places.filter((p) => p.region === region && route(p)).sort((a, b) => Math.abs(b.x - X(b.from!.lon!)) - Math.abs(a.x - X(a.from!.lon!)))[0];
+const flights = [longest('europe'), longest('americas'), longest('oceania')].filter(Boolean);
+const countries = new Set(places.map((p) => p.countryEn)).size;
+const tzs = places.map((p) => p.tz).filter(Boolean);
+const SHAPES = ['rounded-full aspect-square', 'rounded-2xl', 'rounded-[45%] aspect-[5/4]', 'rounded-md'];
+---
+
+<!-- Trip stats -->
+<ul class="mb-6 flex flex-wrap gap-2 text-sm">
+  <li class="rounded-full border border-border bg-card px-3.5 py-1.5">🌏 <b>{places.length}</b> {ui['int.travel.places']}</li>
+  <li class="rounded-full border border-border bg-card px-3.5 py-1.5">🗺️ <b>{countries}</b> {ui['int.travel.countries']}</li>
+  <li class="rounded-full border border-border bg-card px-3.5 py-1.5">🕰️ {tzs[0]} → {tzs[tzs.length - 1]}</li>
+  <li class="rounded-full border border-border bg-card px-3.5 py-1.5">🏠 {homes.map((h) => tr(h.title, lang)).join(' · ')}</li>
+</ul>
+
+<!-- The map -->
+<figure class="relative overflow-hidden rounded-3xl border-[6px] border-[#f3e3c0] bg-[#bfe6f5] shadow-xl ring-1 ring-[#d9c08a] dark:border-[#3a3326] dark:bg-[#16324a] dark:ring-[#5a4a30]">
+  <div class="absolute left-1/2 top-2 z-10 -translate-x-1/2 rounded-full bg-[#fffaf0] px-4 py-1 text-xs font-bold tracking-wider text-[#8a5a3a] shadow ring-1 ring-[#e8d3a6] sm:text-sm">
+    ✈ {ui['int.travel.mapTitle']}
+  </div>
+  <svg viewBox={`0 0 360 ${H}`} class="travel-map block h-auto w-full" role="img" aria-label={ui['int.mapLabel']}>
+    <defs>
+      <pattern id="waves" width="14" height="8" patternUnits="userSpaceOnUse">
+        <path d="M0 5 Q3.5 2 7 5 T14 5" fill="none" stroke="white" stroke-width="0.35" opacity="0.55" />
+      </pattern>
+      <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="0.6" stdDeviation="0.5" flood-color="#000" flood-opacity="0.25" />
+      </filter>
+      {flights.map((p, i) => <path id={`flight-${i}`} d={route(p!)} />)}
+    </defs>
+
+    <rect width="360" height={H} fill="url(#waves)" />
+    <path d={landPath} class="fill-[#f8edc8] stroke-[#d9b56a] dark:fill-[#3c5a46] dark:stroke-[#6f8f62]" stroke-width="0.35" stroke-linejoin="round" filter="url(#soft)" />
+
+    <!-- Sea creatures and boats -->
+    <g font-size="7" class="select-none" aria-hidden="true">
+      <text x="22" y="58">🐳</text>
+      <text x="128" y="52">🐙</text>
+      <text x="252" y="108">🐢</text>
+      <text x="150" y="98">⛵</text>
+      <text x="330" y="80">🐬</text>
+      <text x="176" y="134">🐧</text>
+      <text x="85" y="104">🏝️</text>
+      <text x="300" y="122">🦈</text>
+    </g>
+
+    <!-- Compass rose -->
+    <g transform="translate(18 112)" aria-hidden="true">
+      <circle r="8" fill="#fffaf0" stroke="#d9b56a" stroke-width="0.5" opacity="0.9" />
+      <path d="M0 -7 L1.6 0 L0 7 L-1.6 0 Z" fill="#e63946" />
+      <path d="M-7 0 L0 1.6 L7 0 L0 -1.6 Z" fill="#8a5a3a" opacity="0.7" />
+      <text y="-9" text-anchor="middle" font-size="3.6" font-weight="700" fill="#8a5a3a">N</text>
+    </g>
+
+    <!-- Flight routes from home -->
+    <g fill="none" stroke-width="0.45" stroke-linecap="round" class="routes" aria-hidden="true">
+      {places.map((p) => route(p) && <path d={route(p)} stroke={COLOR[p.region]} stroke-dasharray="1.4 1.6" opacity="0.6" />)}
+    </g>
+
+    <!-- Drifting clouds -->
+    <g class="clouds" fill="white" aria-hidden="true">
+      <g class="cloud" style="--d: 70s; --y: 18px">
+        <circle cx="0" cy="0" r="3" /><circle cx="3.5" cy="-1" r="3.6" /><circle cx="7" cy="0" r="2.8" /><rect x="0" y="0" width="7" height="2.6" rx="1.3" />
+      </g>
+      <g class="cloud" style="--d: 95s; --y: 72px; animation-delay: -40s">
+        <circle cx="0" cy="0" r="2.4" /><circle cx="3" cy="-1" r="3" /><circle cx="6" cy="0" r="2.2" /><rect x="0" y="0" width="6" height="2.2" rx="1.1" />
+      </g>
+      <g class="cloud" style="--d: 80s; --y: 112px; animation-delay: -20s">
+        <circle cx="0" cy="0" r="2.6" /><circle cx="3.2" cy="-1" r="3.2" /><circle cx="6.4" cy="0" r="2.4" /><rect x="0" y="0" width="6.4" height="2.4" rx="1.2" />
+      </g>
+    </g>
+
+    <!-- Pins: a house for home, a teardrop pin everywhere else -->
+    {
+      places.map((p) => (
+        <g data-open={p.index} tabindex="0" role="button" aria-label={tr(p.item.title, lang)} class="pin cursor-pointer outline-none" style={`--c: ${COLOR[p.region]}`}>
+          <title>
+            {p.emoji} {tr(p.item.title, lang)}
+          </title>
+          <circle cx={p.x} cy={p.y - 3} r="4" fill="transparent" />
+          {p.item.home ? (
+            <g filter="url(#soft)">
+              <path d={`M${p.x - 2.4} ${p.y}V${p.y - 2.6}L${p.x} ${p.y - 5}L${p.x + 2.4} ${p.y - 2.6}V${p.y}Z`} fill="#2a9d8f" stroke="white" stroke-width="0.45" />
+              <rect x={p.x - 0.6} y={p.y - 1.6} width="1.2" height="1.6" fill="white" />
+            </g>
+          ) : (
+            <g filter="url(#soft)">
+              <path
+                d={`M${p.x} ${p.y}c-1.3-1.8-2.1-2.8-2.1-3.8a2.1 2.1 0 1 1 4.2 0c0 1-0.8 2-2.1 3.8z`}
+                fill={COLOR[p.region]}
+                stroke="white"
+                stroke-width="0.4"
+              />
+              <circle cx={p.x} cy={p.y - 3.8} r="0.75" fill="white" />
+            </g>
+          )}
+        </g>
+      ))
+    }
+
+    <!-- Little planes flying the longest routes -->
+    <g class="planes" font-size="5" aria-hidden="true">
+      {
+        flights.map((_, i) => (
+          <text text-anchor="middle" dominant-baseline="central">
+            ✈️
+            <animateMotion dur={`${11 + i * 3}s`} repeatCount="indefinite" rotate="auto" begin={`${i * 2}s`}>
+              <mpath href={`#flight-${i}`} />
+            </animateMotion>
+          </text>
+        ))
+      }
+    </g>
+  </svg>
+  <figcaption class="flex flex-wrap items-center gap-x-5 gap-y-1 border-t border-[#e8d3a6] bg-[#fffaf0] px-4 py-2 text-xs text-[#8a5a3a] dark:border-[#5a4a30] dark:bg-[#2a251b] dark:text-[#e8d3a6]">
+    <span><span class="mr-1 inline-block h-2.5 w-2.5 rounded-sm bg-[#2a9d8f] align-middle"></span> {ui['int.home']}</span>
+    {(Object.keys(COLOR) as Region[]).map((r) => <span><span class="mr-1 inline-block h-2.5 w-2.5 rounded-full align-middle" style={`background: ${COLOR[r]}`} /> {ui[`int.region.${r}`]}</span>)}
+    <span class="ml-auto">- - - {ui['int.travel.routes']}</span>
+  </figcaption>
+</figure>
+
+<!-- Passport stamps -->
+<section class="relative mt-12 overflow-hidden rounded-3xl bg-[#f6efe1] bg-[repeating-radial-gradient(circle_at_30%_20%,transparent_0_9px,rgba(29,78,137,0.05)_9px_10px)] p-5 text-[#3b2a1a] shadow-inner ring-1 ring-[#e3d5b8] sm:p-8 dark:bg-[#2a251b] dark:text-[#f3e3c0] dark:ring-[#4a3f2b]">
+  <div class="mb-6 flex items-center gap-3">
+    <span class="flex h-11 w-9 items-center justify-center rounded-md bg-[#1d3557] text-lg text-[#f4d58d] shadow" aria-hidden="true">🛂</span>
+    <div>
+      <h3 class="text-lg font-bold tracking-wide">{ui['int.travel.passport']}</h3>
+      <p class="text-xs opacity-70">{ui['int.travel.passportHint']}</p>
+    </div>
+  </div>
+  <ul class="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-4 lg:grid-cols-6">
+    {
+      places.map((p, k) => (
+        <li class="flex items-center justify-center">
+          <button
+            type="button"
+            data-open={p.index}
+            class:list={[
+              'relative flex w-full max-w-[9.5rem] flex-col items-center justify-center border-[3px] px-2 py-3 text-center transition hover:scale-105 hover:rotate-0 focus-visible:rotate-0',
+              SHAPES[k % SHAPES.length],
+            ]}
+            style={`color: ${COLOR[p.region]}; border-color: currentColor; transform: rotate(${((k * 47) % 17) - 8}deg)`}
+          >
+            <span class="pointer-events-none absolute inset-1.5 rounded-[inherit] border border-dashed border-current opacity-60" aria-hidden="true" />
+            <span class="text-2xl" aria-hidden="true">{p.emoji}</span>
+            <span class="mt-1 text-[13px] font-black uppercase leading-tight tracking-wide">{tr(p.item.title, lang)}</span>
+            {p.country && <span class="text-[10px] font-semibold opacity-80">{p.country}</span>}
+            <span class="mt-0.5 font-mono text-[9px] font-bold opacity-70">{p.item.home ? `🏠 ${ui['int.home']}` : `✈ ${p.tz}`}</span>
+          </button>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .cloud {
+    animation: drift var(--d) linear infinite;
+    opacity: 0.85;
+  }
+  @keyframes drift {
+    from {
+      transform: translate(-20px, var(--y));
+    }
+    to {
+      transform: translate(380px, var(--y));
+    }
+  }
+  .routes path {
+    animation: dash 6s linear infinite;
+  }
+  @keyframes dash {
+    to {
+      stroke-dashoffset: -30;
+    }
+  }
+  .pin {
+    transition: transform 0.2s;
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+  }
+  .pin:hover,
+  .pin:focus-visible {
+    transform: scale(1.6);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cloud,
+    .routes path {
+      animation: none;
+    }
+    .planes {
+      display: none;
+    }
+  }
+</style>

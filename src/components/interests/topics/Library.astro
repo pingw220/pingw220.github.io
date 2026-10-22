@@ -1,0 +1,94 @@
+---
+/**
+ * Novels as a library: the all-time favorites on a lit display stand, then one bookshelf per
+ * category with a spine for every book. Spines open the detail card.
+ */
+import Cover from '../Cover.astro';
+import { groupItems, type LibraryItem } from '../../../config/library';
+import { getLang, t, tr } from '../../../i18n';
+
+interface Props {
+  items: LibraryItem[];
+}
+
+const lang = getLang(Astro.url);
+const ui = t(lang);
+const { ranked, groups } = groupItems(Astro.props.items, lang);
+const SPINES = ['#8c2f39', '#2f5d8a', '#3f7a5a', '#7b4fa0', '#b5651d', '#1f6f78', '#a23b72', '#4b5d16', '#5c3c92', '#9a3412'];
+// A little variety in spine height and width, stable for each book.
+const spine = (index: number, title: string) => ({
+  color: SPINES[(index * 7) % SPINES.length],
+  height: 9.5 + ((index * 37) % 5) * 0.45,
+  width: Math.min(3.4, Math.max(2.1, 1.6 + title.length * 0.09)),
+});
+---
+
+<div class="relative overflow-hidden rounded-3xl bg-[#3b2416] bg-[repeating-linear-gradient(90deg,rgba(255,255,255,0.03)_0_2px,transparent_2px_70px)] p-4 text-[#fbeedd] shadow-xl ring-1 ring-black/20 sm:p-8">
+  <!-- Window with the moon, and a warm lamp glow -->
+  <div class="pointer-events-none absolute -top-24 left-1/2 h-64 w-[36rem] -translate-x-1/2 rounded-full bg-[#ffd29a]/15 blur-3xl" aria-hidden="true"></div>
+
+  {
+    ranked.length > 0 && (
+      <section class="relative">
+        <div class="mx-auto mb-5 w-max rounded-md border-2 border-[#d4a017] bg-gradient-to-b from-[#f4d58d] to-[#d4a017] px-5 py-1.5 text-center text-sm font-bold tracking-widest text-[#3b2416] shadow-md">
+          🏆 {ui['pg.allTimeTop'].replace('{n}', String(ranked.length))}
+        </div>
+        <ol class="relative grid grid-cols-3 gap-4 px-2 sm:grid-cols-6 sm:gap-5">
+          {ranked.map(({ item, index }) => (
+            <li>
+              <button type="button" data-open={index} class="group block w-full text-left" aria-label={tr(item.title, lang)}>
+                <span class="block -rotate-1 transition group-even:rotate-1 group-hover:rotate-0">
+                  <Cover {item} {index} shape="book" rank={item.rank} size="lg" />
+                </span>
+                <span class="mt-2 block text-xs font-semibold leading-snug text-[#fbeedd] group-hover:text-[#ffd166] sm:text-sm">{tr(item.title, lang)}</span>
+              </button>
+            </li>
+          ))}
+        </ol>
+        {/* The display stand. */}
+        <div class="mt-3 h-4 rounded-sm bg-gradient-to-b from-[#b07a45] to-[#6b4329] shadow-[0_8px_14px_-6px_rgba(0,0,0,0.7)]" aria-hidden="true" />
+      </section>
+    )
+  }
+
+  <div class="mt-12 grid gap-x-8 gap-y-12 md:grid-cols-2">
+  {
+    groups.map((g) => (
+      <section class:list={['relative', g.list.length > 6 && 'md:col-span-2']}>
+        <h3 class="mb-0 flex items-center gap-3">
+          <span class="rounded-sm border border-[#8a6a2a] bg-gradient-to-b from-[#e9c46a] to-[#b8860b] px-3 py-0.5 text-sm font-bold text-[#3b2416] shadow">{g.title}</span>
+          <span class="text-xs text-[#fbeedd]/60">
+            {g.list.length} 📖
+          </span>
+        </h3>
+        <ul class="flex min-h-[12.5rem] items-end gap-[3px] overflow-x-auto px-3 pb-0 pt-4 [scrollbar-width:thin]">
+          {g.list.map(({ item, index }) => {
+            const title = tr(item.title, lang);
+            const s = spine(index, title);
+            return (
+              <li class="shrink-0">
+                <button
+                  type="button"
+                  data-open={index}
+                  title={title}
+                  class="group relative flex items-center justify-center overflow-hidden rounded-t-[3px] px-1 py-3 text-[#fff6e3] shadow-[inset_-3px_0_0_rgba(0,0,0,0.25),inset_3px_0_0_rgba(255,255,255,0.12)] transition hover:-translate-y-2 focus-visible:-translate-y-2"
+                  style={`height: ${s.height}rem; width: ${s.width}rem; background: linear-gradient(90deg, ${s.color}, color-mix(in srgb, ${s.color} 70%, black))`}
+                >
+                  <span class="absolute inset-x-0 top-2 h-[3px] bg-[#f4d58d]/70" aria-hidden="true" />
+                  <span class="absolute inset-x-0 bottom-2 h-[3px] bg-[#f4d58d]/70" aria-hidden="true" />
+                  <span class="line-clamp-1 text-[12px] font-semibold tracking-wider" style="writing-mode: vertical-rl">
+                    {title}
+                  </span>
+                </button>
+              </li>
+            );
+          })}
+          {/* A bookend. */}
+          <li class="ml-2 h-24 w-6 shrink-0 rounded-t-md bg-gradient-to-b from-[#9aa0ad] to-[#5c6270]" aria-hidden="true" />
+        </ul>
+        <div class="h-4 rounded-sm bg-gradient-to-b from-[#a0703f] to-[#5e3c27] shadow-[0_10px_14px_-6px_rgba(0,0,0,0.7)]" aria-hidden="true" />
+      </section>
+    ))
+  }
+  </div>
+</div>

@@ -86,10 +86,12 @@ The admin configuration is `public/admin/config.yml`; the embeds are handled by
 The Interests page has two views, switched with the **Page / Interactive 3D** toggle at the top
 (the choice is remembered per browser; `/playground` links redirect here):
 
-- **Page** (default): a regular page with one section per topic: the guestbook, music highlights,
-  posts, the ranked novel/anime/drama/movie shelves, a travel map with boarding-pass cards by time
-  zone, and the sports GOATs. Every item opens the same detail card as in 3D. Code:
-  `src/components/interests/` (`Shelf`, `Cover`, `Travel`, `Guestbook`).
+- **Page** (default): a hub with one block per topic. Music and Posts link to their pages; every
+  other topic has its own themed page at `/interests/<topic>`: the novels as a library of book
+  spines, anime as a theater, dramas as a TV lounge, movies as cinema tickets, travel as a storybook
+  map with passport stamps, sports as trading cards, and the guestbook as a postcard. Items open a
+  detail card. Code: `src/views/InterestTopic.astro`, `src/components/interests/` and its `topics/`
+  folder; the topic list is in `src/config/interests.ts`.
 - **Interactive 3D**: a small night market (three.js) where visitors walk around with Joy, a little
   Akita. It only loads when chosen. Each stall leads into its own world (linkable directly, e.g.
   `/interests#play-library`):

@@ -1,0 +1,91 @@
+---
+/**
+ * Anime as a theater: a light-bulb marquee, the all-time favorites spotlit on stage under the
+ * curtains, and the rest in glowing poster frames along the lobby, one wall per genre.
+ */
+import Cover from '../Cover.astro';
+import { groupItems, type LibraryItem } from '../../../config/library';
+import { getLang, t, tr } from '../../../i18n';
+
+interface Props {
+  items: LibraryItem[];
+  /** The marquee text. */
+  marquee: string;
+}
+
+const lang = getLang(Astro.url);
+const ui = t(lang);
+const { ranked, groups } = groupItems(Astro.props.items, lang);
+const bulbs = 'bg-[radial-gradient(circle,#fff3b0_0_2.5px,#ffb703_3px,transparent_4px)] bg-[length:14px_14px]';
+---
+
+<div class="relative overflow-hidden rounded-3xl bg-[#1a0b14] p-4 text-[#fdf4e3] shadow-xl ring-1 ring-black/30 sm:p-8">
+  <!-- Curtains -->
+  <div class="pointer-events-none absolute inset-y-0 left-0 hidden w-10 bg-[repeating-linear-gradient(90deg,#7a1424_0_10px,#a31d33_10px_20px)] shadow-[8px_0_20px_rgba(0,0,0,0.5)] sm:block" aria-hidden="true"></div>
+  <div class="pointer-events-none absolute inset-y-0 right-0 hidden w-10 bg-[repeating-linear-gradient(90deg,#7a1424_0_10px,#a31d33_10px_20px)] shadow-[-8px_0_20px_rgba(0,0,0,0.5)] sm:block" aria-hidden="true"></div>
+  <div class="pointer-events-none absolute inset-x-0 top-0 h-6 bg-[repeating-linear-gradient(90deg,#7a1424_0_14px,#a31d33_14px_28px)] shadow-[0_6px_14px_rgba(0,0,0,0.5)]" aria-hidden="true"></div>
+
+  <div class="relative sm:px-8">
+    <!-- Marquee -->
+    <div class:list={['mx-auto mt-4 w-max max-w-full rounded-xl p-[7px] shadow-[0_0_30px_rgba(255,183,3,0.35)]', bulbs]}>
+      <div class="rounded-lg bg-[#2b0f1d] px-6 py-2 text-center">
+        <p class="text-[11px] font-bold uppercase tracking-[0.35em] text-[#ffb703]">★ {ui['pg.nowShowing']} ★</p>
+        <p class="text-lg font-black tracking-wide text-[#fff3dc] sm:text-xl">{Astro.props.marquee}</p>
+      </div>
+    </div>
+
+    {
+      ranked.length > 0 && (
+        <section class="relative mt-8">
+          {/* Spotlights */}
+          <div class="pointer-events-none absolute -top-10 left-1/4 h-80 w-40 -translate-x-1/2 rotate-12 bg-gradient-to-b from-[#fff3c4]/25 to-transparent blur-xl" aria-hidden="true" />
+          <div class="pointer-events-none absolute -top-10 right-1/4 h-80 w-40 translate-x-1/2 -rotate-12 bg-gradient-to-b from-[#fff3c4]/25 to-transparent blur-xl" aria-hidden="true" />
+          <h3 class="mb-4 text-center text-sm font-bold uppercase tracking-[0.3em] text-[#ffd166]">🏆 {ui['pg.allTimeTop'].replace('{n}', String(ranked.length))}</h3>
+          <ol class="relative grid grid-cols-3 gap-4 sm:grid-cols-5">
+            {ranked.map(({ item, index }) => (
+              <li>
+                <button type="button" data-open={index} class="group block w-full text-left">
+                  <span class="block rounded-lg shadow-[0_0_24px_rgba(255,209,102,0.35)] transition group-hover:shadow-[0_0_36px_rgba(255,209,102,0.6)]">
+                    <Cover {item} {index} rank={item.rank} size="lg" />
+                  </span>
+                  <span class="mt-2 block text-xs font-semibold leading-snug group-hover:text-[#ffd166] sm:text-sm">{tr(item.title, lang)}</span>
+                </button>
+              </li>
+            ))}
+          </ol>
+          {/* The stage */}
+          <div class="mt-4 h-5 rounded-b-[50%] bg-gradient-to-b from-[#5a2a1a] to-[#2b140c] shadow-[0_12px_20px_-8px_rgba(0,0,0,0.8)]" aria-hidden="true" />
+        </section>
+      )
+    }
+
+    {
+      groups.map((g) => (
+        <section class="mt-12">
+          <h3 class="mb-4 flex items-center gap-3">
+            <span class:list={['rounded-md p-[4px]', bulbs]}>
+              <span class="block rounded bg-[#2b0f1d] px-3 py-0.5 text-sm font-bold text-[#fff3dc]">{g.title}</span>
+            </span>
+            <span class="text-xs text-[#fdf4e3]/60">{g.list.length} 🎞️</span>
+          </h3>
+          <ul class="grid grid-cols-3 gap-x-4 gap-y-6 sm:grid-cols-5 lg:grid-cols-6">
+            {g.list.map(({ item, index }) => (
+              <li>
+                <button type="button" data-open={index} class="group block w-full text-left">
+                  <span class="block rounded-lg bg-[#241a2c] p-1.5 ring-1 ring-[#fff1c4]/40 shadow-[0_0_14px_rgba(255,241,196,0.25)] transition group-hover:shadow-[0_0_24px_rgba(255,241,196,0.55)]">
+                    <Cover {item} {index} />
+                  </span>
+                  <span class="mt-1.5 line-clamp-2 block text-xs font-medium leading-snug text-[#fdf4e3]/90 group-hover:text-[#ffd166]">{tr(item.title, lang)}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+    <!-- Rows of seats -->
+    <div class="mt-12 flex justify-center gap-1.5 opacity-80" aria-hidden="true">
+      {Array.from({ length: 14 }, () => <span class="h-5 w-6 rounded-t-lg bg-[#a31d33] shadow-inner" />)}
+    </div>
+  </div>
+</div>

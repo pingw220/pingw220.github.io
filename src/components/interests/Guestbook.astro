@@ -1,29 +1,200 @@
 ---
-/** The guestbook form and the list of public messages (filled in by the page script). */
+/**
+ * The guestbook: a form for leaving a message (public or private) and the public messages.
+ * `postcard` dresses the form as a postcard and pins the messages to a cork board.
+ * The script also shares the messages with the 3D post office (`playground:messages`).
+ */
+import { SITE } from '../../config/site';
 import { getLang, t } from '../../i18n';
 
-const ui = t(getLang(Astro.url));
+interface Props {
+  variant?: 'plain' | 'postcard';
+}
+
+const { variant = 'plain' } = Astro.props;
+const lang = getLang(Astro.url);
+const ui = t(lang);
+const strings = {
+  sending: ui['pg.msg.sending'],
+  sent: ui['pg.msg.sent'],
+  error: ui['pg.msg.error'],
+  limited: ui['pg.msg.limited'],
+  none: ui['pg.msg.none'],
+  anonymous: ui['pg.anonymous'],
+  locale: lang === 'zh' ? 'zh-Hant-TW' : 'en-US',
+};
+const postcard = variant === 'postcard';
+const field = postcard
+  ? 'mt-1 w-full border-0 border-b-2 border-dashed border-[#c9b79c] bg-transparent px-1 py-1.5 text-[#3b2a1a] placeholder:text-[#a08b6d] focus:border-[#d62828] focus:outline-none focus:ring-0'
+  : 'mt-1 w-full rounded-lg border border-border bg-card px-3 py-2 text-foreground';
 ---
 
-<form class="msg-form space-y-3">
-  <label class="block text-sm">
-    <span class="text-muted">{ui['pg.msg.name']}</span>
-    <input name="name" maxlength="40" autocomplete="nickname" class="mt-1 w-full rounded-lg border border-border bg-card px-3 py-2 text-foreground" />
-  </label>
-  <label class="block text-sm">
-    <span class="text-muted">{ui['pg.msg.message']}</span>
-    <textarea name="message" required maxlength="800" rows="5" class="mt-1 w-full rounded-lg border border-border bg-card px-3 py-2 text-foreground"></textarea>
-  </label>
-  {/* Honeypot: hidden from people, tempting to bots. */}
-  <input name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
-  <fieldset class="space-y-1.5 text-sm">
-    <label class="flex items-center gap-2"><input type="radio" name="visibility" value="private" checked /> 🔒 {ui['pg.msg.private']}</label>
-    <label class="flex items-center gap-2"><input type="radio" name="visibility" value="public" /> 📌 {ui['pg.msg.public']}</label>
-  </fieldset>
-  <div class="flex items-center gap-3">
-    <button type="submit" class="rounded-full bg-accent-violet px-5 py-2 text-sm font-semibold text-background transition hover:brightness-110">💌 {ui['pg.msg.send']}</button>
-    <p class="msg-status text-sm text-muted" role="status"></p>
+<div class:list={[postcard && 'grid gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]']}>
+  <form
+    class:list={[
+      'msg-form space-y-3',
+      postcard && 'relative overflow-hidden rounded-md bg-[#fffaf0] p-6 pr-6 text-[#3b2a1a] shadow-[0_10px_30px_-12px_rgba(60,30,10,0.45)] ring-1 ring-[#e8dcc4] sm:p-8 sm:pr-36',
+    ]}
+    data-api={SITE.visitorApi}
+    data-strings={JSON.stringify(strings)}
+  >
+    {
+      postcard && (
+        <>
+          {/* Airmail border, stamp, and postmark. */}
+          <span class="pointer-events-none absolute inset-x-0 top-0 h-2 bg-[repeating-linear-gradient(135deg,#d62828_0_14px,#fffaf0_14px_22px,#1d4e89_22px_36px,#fffaf0_36px_44px)]" aria-hidden="true" />
+          <span class="pointer-events-none absolute inset-x-0 bottom-0 h-2 bg-[repeating-linear-gradient(135deg,#d62828_0_14px,#fffaf0_14px_22px,#1d4e89_22px_36px,#fffaf0_36px_44px)]" aria-hidden="true" />
+          <span class="pointer-events-none absolute right-6 top-7 hidden h-24 w-20 rotate-3 flex-col items-center justify-center border-4 border-dotted border-[#fffaf0] bg-[#d62828] text-center text-white shadow-md outline outline-1 outline-[#d62828] sm:flex" aria-hidden="true">
+            <span class="text-3xl">📮</span>
+            <span class="mt-1 text-[10px] font-bold tracking-widest">PING · 王平</span>
+          </span>
+          <span class="pointer-events-none absolute right-5 top-32 hidden h-20 w-20 -rotate-12 items-center justify-center rounded-full border-2 border-[#1d4e89]/50 text-center text-[9px] font-bold uppercase leading-tight tracking-wider text-[#1d4e89]/60 sm:flex" aria-hidden="true">
+            Seattle
+            <br />★<br />
+            Taipei
+          </span>
+          <p class="font-serif text-2xl italic text-[#8a5a3a]">{ui['int.post.greeting']}</p>
+        </>
+      )
+    }
+    <label class="block text-sm">
+      <span class:list={[postcard ? 'font-medium text-[#8a5a3a]' : 'text-muted']}>{ui['pg.msg.name']}</span>
+      <input name="name" maxlength="40" autocomplete="nickname" class={field} />
+    </label>
+    <label class="block text-sm">
+      <span class:list={[postcard ? 'font-medium text-[#8a5a3a]' : 'text-muted']}>{ui['pg.msg.message']}</span>
+      <textarea
+        name="message"
+        required
+        maxlength="800"
+        rows="5"
+        class:list={[field, postcard && 'resize-none bg-[repeating-linear-gradient(transparent_0_27px,#e8dcc4_27px_28px)] leading-7']}
+      ></textarea>
+    </label>
+    {/* Honeypot: hidden from people, tempting to bots. */}
+    <input name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+    <fieldset class="space-y-1.5 text-sm">
+      <label class="flex items-center gap-2"><input type="radio" name="visibility" value="private" checked /> 🔒 {ui['pg.msg.private']}</label>
+      <label class="flex items-center gap-2"><input type="radio" name="visibility" value="public" /> 📌 {ui['pg.msg.public']}</label>
+    </fieldset>
+    <div class="flex flex-wrap items-center gap-3 pt-1">
+      <button
+        type="submit"
+        class:list={[
+          'rounded-full px-5 py-2 text-sm font-semibold transition hover:brightness-110 disabled:opacity-60',
+          postcard ? 'bg-[#d62828] text-white shadow' : 'bg-accent-violet text-background',
+        ]}
+      >
+        ✉️ {ui['pg.msg.send']}
+      </button>
+      <p class:list={['msg-status text-sm', postcard ? 'text-[#8a5a3a]' : 'text-muted']} role="status"></p>
+    </div>
+  </form>
+
+  <div>
+    <h3 class:list={['text-lg font-semibold', postcard ? '' : 'mt-10']}>📌 {ui['pg.msg.publicList']}</h3>
+    <ul
+      class:list={[
+        'msg-list mt-3',
+        postcard
+          ? 'grid gap-5 rounded-xl bg-[#c68b59] bg-[radial-gradient(rgba(0,0,0,0.12)_1px,transparent_1.5px)] bg-[length:9px_9px] p-5 shadow-inner ring-8 ring-[#7a4f32] sm:grid-cols-2'
+          : 'space-y-3',
+      ]}
+      data-variant={variant}
+    >
+    </ul>
   </div>
-</form>
-<h3 class="mt-10 text-lg font-semibold">{ui['pg.msg.publicList']}</h3>
-<ul class="msg-list mt-3 space-y-3"></ul>
+</div>
+
+<script>
+  type Message = { id: number; name: string; message: string; date: string };
+  type Strings = { sending: string; sent: string; error: string; limited: string; none: string; anonymous: string; locale: string };
+
+  const forms = [...document.querySelectorAll<HTMLFormElement>('.msg-form')];
+  const lists = [...document.querySelectorAll<HTMLElement>('.msg-list')];
+  const first = forms[0];
+  if (first) {
+    const api = (first.dataset.api ?? '').replace(/\/$/, '');
+    const S: Strings = JSON.parse(first.dataset.strings ?? '{}');
+    const tilt = (i: number) => ['-rotate-2', 'rotate-1', '-rotate-1', 'rotate-2'][i % 4];
+    let messages: Message[] = [];
+
+    const render = () => {
+      // The 3D post office pins these to its board.
+      (window as { playgroundMessages?: Message[] }).playgroundMessages = messages;
+      window.dispatchEvent(new CustomEvent('playground:messages', { detail: messages }));
+      for (const list of lists) {
+        const card = list.dataset.variant === 'postcard';
+        if (!messages.length) {
+          const li = document.createElement('li');
+          li.className = card ? 'rounded-md bg-[#fffaf0] p-4 text-sm text-[#8a5a3a] shadow sm:col-span-2' : 'rounded-xl border border-dashed border-border p-4 text-sm text-muted';
+          li.textContent = S.none;
+          list.replaceChildren(li);
+          continue;
+        }
+        list.replaceChildren(
+          ...messages.map((m, i) => {
+            const li = document.createElement('li');
+            li.className = card ? `relative rounded-sm bg-[#fffaf0] p-4 pt-5 text-[#3b2a1a] shadow-md transition hover:rotate-0 hover:scale-[1.02] ${tilt(i)}` : 'rounded-xl border border-border bg-card p-4';
+            if (card) {
+              const pin = document.createElement('span');
+              pin.className = 'absolute left-1/2 top-1.5 h-3 w-3 -translate-x-1/2 rounded-full bg-[#e63946] shadow ring-2 ring-white/60';
+              pin.setAttribute('aria-hidden', 'true');
+              li.append(pin);
+            }
+            const head = document.createElement('p');
+            head.className = 'text-sm font-semibold';
+            head.textContent = `✉️ ${m.name || S.anonymous}`;
+            const when = document.createElement('span');
+            when.className = `ml-2 font-mono text-xs font-normal ${card ? 'text-[#a08b6d]' : 'text-muted'}`;
+            when.textContent = new Date(m.date).toLocaleDateString(S.locale);
+            head.append(when);
+            const body = document.createElement('p');
+            body.className = `mt-1 whitespace-pre-line text-sm leading-relaxed ${card ? 'font-serif' : 'text-foreground/85'}`;
+            body.textContent = m.message;
+            li.append(head, body);
+            return li;
+          }),
+        );
+      }
+    };
+
+    const load = async () => {
+      if (api) {
+        try {
+          const res = await fetch(`${api}/messages`);
+          if (res.ok) messages = (await res.json()).messages ?? [];
+        } catch {}
+      }
+      render();
+    };
+
+    for (const form of forms) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const status = form.querySelector<HTMLElement>('.msg-status')!;
+        const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+        const fd = new FormData(form);
+        button.disabled = true;
+        status.textContent = S.sending;
+        try {
+          const res = await fetch(`${api}/messages`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: fd.get('name'), message: fd.get('message'), public: fd.get('visibility') === 'public', website: fd.get('website') }),
+          });
+          const out = await res.json().catch(() => ({}));
+          if (out.ok) {
+            status.textContent = S.sent;
+            form.reset();
+            load();
+          } else status.textContent = out.error === 'rate limited' ? S.limited : S.error;
+        } catch {
+          status.textContent = S.error;
+        }
+        button.disabled = false;
+      });
+    }
+    load();
+  }
+</script>

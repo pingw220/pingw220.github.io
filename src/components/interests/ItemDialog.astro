@@ -1,0 +1,120 @@
+---
+/**
+ * The detail card for one item on an Interests page: photo, title, notes, and Ping's rank,
+ * rating, love, category, and thoughts. Any element with `data-open="<index>"` opens it.
+ */
+import type { LibraryItem } from '../../config/library';
+import { getLang, t, tr } from '../../i18n';
+
+interface Props {
+  items: LibraryItem[];
+}
+
+const lang = getLang(Astro.url);
+const ui = t(lang);
+const items = Astro.props.items.map((item) => ({
+  title: tr(item.title, lang),
+  subtitle: [item.subtitle && tr(item.subtitle, lang), item.date].filter(Boolean).join(' · '),
+  note: item.note ? tr(item.note, lang) : '',
+  image: item.image ?? '',
+  credit: item.imageCredit ?? null,
+  link: item.link ?? '',
+  facts: [
+    item.rank ? [ui['pg.card.rank'], `🏆 #${item.rank}`] : null,
+    typeof item.rating === 'number' ? [ui['pg.card.rating'], `${'★'.repeat(Math.floor(item.rating))}${item.rating % 1 >= 0.5 ? '½' : ''} ${item.rating}/5`] : null,
+    typeof item.love === 'number' ? [ui['pg.card.love'], '♥'.repeat(Math.round(item.love)) + '♡'.repeat(Math.max(0, 5 - Math.round(item.love)))] : null,
+    item.category ? [ui['pg.card.category'], tr(item.category, lang)] : null,
+    item.review && tr(item.review, lang) ? [ui['pg.card.review'], tr(item.review, lang)] : null,
+  ].filter(Boolean),
+}));
+---
+
+<dialog
+  class="item-dialog m-auto w-[min(36rem,calc(100vw-2rem))] overflow-hidden rounded-3xl border border-border bg-background p-0 text-foreground shadow-2xl backdrop:bg-black/50 backdrop:backdrop-blur-[2px]"
+  data-items={JSON.stringify(items)}
+  data-open-label={ui['pg.open']}
+>
+  <div class="dialog-media"></div>
+  <div class="p-6">
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h2 class="dialog-title text-xl font-semibold leading-snug tracking-tight"></h2>
+        <p class="dialog-subtitle mt-1 text-sm text-muted"></p>
+      </div>
+      <form method="dialog">
+        <button class="shrink-0 rounded-full border border-border px-3 py-1.5 text-sm text-muted transition-colors hover:border-accent-violet/60 hover:text-foreground">{ui['pg.close']} ✕</button>
+      </form>
+    </div>
+    <p class="dialog-note mt-4 leading-relaxed text-foreground/85"></p>
+    <dl class="dialog-facts mt-4 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-sm"></dl>
+    <a class="dialog-credit mt-4 block text-xs text-muted underline underline-offset-2 hover:text-foreground" target="_blank" rel="noopener noreferrer"></a>
+    <a class="dialog-link mt-4 inline-block text-sm text-accent-blue underline underline-offset-4 hover:text-foreground" target="_blank" rel="noopener noreferrer"></a>
+  </div>
+</dialog>
+
+<script>
+  type Item = { title: string; subtitle: string; note: string; image: string; credit: { text: string; href?: string } | null; link: string; facts: [string, string][] };
+  const dialog = document.querySelector<HTMLDialogElement>('.item-dialog');
+  if (dialog) {
+    const items: Item[] = JSON.parse(dialog.dataset.items ?? '[]');
+    const $ = <T extends HTMLElement>(sel: string) => dialog.querySelector<T>(sel)!;
+    const open = (i: number) => {
+      const it = items[i];
+      if (!it) return;
+      const media = $('.dialog-media');
+      media.replaceChildren();
+      if (it.image) {
+        const img = document.createElement('img');
+        img.src = it.image;
+        img.alt = '';
+        img.className = 'max-h-[50vh] w-full object-cover';
+        media.append(img);
+      }
+      $('.dialog-title').textContent = it.title;
+      $('.dialog-subtitle').textContent = it.subtitle;
+      const note = $('.dialog-note');
+      note.textContent = it.note;
+      note.hidden = !it.note;
+      const facts = $('.dialog-facts');
+      facts.replaceChildren(
+        ...it.facts.flatMap(([k, v]) => {
+          const dt = document.createElement('dt');
+          dt.className = 'font-medium text-muted';
+          dt.textContent = k;
+          const dd = document.createElement('dd');
+          dd.className = 'whitespace-pre-line';
+          dd.textContent = v;
+          return [dt, dd];
+        }),
+      );
+      facts.hidden = !it.facts.length;
+      const credit = $<HTMLAnchorElement>('.dialog-credit');
+      credit.hidden = !it.credit;
+      if (it.credit) {
+        credit.textContent = it.credit.text;
+        if (it.credit.href) credit.href = it.credit.href;
+        else credit.removeAttribute('href');
+      }
+      const link = $<HTMLAnchorElement>('.dialog-link');
+      link.hidden = !it.link;
+      if (it.link) {
+        link.href = it.link;
+        link.textContent = `${dialog.dataset.openLabel} ↗`;
+      }
+      dialog.showModal();
+    };
+    document.addEventListener('click', (e) => {
+      const el = (e.target as Element).closest<HTMLElement>('[data-open]');
+      if (el) open(Number(el.dataset.open));
+    });
+    document.addEventListener('keydown', (e) => {
+      const el = e.target as HTMLElement;
+      if ((e.key === 'Enter' || e.key === ' ') && el.matches?.('[data-open]:not(button)')) {
+        e.preventDefault();
+        open(Number(el.dataset.open));
+      }
+    });
+    // Click outside the card closes it.
+    dialog.addEventListener('click', (e) => e.target === dialog && dialog.close());
+  }
+</script>

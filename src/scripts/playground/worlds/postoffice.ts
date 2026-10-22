@@ -56,20 +56,20 @@ export const postOfficeWorld = (data: PlaygroundData) => (gradientMap: THREE.Tex
   const top = ball(0.45, toon(0xd62828), 20);
   top.scale.y = 0.6;
   mailbox.add(at(boxBody, 0, 0.75, 0), at(top, 0, 1.5, 0), at(box(0.42, 0.06, 0.05, toon(0x1a1a1a)), 0, 1.25, 0.44), at(cyl(0.12, 0.16, 0.12, toon(0x1a1a1a)), 0, 0.06, 0));
-  const mailSign = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 0.5), new THREE.MeshBasicMaterial({ map: labelTexture(data.strings.writeMessage, { emoji: '💌', bg: '#fff3dc', border: '#d62828' }), color: 0xe0d8cc, transparent: true }));
+  const mailSign = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 0.5), new THREE.MeshBasicMaterial({ map: labelTexture(data.strings.writeMessage, { emoji: '📮', bg: '#fff3dc', border: '#d62828' }), color: 0xe0d8cc, transparent: true }));
   mailbox.add(at(mailSign, 0, 2.35, 0));
-  const heart = ball(0.12, glow(0xff6b9a, 1));
-  mailbox.add(at(heart, 0, 1.95, 0));
+  const lamp = ball(0.12, glow(0xffd166, 1.2)); // a little lamp over the mailbox
+  mailbox.add(at(lamp, 0, 1.95, 0));
   items.push({
     id: 'mailbox',
     kind: 'station',
     label: data.strings.writeMessage,
-    emoji: '💌',
+    emoji: '📮',
     front: new THREE.Vector3(3.6, 0, D / 2 - 2.9),
     facing: Math.PI,
     hits: markHits([boxBody, top, mailSign], 'mailbox'),
     update(t) {
-      heart.position.y = 1.95 + Math.sin(t * 2.4) * 0.08;
+      lamp.position.y = 1.95 + Math.sin(t * 2.4) * 0.08;
     },
   });
 
@@ -88,7 +88,7 @@ export const postOfficeWorld = (data: PlaygroundData) => (gradientMap: THREE.Tex
     notes.clear();
     for (let k = items.length - 1; k >= 0; k--) if (isMessage(items[k])) items.splice(k, 1);
     if (list.length === 0) {
-      const note = new THREE.Mesh(new THREE.PlaneGeometry(3.8, 1.1), new THREE.MeshBasicMaterial({ map: labelTexture(data.strings.beFirst, { emoji: '💌', bg: '#fff6e3', border: '#2a9d8f' }), color: 0xe0d8cc, transparent: true }));
+      const note = new THREE.Mesh(new THREE.PlaneGeometry(3.8, 1.1), new THREE.MeshBasicMaterial({ map: labelTexture(data.strings.beFirst, { emoji: '📮', bg: '#fff6e3', border: '#2a9d8f' }), color: 0xe0d8cc, transparent: true }));
       note.position.z = 0.06;
       notes.add(note);
       return;
@@ -106,7 +106,7 @@ export const postOfficeWorld = (data: PlaygroundData) => (gradientMap: THREE.Tex
         id,
         kind: 'item',
         label: m.name || data.strings.anonymous,
-        emoji: '💌',
+        emoji: '✉️',
         front: new THREE.Vector3(-W / 2 + 1.2, 0, 0.6 - u),
         facing: -Math.PI / 2,
         hits: markHits([note], id),

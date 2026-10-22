@@ -1,0 +1,57 @@
+---
+/**
+ * Movies as cinema tickets: one ticket per film, poster on the left, a perforated stub with the
+ * rank as the seat, all between two strips of film.
+ */
+import { groupItems, type LibraryItem } from '../../../config/library';
+import { getLang, t, tr } from '../../../i18n';
+
+interface Props {
+  items: LibraryItem[];
+}
+
+const lang = getLang(Astro.url);
+const ui = t(lang);
+const { ranked, groups } = groupItems(Astro.props.items, lang);
+const tickets = [...ranked, ...groups.flatMap((g) => g.list)];
+const TINTS = ['#ffd166', '#f4a3b5', '#9bd1e5', '#b5e48c', '#cdb4db', '#f6bd60'];
+const strip = 'h-6 bg-[#111] bg-[repeating-linear-gradient(90deg,transparent_0_10px,#f5f5f5_10px_22px,transparent_22px_32px)] bg-[length:32px_10px] bg-center bg-repeat-x';
+---
+
+<div class="overflow-hidden rounded-3xl bg-[#0f0b1a] text-[#fdf4e3] shadow-xl ring-1 ring-black/30">
+  <div class={strip} aria-hidden="true"></div>
+  <div class="p-4 sm:p-8">
+    <h3 class="mb-6 text-center text-sm font-bold uppercase tracking-[0.3em] text-[#e9c46a]">🎬 {ui['pg.allTimeTop'].replace('{n}', String(ranked.length))}</h3>
+    <ol class="grid gap-5 lg:grid-cols-2">
+      {
+        tickets.map(({ item, index }, k) => (
+          <li>
+            <button type="button" data-open={index} class="group flex w-full items-stretch text-left text-[#2a1a10] drop-shadow-[0_8px_14px_rgba(0,0,0,0.45)] transition hover:-translate-y-1 hover:-rotate-1">
+              <span class="relative flex flex-1 gap-4 rounded-l-xl p-3" style={`background: ${TINTS[k % TINTS.length]}`}>
+                <span class="block w-20 shrink-0 overflow-hidden rounded-md bg-black/20 shadow sm:w-24">
+                  {item.image && <img src={item.image} alt="" loading="lazy" decoding="async" class="aspect-[2/3] w-full object-cover" />}
+                </span>
+                <span class="flex min-w-0 flex-col justify-center">
+                  <span class="text-[10px] font-bold uppercase tracking-[0.3em] opacity-70">Admit one · {ui['int.cinema.ticket']}</span>
+                  <span class="mt-1 text-lg font-black leading-tight">{tr(item.title, lang)}</span>
+                  {item.subtitle && <span class="mt-1 text-xs opacity-80">🎥 {tr(item.subtitle, lang)}</span>}
+                  {item.date && <span class="mt-2 w-max rounded-full border border-current px-2 py-0.5 font-mono text-[11px]">{item.date}</span>}
+                </span>
+              </span>
+              {/* Perforated stub */}
+              <span class="relative flex w-20 shrink-0 flex-col items-center justify-center self-stretch rounded-r-xl border-l-2 border-dashed border-black/30 sm:w-24" style={`background: ${TINTS[k % TINTS.length]}`}>
+                <span class="absolute -left-2 -top-2 h-4 w-4 rounded-full bg-[#0f0b1a]" aria-hidden="true" />
+                <span class="absolute -bottom-2 -left-2 h-4 w-4 rounded-full bg-[#0f0b1a]" aria-hidden="true" />
+                <span class="text-[10px] font-bold uppercase tracking-widest opacity-70">{ui['int.cinema.seat']}</span>
+                <span class="text-3xl font-black">{item.rank ? `#${item.rank}` : '★'}</span>
+                <span class="font-mono text-[10px] opacity-70">ROW A</span>
+              </span>
+            </button>
+          </li>
+        ))
+      }
+    </ol>
+    <p class="mt-8 text-center text-xs text-[#fdf4e3]/60">🍿 {ui['int.cinema.popcorn']}</p>
+  </div>
+  <div class={strip} aria-hidden="true"></div>
+</div>

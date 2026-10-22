@@ -269,9 +269,13 @@ function buildProps(kind: StallKind, group: THREE.Group, toon: Toon, animated: (
       env.rotation.y = (i - 1.5) * 0.15;
       put(env, 0.35, counterTop + 0.02 + i * 0.025, 0.35);
     }
-    const heart = sphere(0.09, 0xff6b9a, { emissive: new THREE.Color(0xff6b9a), emissiveIntensity: 0.8 });
-    put(heart, 0.35, counterTop + 0.35, 0.35);
-    animated.push((t) => (heart.position.y = counterTop + 0.35 + Math.sin(t * 2.5) * 0.06));
+    // A gold stamp floating over the letters.
+    const stamp = box(0.16, 0.2, 0.02, 0xffd166, { emissive: new THREE.Color(0xffb703), emissiveIntensity: 0.5 });
+    put(stamp, 0.35, counterTop + 0.35, 0.35);
+    animated.push((t) => {
+      stamp.position.y = counterTop + 0.35 + Math.sin(t * 2.5) * 0.06;
+      stamp.rotation.y = t * 1.2;
+    });
   } else if (kind === 'dramas') {
     // A flat TV on a stand, and a stack of box sets.
     const tv = new THREE.Group();

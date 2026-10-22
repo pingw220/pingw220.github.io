@@ -4,10 +4,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import MusicSections from '../components/MusicSections.astro';
 import PostCard from '../components/PostCard.astro';
 import Guestbook from '../components/interests/Guestbook.astro';
-import Shelf from '../components/interests/Shelf.astro';
-import Travel from '../components/interests/Travel.astro';
-import Cover from '../components/interests/Cover.astro';
-import { LIBRARY, type LibraryShelf } from '../config/library';
+import { LIBRARY, type LibraryItem, type LibraryShelf } from '../config/library';
+import { TOPICS } from '../config/interests';
 import { MUSIC_SECTIONS } from '../config/music';
 import { SITE } from '../config/site';
 import { formatDate, getLang, localizePath, t, tr } from '../i18n';
@@ -23,7 +21,7 @@ const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
 // Stalls along the lane (left/right alternate, entrance first). `world` is where each leads;
 // `panel` is its list view.
 const STALLS = [
-  { world: 'postoffice', panel: 'messages', emoji: '💌', color: '#d62828', side: -1, z: 3 },
+  { world: 'postoffice', panel: 'messages', emoji: '📮', color: '#d62828', side: -1, z: 3 },
   { world: 'studio', panel: 'music', emoji: '🎻', color: '#e76f51', side: 1, z: -2 },
   { world: 'writing', panel: 'posts', emoji: '📝', color: '#2a9d8f', side: -1, z: -7 },
   { world: 'library', panel: 'novels', emoji: '📚', color: '#9b5de5', side: 1, z: -12 },
@@ -144,15 +142,23 @@ const data: PlaygroundData = {
   },
 };
 
-// The page view: one section per stall, in the same order as the market.
-const SECTIONS = STALLS.map((s) => ({ ...s, id: s.panel === 'messages' ? 'guestbook' : s.panel, label: ui[`stall.${s.panel}`], blurb: ui[`stall.${s.panel}.blurb`] }));
-const counts: Record<string, number> = {
-  music: MUSIC_SECTIONS.reduce((n, s) => n + s.performances.length, 0),
-  posts: posts.length,
-  ...Object.fromEntries(shelves.map((k) => [k, (LIBRARY[k] ?? []).length])),
-};
-// A few performances up front; the rest are on the Music page.
-const highlights = MUSIC_SECTIONS.flatMap((s) => s.performances.slice(0, 2).map((p) => ({ ...p, section: tr(s.title, lang) }))).slice(0, 6);
+// The hub: one block per topic, each linking to its own page.
+const shelfOf: Record<string, LibraryItem[]> = { novels: LIBRARY.novels, anime: LIBRARY.anime, dramas: LIBRARY.dramas ?? [], movies: LIBRARY.movies ?? [], travel: LIBRARY.travel, sports: LIBRARY.sports ?? [] };
+const music = MUSIC_SECTIONS.flatMap((s) => s.performances);
+const blocks = TOPICS.map((topic) => {
+  const list = shelfOf[topic.id] ?? [];
+  const ranked = [...list].sort((a, b) => (a.rank ?? 99) - (b.rank ?? 99));
+  const previews = topic.id === 'music' ? music.slice(0, 3).map((p) => `https://i.ytimg.com/vi/${p.id}/mqdefault.jpg`) : ranked.filter((i) => i.image).slice(0, 3).map((i) => i.image!);
+  return {
+    ...topic,
+    label: ui[`stall.${topic.key}`],
+    blurb: ui[`stall.${topic.key}.blurb`],
+    href: localizePath(topic.href ?? `/interests/${topic.id}`, lang),
+    count: topic.id === 'music' ? music.length : topic.id === 'posts' ? posts.length : topic.id === 'guestbook' ? undefined : list.length,
+    previews,
+    span: topic.id === 'music' ? 'lg:col-span-2' : topic.id === 'travel' ? 'order-last sm:col-span-2 lg:col-span-3' : '',
+  };
+});
 
 const description =
   lang === 'zh'
@@ -161,7 +167,7 @@ const description =
 ---
 
 <BaseLayout title={ui['nav.playground']} {description}>
-  <!-- Page view (default): a regular page with every stall as a section -->
+  <!-- Page view (default): a hub with one block per topic, each linking to its own page -->
   <div class="interests-static">
     <header class="relative overflow-hidden border-b border-border">
       <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(155,93,229,0.16),transparent_60%),radial-gradient(ellipse_at_bottom_left,rgba(255,183,3,0.12),transparent_55%)]" aria-hidden="true"></div>
@@ -177,103 +183,70 @@ const description =
           </div>
         </div>
         <p class="mode-note mt-3 hidden text-sm text-muted" data-nogl={ui['pg.fallback']}></p>
-        <!-- At a glance: one tile per section -->
-        <ul class="mt-10 grid grid-cols-3 gap-3 sm:grid-cols-5 lg:grid-cols-9">
-          {
-            SECTIONS.map((sec) => (
-              <li>
-                <a href={`#${sec.id}`} class="group flex h-full flex-col items-center rounded-2xl border border-border bg-card/80 px-2 py-4 text-center backdrop-blur transition hover:-translate-y-0.5 hover:shadow-md" style={`--c: ${sec.color}`}>
-                  <span class="text-2xl transition group-hover:scale-110" aria-hidden="true">{sec.emoji}</span>
-                  <span class="mt-2 text-xs font-medium leading-tight">{sec.label}</span>
-                  {counts[sec.panel] !== undefined && <span class="mt-1 font-mono text-[11px] text-muted">{counts[sec.panel]}</span>}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
       </div>
     </header>
 
-    <div class="mx-auto max-w-5xl px-5 pb-24">
-      {
-        SECTIONS.map((sec) => (
-          <section id={sec.id} class="scroll-mt-24 border-b border-border/60 py-14 last:border-b-0" aria-labelledby={`h-${sec.id}`}>
-            <div class="mb-8 flex items-center gap-4">
-              <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-2xl" style={`background: ${sec.color}22; box-shadow: inset 0 0 0 1px ${sec.color}55`} aria-hidden="true">
-                {sec.emoji}
-              </span>
-              <div>
-                <h2 id={`h-${sec.id}`} class="text-2xl font-bold tracking-tight">{sec.label}</h2>
-                <p class="text-sm text-muted">{sec.blurb}</p>
-              </div>
-            </div>
-
-            {sec.panel === 'messages' && (
-              <div class="max-w-2xl rounded-2xl border border-border bg-card p-5 sm:p-6">
-                <Guestbook />
-              </div>
-            )}
-
-            {sec.panel === 'music' && (
-              <>
-                <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                  {highlights.map((v) => (
-                    <li>
-                      <button type="button" data-item={`video:${v.id}`} class="group block w-full overflow-hidden rounded-xl border border-border bg-card text-left transition hover:-translate-y-0.5 hover:shadow-md">
-                        <span class="relative block aspect-video bg-black">
-                          <img src={`https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`} alt="" loading="lazy" class="h-full w-full object-cover opacity-90 transition group-hover:opacity-100" />
-                          <span class="absolute inset-0 flex items-center justify-center" aria-hidden="true">
-                            <span class="flex h-12 w-12 items-center justify-center rounded-full bg-black/60 text-white transition group-hover:scale-110">▶</span>
-                          </span>
-                        </span>
-                        <span class="block p-3">
-                          <span class="block text-sm font-semibold leading-snug group-hover:text-accent-violet">{tr(v.title, lang)}</span>
-                          <span class="mt-0.5 block text-xs text-muted">{v.section}</span>
-                        </span>
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-                <a href={localizePath('/music', lang)} class="mt-6 inline-block text-sm font-medium text-accent-blue underline-offset-4 hover:underline">
-                  {ui['int.allMusic'].replace('{n}', String(counts.music))} →
-                </a>
-              </>
-            )}
-
-            {sec.panel === 'posts' &&
-              (posts.length ? (
-                <div class="space-y-4">{posts.map((post) => <PostCard {post} />)}</div>
-              ) : (
-                <p class="rounded-2xl border border-dashed border-border p-8 text-center text-sm text-muted">🌙 {ui['posts.empty']}</p>
-              ))}
-
-            {sec.panel === 'novels' && <Shelf items={LIBRARY.novels} prefix="book" shape="book" emoji="📖" />}
-            {sec.panel === 'anime' && <Shelf items={LIBRARY.anime} prefix="anime" emoji="🎞️" />}
-            {sec.panel === 'dramas' && <Shelf items={LIBRARY.dramas ?? []} prefix="drama" emoji="📺" />}
-            {sec.panel === 'movies' && <Shelf items={LIBRARY.movies ?? []} prefix="movie" emoji="🎬" />}
-            {sec.panel === 'travel' && <Travel items={LIBRARY.travel} />}
-
-            {sec.panel === 'sports' && (
-              <ul class="grid grid-cols-2 gap-5 sm:grid-cols-4">
-                {(LIBRARY.sports ?? []).map((item, index) => (
-                  <li>
-                    <button type="button" data-item={`athlete:${index}`} class="group block w-full text-left">
-                      <span class="relative block">
-                        <Cover {item} {index} shape="book" />
-                        <span class="pointer-events-none absolute inset-x-0 bottom-0 rounded-b-lg bg-gradient-to-t from-black/80 to-transparent px-3 pb-3 pt-10 text-white">
-                          <span class="block text-xs font-semibold uppercase tracking-widest text-[#ffd166]">🐐 GOAT</span>
-                          <span class="block text-lg font-bold leading-tight">{tr(item.title, lang)}</span>
-                          {item.subtitle && <span class="block text-xs text-white/80">{tr(item.subtitle, lang)}</span>}
-                        </span>
-                      </span>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
-        ))
-      }
+    <div class="mx-auto max-w-5xl px-5 pb-24 pt-10">
+      <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          blocks.map((b) => (
+            <li class={b.span}>
+              <a
+                href={b.href}
+                class="group relative flex h-full min-h-[15rem] flex-col overflow-hidden rounded-3xl p-6 text-white shadow-lg ring-1 ring-black/10 transition duration-300 hover:-translate-y-1 hover:shadow-2xl"
+                style={`background: linear-gradient(140deg, ${b.colors[0]}, ${b.colors[1]})`}
+              >
+                <span class="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.14)_1.5px,transparent_2px)] bg-[length:18px_18px]" aria-hidden="true" />
+                {b.id === 'guestbook' && (
+                  <>
+                    <span class="pointer-events-none absolute inset-x-0 top-0 h-2 bg-[repeating-linear-gradient(135deg,#fffaf0_0_12px,#d62828_12px_20px,#1d4e89_20px_32px,#d62828_32px_40px)] opacity-80" aria-hidden="true" />
+                    <span class="pointer-events-none absolute bottom-5 right-5 flex h-24 w-20 rotate-6 flex-col items-center justify-center border-4 border-dotted border-white/80 bg-[#fffaf0] text-[#d62828] shadow-lg transition group-hover:rotate-0" aria-hidden="true">
+                      <span class="text-3xl">📮</span>
+                      <span class="text-[9px] font-black tracking-widest">AIR MAIL</span>
+                    </span>
+                  </>
+                )}
+                {b.id === 'travel' && (
+                  <svg class="pointer-events-none absolute inset-0 h-full w-full opacity-70" viewBox="0 0 400 200" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M30 170 Q200 -20 380 120" fill="none" stroke="white" stroke-width="2" stroke-dasharray="6 7" />
+                    <text x="300" y="58" font-size="22" class="transition group-hover:translate-x-2">✈️</text>
+                  </svg>
+                )}
+                {b.id === 'posts' && (
+                  <span class="pointer-events-none absolute bottom-5 right-5 w-24 rotate-3 rounded-md bg-[#fffaf0] p-3 shadow-lg transition group-hover:rotate-0" aria-hidden="true">
+                    {[0, 1, 2, 3].map(() => <span class="mb-2 block h-1 rounded bg-[#2a9d8f]/40 last:mb-0" />)}
+                  </span>
+                )}
+                {b.previews.length > 0 && (
+                  <span class="pointer-events-none absolute bottom-4 right-4 flex items-end" aria-hidden="true">
+                    {b.previews.map((src, i) => (
+                      <img
+                        src={src}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        class:list={[
+                          'rounded-lg object-cover shadow-xl ring-2 ring-white/70 transition duration-300',
+                          b.id === 'music' ? 'aspect-video w-28' : b.id === 'travel' ? 'aspect-[4/3] w-24' : 'aspect-[2/3] w-16',
+                          i > 0 && '-ml-6',
+                          i === 0 ? '-rotate-6 group-hover:-rotate-12' : i === 1 ? 'z-10 mb-2 group-hover:-translate-y-2' : 'rotate-6 group-hover:rotate-12',
+                        ]}
+                      />
+                    ))}
+                  </span>
+                )}
+                <span class="relative text-4xl drop-shadow" aria-hidden="true">{b.emoji}</span>
+                <h2 class="relative mt-3 text-xl font-bold tracking-tight">{b.label}</h2>
+                <p class:list={['relative mt-1 text-sm leading-relaxed text-white/85', b.span ? 'max-w-[18rem]' : 'max-w-[52%]']}>{b.blurb}</p>
+                <span class="relative mt-auto inline-flex items-center gap-2 pt-6 text-sm font-semibold">
+                  {b.count !== undefined && <span class="rounded-full bg-white/20 px-2.5 py-0.5 font-mono text-xs backdrop-blur">{b.count}</span>}
+                  <span class="transition group-hover:translate-x-1">{ui['int.enter']} →</span>
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
       <p class="mt-6 rounded-2xl border border-border bg-card p-5 text-center text-sm text-muted">
         🏮 {ui['int.tryInteractive']}{' '}
         <button type="button" data-mode="interactive" class="font-medium text-accent-violet underline-offset-4 hover:underline">{ui['int.interactive']} →</button>
@@ -639,8 +612,9 @@ const description =
           credit: c.imageCredit,
         });
     } else if (kind === 'msg') {
+      const messages = (window as { playgroundMessages?: { id: number; name: string; message: string; date: string }[] }).playgroundMessages ?? [];
       const m = messages.find((x) => String(x.id) === raw);
-      if (m) showCard({ title: `💌 ${m.name || S.anonymous}`, subtitle: new Date(m.date).toLocaleDateString(data.lang === 'zh' ? 'zh-Hant-TW' : 'en-US'), note: m.message });
+      if (m) showCard({ title: `✉️ ${m.name || S.anonymous}`, subtitle: new Date(m.date).toLocaleDateString(data.lang === 'zh' ? 'zh-Hant-TW' : 'en-US'), note: m.message });
     } else if (kind === 'post') {
       const p = data.posts[i];
       if (p) showCard({ title: p.title, subtitle: p.date, note: p.description, link: { href: p.href, label: S.read } });
@@ -721,89 +695,7 @@ const description =
     }
   });
 
-  // ── Guestbook ───────────────────────────────────────────────────────────
-  type Message = { id: number; name: string; message: string; date: string };
-  let messages: Message[] = [];
-  const msgLists = [...document.querySelectorAll<HTMLElement>('.msg-list')];
-  const api = (data.messagesApi || '').replace(/\/$/, '');
-  function renderMessages() {
-    (window as { playgroundMessages?: Message[] }).playgroundMessages = messages;
-    window.dispatchEvent(new CustomEvent('playground:messages', { detail: messages }));
-    for (const list of msgLists) fillMessages(list);
-  }
-  function fillMessages(msgList: HTMLElement) {
-    if (!messages.length) {
-      const li = document.createElement('li');
-      li.className = 'rounded-xl border border-dashed border-border p-4 text-sm text-muted';
-      li.textContent = S.msgNone;
-      return msgList.replaceChildren(li);
-    }
-    msgList.replaceChildren(
-      ...messages.map((m) => {
-        const li = document.createElement('li');
-        li.className = 'rounded-xl border border-border bg-card p-4';
-        const head = document.createElement('p');
-        head.className = 'text-sm font-semibold';
-        head.textContent = `💌 ${m.name || S.anonymous}`;
-        const when = document.createElement('span');
-        when.className = 'ml-2 font-mono text-xs font-normal text-muted';
-        when.textContent = new Date(m.date).toLocaleDateString(data.lang === 'zh' ? 'zh-Hant-TW' : 'en-US');
-        head.append(when);
-        const body = document.createElement('p');
-        body.className = 'mt-1 whitespace-pre-line text-sm leading-relaxed text-foreground/85';
-        body.textContent = m.message;
-        li.append(head, body);
-        return li;
-      }),
-    );
-  }
-  async function loadMessages() {
-    if (!api) return renderMessages();
-    try {
-      const res = await fetch(`${api}/messages`);
-      if (res.ok) messages = (await res.json()).messages ?? [];
-    } catch {}
-    renderMessages();
-  }
-  document.querySelectorAll<HTMLFormElement>('.msg-form').forEach((f) => f.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const form = e.currentTarget as HTMLFormElement;
-    const status = form.querySelector<HTMLElement>('.msg-status')!;
-    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
-    const fd = new FormData(form);
-    button.disabled = true;
-    status.textContent = S.msgSending;
-    try {
-      const res = await fetch(`${api}/messages`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: fd.get('name'), message: fd.get('message'), public: fd.get('visibility') === 'public', website: fd.get('website') }),
-      });
-      const out = await res.json().catch(() => ({}));
-      if (out.ok) {
-        status.textContent = S.msgSent;
-        form.reset();
-        loadMessages();
-      } else status.textContent = out.error === 'rate limited' ? S.msgLimited : S.msgError;
-    } catch {
-      status.textContent = S.msgError;
-    }
-    button.disabled = false;
-  }));
-  loadMessages();
 
-  // ── Page view: every cover, poster, pin, and video opens the same detail card ──
-  const openFrom = (el: Element | null) => {
-    const target = el?.closest<HTMLElement>('[data-item]');
-    if (!target || !staticView.contains(target)) return false;
-    openItem({ id: target.dataset.item! } as Interactable);
-    return true;
-  };
-  staticView.addEventListener('click', (e) => openFrom(e.target as Element));
-  staticView.addEventListener('keydown', (e) => {
-    const el = e.target as HTMLElement;
-    if ((e.key === 'Enter' || e.key === ' ') && el.matches('[data-item]:not(button)') && openFrom(el)) e.preventDefault();
-  });
 
   // ── Start ───────────────────────────────────────────────────────────────
   function hasWebGL() {
@@ -861,7 +753,6 @@ const description =
       );
       requestAnimationFrame(() => loading.remove());
       if (!touch) lookHint.classList.remove('hidden');
-      renderMessages();
       host.focus({ preventScroll: true });
       if (first === 'market') {
         greeting.classList.remove('hidden');

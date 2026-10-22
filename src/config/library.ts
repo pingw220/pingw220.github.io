@@ -3,7 +3,7 @@
  * admin page (/admin → Profile & pages → Playground library) and stored in
  * src/data/library.json. Every field except the title is optional.
  */
-import type { Text } from '../i18n';
+import { tr, type Text } from '../i18n';
 import data from '../data/library.json';
 
 export interface LibraryItem {
@@ -37,3 +37,18 @@ export interface LibraryItem {
 export type LibraryShelf = 'novels' | 'anime' | 'dramas' | 'movies' | 'travel' | 'sports';
 
 export const LIBRARY = data as Record<LibraryShelf, LibraryItem[]>;
+
+/** Ranked favorites (by rank) and the rest grouped by category, keeping each item's index. */
+export function groupItems(items: LibraryItem[], lang: 'en' | 'zh') {
+  const indexed = items.map((item, index) => ({ item, index }));
+  const ranked = indexed.filter(({ item }) => item.rank).sort((a, b) => a.item.rank! - b.item.rank!);
+  const groups: { title: string; list: typeof indexed }[] = [];
+  for (const entry of indexed) {
+    if (entry.item.rank) continue;
+    const title = entry.item.category ? tr(entry.item.category, lang) : '';
+    let g = groups.find((x) => x.title === title);
+    if (!g) groups.push((g = { title, list: [] }));
+    g.list.push(entry);
+  }
+  return { ranked, groups };
+}

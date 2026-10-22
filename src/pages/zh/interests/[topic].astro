@@ -1,0 +1,12 @@
+---
+import InterestTopic from '../../../views/InterestTopic.astro';
+import { TOPIC_PAGES, type Topic } from '../../../config/interests';
+
+export function getStaticPaths() {
+  return TOPIC_PAGES.map((t) => ({ params: { topic: t.id } }));
+}
+
+const { topic } = Astro.params as { topic: Topic['id'] };
+---
+
+<InterestTopic id={topic} />
