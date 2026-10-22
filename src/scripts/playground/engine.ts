@@ -273,7 +273,7 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
     { passive: false },
   );
 
-  /** Use an item: open it if Joy is close, otherwise walk there first. */
+  /** Use an item: open it if Joy is close, otherwise hop there first. */
   function use(item: Interactable) {
     const d = Math.hypot(item.front.x - pos.x, item.front.z - pos.z);
     if (d < NEAR_DISTANCE + 0.6) trigger(item);
@@ -287,11 +287,16 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
     else options.onActivate(item, world.id);
   }
 
+  /** Go to an item right away (no waiting for Joy to walk) and use it. */
   function visit(itemId: string) {
     const item = world.items.find((i) => i.id === itemId);
     if (!item || switching) return;
-    target = clamp(item.front.clone());
-    targetItem = item;
+    pos.copy(clamp(item.front.clone()));
+    joy.group.rotation.y = item.facing;
+    lookBehind(item.facing);
+    target = null;
+    targetItem = null;
+    trigger(item);
   }
 
   async function enter(id: WorldId, arriveAt?: string) {
@@ -345,7 +350,7 @@ export function startEngine(host: HTMLElement, options: EngineOptions, first: Wo
     }
     let speed = 0;
     if (move.lengthSq() > 0) {
-      const step = Math.min(SPEED * (running ? RUN_FACTOR : 1) * dt, move.length());
+      const step = Math.min(SPEED * (running || target ? RUN_FACTOR : 1) * dt, move.length());
       move.normalize();
       // Move each axis separately so Joy slides along furniture instead of stopping.
       const blocked = (x: number, z: number) =>

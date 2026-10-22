@@ -1,51 +1,167 @@
 import * as THREE from 'three';
-import { buildExitDoor, FONT, imageOr, labelTexture, makeKit, markHits, roomLights } from '../kit';
+import { buildExitDoor, EMOJI_FONT, FONT, imageOr, labelTexture, makeKit, markHits, roomLights } from '../kit';
 import { canvasTexture } from '../textures';
 import { feature } from 'topojson-client';
 import type { GeometryCollection, Topology } from 'topojson-specification';
 import landTopo from 'world-atlas/land-110m.json';
-import type { Interactable, PlaygroundData, World } from '../types';
+import type { Interactable, LibraryCard, PlaygroundData, World } from '../types';
 
-/** World map (Natural Earth land, equirectangular) in a soft storybook palette. */
-function mapTexture(): THREE.CanvasTexture {
-  return canvasTexture(2048, 1024, (g, w, h) => {
-    g.fillStyle = '#a9d8ea';
+// The map shows 80°N–58°S, like the travel page.
+const MAP_TOP = 80;
+const MAP_SPAN = 138;
+type Region = 'americas' | 'europe' | 'mideast' | 'asia' | 'oceania';
+const regionOf = (lat: number, lon: number): Region =>
+  lon < -30 ? 'americas' : lon < 45 ? 'europe' : lon < 62 ? 'mideast' : lat < -10 ? 'oceania' : 'asia';
+const REGION_COLOR: Record<Region, string> = { americas: '#e76f51', europe: '#9b5de5', mideast: '#f4a261', asia: '#e63946', oceania: '#2a9d8f' };
+
+/**
+ * The storybook travel map from the travel page, painted on a canvas: a wavy ocean, cream land,
+ * dashed flight routes from home, colored pins (houses for home), a compass, and sea creatures.
+ */
+function mapTexture(places: LibraryCard[]): THREE.CanvasTexture {
+  const W = 2400;
+  const H = Math.round((W * MAP_SPAN) / 360);
+  return canvasTexture(W, H, (g, w, h) => {
+    const X = (lon: number) => ((lon + 180) / 360) * w;
+    const Y = (lat: number) => ((MAP_TOP - lat) / MAP_SPAN) * h;
+    // Ocean with little waves.
+    g.fillStyle = '#bfe6f5';
     g.fillRect(0, 0, w, h);
-    g.strokeStyle = 'rgba(255,255,255,0.35)';
-    g.lineWidth = 2;
-    for (let lat = -60; lat <= 60; lat += 30) {
-      g.beginPath();
-      g.moveTo(0, ((90 - lat) / 180) * h);
-      g.lineTo(w, ((90 - lat) / 180) * h);
-      g.stroke();
+    g.strokeStyle = 'rgba(255,255,255,0.6)';
+    g.lineWidth = 2.5;
+    for (let y = 30; y < h; y += 52) {
+      for (let x = (y / 52) % 2 ? 0 : 46; x < w; x += 92) {
+        g.beginPath();
+        g.moveTo(x, y);
+        g.quadraticCurveTo(x + 11, y - 9, x + 23, y);
+        g.quadraticCurveTo(x + 34, y + 9, x + 46, y);
+        g.stroke();
+      }
     }
-    for (let lon = -150; lon <= 150; lon += 30) {
-      g.beginPath();
-      g.moveTo(((lon + 180) / 360) * w, 0);
-      g.lineTo(((lon + 180) / 360) * w, h);
-      g.stroke();
-    }
+    // Land.
     const topo = landTopo as unknown as Topology<{ land: GeometryCollection }>;
     const land = feature(topo, topo.objects.land) as unknown as { features: { geometry: { type: string; coordinates: number[][][] | number[][][][] } }[] };
-    const project = ([lon, lat]: number[]) => [((lon + 180) / 360) * w, ((90 - lat) / 180) * h] as const;
-    g.fillStyle = '#a8d39a';
-    g.strokeStyle = '#7fb36f';
-    g.lineWidth = 2;
+    g.beginPath();
     for (const f of land.features) {
       const polys = f.geometry.type === 'Polygon' ? [f.geometry.coordinates as number[][][]] : (f.geometry.coordinates as number[][][][]);
       for (const poly of polys) {
-        g.beginPath();
         for (const ring of poly) {
-          ring.forEach((pt, i) => {
-            const [x, y] = project(pt);
-            if (i === 0) g.moveTo(x, y);
-            else g.lineTo(x, y);
+          ring.forEach(([lon, lat], i) => {
+            // Lift the pen where a ring wraps around the 180° meridian.
+            if (i === 0 || Math.abs(lon - ring[i - 1][0]) > 180) g.moveTo(X(lon), Y(lat));
+            else g.lineTo(X(lon), Y(lat));
           });
-          g.closePath();
         }
-        g.fill('evenodd');
-        g.stroke();
       }
+    }
+    g.save();
+    g.shadowColor = 'rgba(0,0,0,0.25)';
+    g.shadowBlur = 8;
+    g.shadowOffsetY = 4;
+    g.fillStyle = '#f8edc8';
+    g.fill('evenodd');
+    g.restore();
+    g.strokeStyle = '#d9b56a';
+    g.lineWidth = 2.5;
+    g.lineJoin = 'round';
+    g.stroke();
+
+    const located = places.filter((p) => typeof p.lat === 'number' && typeof p.lon === 'number');
+    const homes = located.filter((p) => p.home);
+    // Flight routes from the nearer home.
+    g.lineWidth = 3.5;
+    g.setLineDash([10, 12]);
+    g.lineCap = 'round';
+    for (const p of located) {
+      if (p.home) continue;
+      const region = regionOf(p.lat!, p.lon!);
+      const from = homes.find((h) => (region === 'americas') === (h.lon! < -30));
+      if (!from) continue;
+      const [x1, y1, x2, y2] = [X(from.lon!), Y(from.lat!), X(p.lon!), Y(p.lat!)];
+      g.strokeStyle = REGION_COLOR[region];
+      g.globalAlpha = 0.55;
+      g.beginPath();
+      g.moveTo(x1, y1);
+      g.quadraticCurveTo((x1 + x2) / 2, (y1 + y2) / 2 - Math.min(170, Math.hypot(x2 - x1, y2 - y1) * 0.28), x2, y2);
+      g.stroke();
+    }
+    g.globalAlpha = 1;
+    g.setLineDash([]);
+    // Pins: a teardrop for each place, a little house for home.
+    for (const p of located) {
+      const x = X(p.lon!);
+      const y = Y(p.lat!);
+      g.save();
+      g.shadowColor = 'rgba(0,0,0,0.3)';
+      g.shadowBlur = 4;
+      g.shadowOffsetY = 2;
+      g.strokeStyle = '#ffffff';
+      g.lineWidth = 3;
+      if (p.home) {
+        g.fillStyle = '#2a9d8f';
+        g.beginPath();
+        g.moveTo(x - 16, y);
+        g.lineTo(x - 16, y - 17);
+        g.lineTo(x, y - 33);
+        g.lineTo(x + 16, y - 17);
+        g.lineTo(x + 16, y);
+        g.closePath();
+        g.fill();
+        g.stroke();
+        g.restore();
+        g.fillStyle = '#ffffff';
+        g.fillRect(x - 4, y - 11, 8, 11);
+        continue;
+      }
+      g.fillStyle = REGION_COLOR[regionOf(p.lat!, p.lon!)];
+      g.beginPath();
+      g.moveTo(x, y);
+      g.bezierCurveTo(x - 9, y - 12, x - 14, y - 18, x - 14, y - 25);
+      g.arc(x, y - 25, 14, Math.PI, 0);
+      g.bezierCurveTo(x + 14, y - 18, x + 9, y - 12, x, y);
+      g.fill();
+      g.stroke();
+      g.restore();
+      g.fillStyle = '#ffffff';
+      g.beginPath();
+      g.arc(x, y - 25, 5, 0, Math.PI * 2);
+      g.fill();
+    }
+    // Compass rose.
+    const cx = 120;
+    const cy = h - 120;
+    g.fillStyle = 'rgba(255,250,240,0.92)';
+    g.strokeStyle = '#d9b56a';
+    g.lineWidth = 3;
+    g.beginPath();
+    g.arc(cx, cy, 52, 0, Math.PI * 2);
+    g.fill();
+    g.stroke();
+    g.fillStyle = '#e63946';
+    g.beginPath();
+    g.moveTo(cx, cy - 46);
+    g.lineTo(cx + 11, cy);
+    g.lineTo(cx, cy + 46);
+    g.lineTo(cx - 11, cy);
+    g.closePath();
+    g.fill();
+    g.fillStyle = 'rgba(138,90,58,0.75)';
+    g.beginPath();
+    g.moveTo(cx - 46, cy);
+    g.lineTo(cx, cy + 11);
+    g.lineTo(cx + 46, cy);
+    g.lineTo(cx, cy - 11);
+    g.closePath();
+    g.fill();
+    g.fillStyle = '#8a5a3a';
+    g.font = `800 26px ${FONT}`;
+    g.textAlign = 'center';
+    g.fillText('N', cx, cy - 60);
+    // Sea creatures and boats.
+    g.font = `46px ${EMOJI_FONT}`;
+    g.textBaseline = 'middle';
+    for (const [e, lon, lat] of [['🐳', -150, 30], ['🐙', -45, 36], ['🐢', 75, -20], ['⛵', -27, -10], ['🐬', 152, 8], ['🐧', -3, -48], ['🏝️', -95, -15], ['🦈', 120, -42]] as const) {
+      g.fillText(e, X(lon), Y(lat));
     }
   });
 }
@@ -97,7 +213,7 @@ function frameTexture(): THREE.CanvasTexture {
 /** Travel → an airplane cabin. Every window looks out over one of the places; the map is up front. */
 export const flightWorld = (data: PlaygroundData) => (gradientMap: THREE.Texture): World => {
   const kit = makeKit(gradientMap);
-  const { toon, glow, box, cyl, ball, at } = kit;
+  const { toon, glow, box, cyl, at } = kit;
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x0f1a33);
   scene.fog = new THREE.Fog(0x0f1a33, 22, 48);
@@ -204,21 +320,13 @@ export const flightWorld = (data: PlaygroundData) => (gradientMap: THREE.Texture
   }
 
   // Up front: the flight map with every place pinned.
-  const MAP_W = 4.6;
-  const MAP_H = 2.3;
+  const MAP_W = 5.0;
+  const MAP_H = (MAP_W * MAP_SPAN) / 360;
   const board = at(new THREE.Group(), 0, 2.0, -D / 2 + 0.06, scene);
   board.add(at(box(MAP_W + 0.24, MAP_H + 0.24, 0.08, toon(0x1d2433)), 0, 0, 0));
-  const map = new THREE.Mesh(new THREE.PlaneGeometry(MAP_W, MAP_H), new THREE.MeshBasicMaterial({ map: mapTexture(), color: 0xe4e0d8 }));
+  const map = new THREE.Mesh(new THREE.PlaneGeometry(MAP_W, MAP_H), new THREE.MeshBasicMaterial({ map: mapTexture(data.travel), color: 0xe4e0d8 }));
   map.position.z = 0.05;
   board.add(map);
-  const homeMat = glow(0x2a9d8f, 0.9);
-  const pinMat = glow(0xe63946, 0.8);
-  for (const { place } of places) {
-    if (typeof place.lat !== 'number' || typeof place.lon !== 'number') continue;
-    const u = (place.lon / 180) * (MAP_W / 2);
-    const v = (place.lat / 90) * (MAP_H / 2);
-    board.add(at(ball(place.home ? 0.05 : 0.032, place.home ? homeMat : pinMat, 10), u, v, 0.08));
-  }
   const title = new THREE.Mesh(new THREE.PlaneGeometry(3.2, 0.48), new THREE.MeshBasicMaterial({ map: labelTexture(data.strings.journal, { emoji: '🗺️', bg: '#fff3dc', border: '#3fa7d6' }), color: 0xe0d8cc, transparent: true }));
   title.position.set(0, 3.55, -D / 2 + 0.08);
   scene.add(title);

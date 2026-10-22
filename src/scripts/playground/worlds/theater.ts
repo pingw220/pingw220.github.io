@@ -4,9 +4,6 @@ import { buildGallery } from './gallery';
 import { canvasTexture } from '../textures';
 import type { LibraryCard, PlaygroundData } from '../types';
 
-const W = 14;
-const D = 18;
-const H = 6.5;
 const POSTER_COLORS: [string, string][] = [
   ['#1b2a4a', '#e94560'],
   ['#ff7b54', '#ffd56f'],
