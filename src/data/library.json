@@ -2472,6 +2472,24 @@
     },
     {
       "title": {
+        "en": "Taipei",
+        "zh": "臺北"
+      },
+      "subtitle": {
+        "en": "Taiwan",
+        "zh": "臺灣"
+      },
+      "lat": 25.03,
+      "lon": 121.56,
+      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ea/Taipei_Skyline_2022.06.29.jpg/960px-Taipei_Skyline_2022.06.29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "imageCredit": {
+        "text": "Photo: Taipei — 毛貓大少爺, CC BY-SA 2.0 (Wikimedia Commons)",
+        "href": "https://commons.wikimedia.org/wiki/File:Taipei_Skyline_2022.06.29.jpg"
+      },
+      "date": "2025-01"
+    },
+    {
+      "title": {
         "en": "Seoul",
         "zh": "首爾"
       },

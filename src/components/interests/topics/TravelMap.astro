@@ -47,7 +47,7 @@ const EMOJI: Record<string, string> = {
   Hawaii: '🌺', Canada: '🍁', Portland: '🌲', 'Bay Area': '🌉', Seattle: '☕', 'Los Angeles': '🎬', 'San Diego': '🏖️', 'New York': '🗽', Boston: '🦞',
   Belgium: '🧇', Netherlands: '🌷', Switzerland: '🏔️', Germany: '🥨', Norway: '🌌', Denmark: '🧜', 'Czech Republic': '🏰', Vienna: '🎻', Sweden: '🦌', Finland: '🎅',
   Turkey: '🎈', Russia: '🪆', Dubai: '🏙️', Thailand: '🐘', Malaysia: '🌴', Singapore: '🦁', "Xi'an": '🏺', Macau: '⛪', 'Hong Kong': '🌃', Beijing: '🏯',
-  Shandong: '⛰️', 'Hsinchu & Zhubei': '🌬️', Shanghai: '🌆', Seoul: '🎤', Okinawa: '🐠', Busan: '🌊', Osaka: '🐙', Kyoto: '⛩️', Tokyo: '🗼', Hokkaido: '❄️',
+  Shandong: '⛰️', 'Hsinchu & Zhubei': '🌬️', Taipei: '🧋', Shanghai: '🌆', Seoul: '🎤', Okinawa: '🐠', Busan: '🌊', Osaka: '🐙', Kyoto: '⛩️', Tokyo: '🗼', Hokkaido: '❄️',
   Australia: '🦘', 'New Zealand': '🥝', Spain: '🥘', Portugal: '🐓', 'Las Vegas': '🎲', 'Grand Canyon': '🏜️', 'Antelope Canyon': '🌅', Page: '🐴', Toronto: '🦝',
 };
 
@@ -81,8 +81,9 @@ const longest = (region: Region) =>
   places.filter((p) => p.region === region && route(p)).sort((a, b) => Math.abs(b.x - X(b.from!.lon!)) - Math.abs(a.x - X(a.from!.lon!)))[0];
 const flights = [longest('europe'), longest('americas'), longest('oceania')].filter(Boolean);
 const countries = new Set(places.map((p) => p.countryEn)).size;
-// A place is a city (or area) when it sits inside a country rather than being the country itself.
-const cities = places.filter((p) => p.countryEn !== p.en).length;
+// Every place is at least one city: a city or area counts as itself, and a country-level entry
+// (e.g. Germany) stands for at least one city visited there.
+const cities = places.length;
 const journals = Astro.props.journals ?? [];
 const journalCount = (en: string) => journals.filter((j) => j.places.some((x) => x.toLowerCase() === en.toLowerCase())).length;
 ---
