@@ -47,8 +47,8 @@ const EMOJI: Record<string, string> = {
   Hawaii: '🌺', Canada: '🍁', Portland: '🌲', 'Bay Area': '🌉', Seattle: '☕', 'Los Angeles': '🎬', 'San Diego': '🏖️', 'New York': '🗽', Boston: '🦞',
   Belgium: '🧇', Netherlands: '🌷', Switzerland: '🏔️', Germany: '🥨', Norway: '🌌', Denmark: '🧜', 'Czech Republic': '🏰', Vienna: '🎻', Sweden: '🦌', Finland: '🎅',
   Turkey: '🎈', Russia: '🪆', Dubai: '🏙️', Thailand: '🐘', Malaysia: '🌴', Singapore: '🦁', "Xi'an": '🏺', Macau: '⛪', 'Hong Kong': '🌃', Beijing: '🏯',
-  Shandong: '⛰️', Taiwan: '🧋', Shanghai: '🌆', Seoul: '🎤', Okinawa: '🐠', Busan: '🌊', Osaka: '🐙', Kyoto: '⛩️', Tokyo: '🗼', Hokkaido: '❄️',
-  Australia: '🦘', 'New Zealand': '🥝',
+  Shandong: '⛰️', 'Hsinchu & Zhubei': '🌬️', Shanghai: '🌆', Seoul: '🎤', Okinawa: '🐠', Busan: '🌊', Osaka: '🐙', Kyoto: '⛩️', Tokyo: '🗼', Hokkaido: '❄️',
+  Australia: '🦘', 'New Zealand': '🥝', Spain: '🥘', Portugal: '🐓', 'Las Vegas': '🎲', 'Grand Canyon': '🏜️', 'Antelope Canyon': '🌅', Page: '🐴', Toronto: '🦝',
 };
 
 const homes = items.filter((p) => p.home && typeof p.lat === 'number');
@@ -60,7 +60,7 @@ const places = items
     // When I went, e.g. '2025-01' → '2025.01'.
     const when = item.date ? item.date.replaceAll('-', '.') : '';
     const country = parts.filter((s) => s !== '家' && s !== 'Home').join(' · ');
-    const countryEn = partsEn.filter((s) => s !== 'Home').join(' · ') || en;
+    const countryEn = partsEn.filter((s) => s !== 'Home').pop() || en;
     const lat = item.lat ?? 0;
     const lon = item.lon ?? 0;
     const region = regionOf(lat, lon);
