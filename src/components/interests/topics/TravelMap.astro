@@ -66,10 +66,11 @@ const places = items
     const region = regionOf(lat, lon);
     // Fly from the nearer home: Seattle for the Americas, Taiwan for everywhere else.
     const from = homes.find((h) => (region === 'americas') === ((h.lon ?? 0) < -30));
-    return { item, index, en, when, country, countryEn, x: X(lon), y: Y(lat), region, emoji: EMOJI[en] ?? '✈️', from };
+    const located = typeof item.lat === 'number' && typeof item.lon === 'number';
+    return { item, index, en, when, located, country, countryEn, x: X(lon), y: Y(lat), region, emoji: EMOJI[en] ?? '✈️', from };
   });
 const route = (p: (typeof places)[number]) => {
-  if (!p.from || p.item.home) return '';
+  if (!p.from || p.item.home || !p.located) return '';
   const x1 = X(p.from.lon!);
   const y1 = Y(p.from.lat!);
   const mx = (x1 + p.x) / 2;
@@ -151,7 +152,7 @@ const journalCount = (en: string) => journals.filter((j) => j.places.some((x) =>
 
     <!-- Pins: a house for home, a teardrop pin everywhere else -->
     {
-      places.map((p) => (
+      places.filter((p) => p.located).map((p) => (
         <g data-open={p.index} tabindex="0" role="button" aria-label={tr(p.item.title, lang)} class="pin cursor-pointer outline-none" style={`--c: ${COLOR[p.region]}`}>
           <title>
             {p.emoji} {tr(p.item.title, lang)}
