@@ -1914,24 +1914,6 @@
     },
     {
       "title": {
-        "en": "Grand Canyon",
-        "zh": "大峽谷"
-      },
-      "subtitle": {
-        "en": "Arizona · United States",
-        "zh": "亞利桑那 · 美國"
-      },
-      "lat": 36.06,
-      "lon": -112.14,
-      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/31/Canyon_River_Tree_%28165872763%29.jpeg/960px-Canyon_River_Tree_%28165872763%29.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-      "imageCredit": {
-        "text": "Photo: Grand Canyon — Lennart Sikkema, CC BY 3.0 (Wikimedia Commons)",
-        "href": "https://commons.wikimedia.org/wiki/File:Canyon_River_Tree_(165872763).jpeg"
-      },
-      "date": "2025-01"
-    },
-    {
-      "title": {
         "en": "Page",
         "zh": "佩吉"
       },
@@ -1945,24 +1927,6 @@
       "imageCredit": {
         "text": "Photo: Horseshoe Bend (Arizona) — Thomas Wolf, www.foto-tw.de, CC BY-SA 3.0 (Wikimedia Commons)",
         "href": "https://commons.wikimedia.org/wiki/File:Grand_Canyon_Horseshoe_Bend.jpg"
-      },
-      "date": "2025-01"
-    },
-    {
-      "title": {
-        "en": "Antelope Canyon",
-        "zh": "羚羊峽谷"
-      },
-      "subtitle": {
-        "en": "Arizona · United States",
-        "zh": "亞利桑那 · 美國"
-      },
-      "lat": 36.86,
-      "lon": -111.37,
-      "image": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b5/USA_Antelope-Canyon.jpg/960px-USA_Antelope-Canyon.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-      "imageCredit": {
-        "text": "Photo: Antelope Canyon — Lucas Löffler, Public domain (Wikimedia Commons)",
-        "href": "https://commons.wikimedia.org/wiki/File:USA_Antelope-Canyon.jpg"
       },
       "date": "2025-01"
     },
