@@ -818,6 +818,13 @@ collections:
               - { name: lat, label: Latitude, widget: number, value_type: float, required: false }
               - { name: lon, label: Longitude, widget: number, value_type: float, required: false }
               - { name: home, label: 'Home (green house pin)', widget: boolean, required: false }
+              - name: country
+                label: 'Country (only when the subtitle is a state, e.g. California → United States)'
+                widget: object
+                required: false
+                fields:
+                  - { name: en, label: English, widget: string, required: false }
+                  - { name: zh, label: 中文, widget: string, required: false }
           - name: sports
             label: Sports GOATs
             label_singular: Item

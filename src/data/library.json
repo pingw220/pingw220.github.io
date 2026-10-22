@@ -1770,12 +1770,12 @@
   "travel": [
     {
       "title": {
-        "en": "Hawaii",
-        "zh": "夏威夷"
+        "en": "Honolulu",
+        "zh": "檀香山"
       },
       "subtitle": {
-        "en": "United States",
-        "zh": "美國"
+        "en": "Hawaii",
+        "zh": "夏威夷州"
       },
       "lat": 21.31,
       "lon": -157.86,
@@ -1784,7 +1784,11 @@
         "text": "Photo: Diamond Head, Hawaii — mar1865, CC BY-SA 3.0 (Wikimedia Commons)",
         "href": "https://commons.wikimedia.org/wiki/File:Diamond_Head_Hawaii_From_Round_Top_Rd.JPG"
       },
-      "date": "2025-01"
+      "date": "2025-01",
+      "country": {
+        "en": "United States",
+        "zh": "美國"
+      }
     },
     {
       "title": {
@@ -1810,8 +1814,8 @@
         "zh": "波特蘭"
       },
       "subtitle": {
-        "en": "United States",
-        "zh": "美國"
+        "en": "Oregon",
+        "zh": "俄勒岡州"
       },
       "lat": 45.52,
       "lon": -122.68,
@@ -1820,16 +1824,20 @@
         "text": "Photo: Portland Japanese Garden — Adonelson, CC BY-SA 3.0 (Wikimedia Commons)",
         "href": "https://commons.wikimedia.org/wiki/File:Japanese_Garden_-1.jpg"
       },
-      "date": "2025-01"
+      "date": "2025-01",
+      "country": {
+        "en": "United States",
+        "zh": "美國"
+      }
     },
     {
       "title": {
-        "en": "Bay Area",
-        "zh": "灣區"
+        "en": "San Francisco",
+        "zh": "舊金山"
       },
       "subtitle": {
-        "en": "United States",
-        "zh": "美國"
+        "en": "California",
+        "zh": "加州"
       },
       "lat": 37.77,
       "lon": -122.42,
@@ -1838,7 +1846,11 @@
         "text": "Photo: Golden Gate Bridge — Frank Schulenburg, CC BY-SA 4.0 (Wikimedia Commons)",
         "href": "https://commons.wikimedia.org/wiki/File:Golden_Gate_Bridge_as_seen_from_Battery_East.jpg"
       },
-      "date": "2025-01"
+      "date": "2025-01",
+      "country": {
+        "en": "United States",
+        "zh": "美國"
+      }
     },
     {
       "title": {
@@ -1846,8 +1858,8 @@
         "zh": "西雅圖"
       },
       "subtitle": {
-        "en": "Home · United States",
-        "zh": "家 · 美國"
+        "en": "Home · Washington",
+        "zh": "家 · 華盛頓州"
       },
       "lat": 47.61,
       "lon": -122.33,
@@ -1856,6 +1868,10 @@
       "imageCredit": {
         "text": "Photo: Space Needle — Jordon Kalilich, Public domain (Wikimedia Commons)",
         "href": "https://commons.wikimedia.org/wiki/File:Space_Needle_2011-07-04.jpg"
+      },
+      "country": {
+        "en": "United States",
+        "zh": "美國"
       }
     },
     {
@@ -1864,8 +1880,8 @@
         "zh": "洛杉磯"
       },
       "subtitle": {
-        "en": "United States",
-        "zh": "美國"
+        "en": "California",
+        "zh": "加州"
       },
       "lat": 34.05,
       "lon": -118.24,
@@ -1874,7 +1890,11 @@
         "text": "Photo: Hollywood Sign — Gnaphron, CC BY-SA 2.0 (Wikimedia Commons)",
         "href": "https://commons.wikimedia.org/wiki/File:Hollywood_sign_(8485145044).jpg"
       },
-      "date": "2025-01"
+      "date": "2025-01",
+      "country": {
+        "en": "United States",
+        "zh": "美國"
+      }
     },
     {
       "title": {
@@ -1882,8 +1902,8 @@
         "zh": "聖地牙哥"
       },
       "subtitle": {
-        "en": "United States",
-        "zh": "美國"
+        "en": "California",
+        "zh": "加州"
       },
       "lat": 32.72,
       "lon": -117.16,
@@ -1892,7 +1912,11 @@
         "text": "Photo: San Diego — Dirk Hansen, CC BY-SA 3.0 (Wikimedia Commons)",
         "href": "https://commons.wikimedia.org/wiki/File:La_Jolla_Shores_view_(cropped).jpg"
       },
-      "date": "2025-01"
+      "date": "2025-01",
+      "country": {
+        "en": "United States",
+        "zh": "美國"
+      }
     },
     {
       "title": {
@@ -1900,8 +1924,8 @@
         "zh": "拉斯維加斯"
       },
       "subtitle": {
-        "en": "Nevada · United States",
-        "zh": "內華達 · 美國"
+        "en": "Nevada",
+        "zh": "內華達州"
       },
       "lat": 36.17,
       "lon": -115.14,
@@ -1910,7 +1934,11 @@
         "text": "Photo: Las Vegas Strip — Mariordo (Mario Roberto Durán Ortiz), CC BY-SA 4.0 (Wikimedia Commons)",
         "href": "https://commons.wikimedia.org/wiki/File:Las_Vegas_Strip_09_2017_4897.jpg"
       },
-      "date": "2025-01"
+      "date": "2025-01",
+      "country": {
+        "en": "United States",
+        "zh": "美國"
+      }
     },
     {
       "title": {
@@ -1918,8 +1946,8 @@
         "zh": "佩吉"
       },
       "subtitle": {
-        "en": "Arizona · United States",
-        "zh": "亞利桑那 · 美國"
+        "en": "Arizona",
+        "zh": "亞利桑那州"
       },
       "lat": 36.91,
       "lon": -111.46,
@@ -1928,7 +1956,11 @@
         "text": "Photo: Horseshoe Bend (Arizona) — Thomas Wolf, www.foto-tw.de, CC BY-SA 3.0 (Wikimedia Commons)",
         "href": "https://commons.wikimedia.org/wiki/File:Grand_Canyon_Horseshoe_Bend.jpg"
       },
-      "date": "2025-01"
+      "date": "2025-01",
+      "country": {
+        "en": "United States",
+        "zh": "美國"
+      }
     },
     {
       "title": {
@@ -1954,8 +1986,8 @@
         "zh": "紐約"
       },
       "subtitle": {
-        "en": "United States",
-        "zh": "美國"
+        "en": "New York",
+        "zh": "紐約州"
       },
       "lat": 40.71,
       "lon": -74.01,
@@ -1964,7 +1996,11 @@
         "text": "Photo: Statue of Liberty — AskALotl, CC0 (Wikimedia Commons)",
         "href": "https://commons.wikimedia.org/wiki/File:Front_view_of_Statue_of_Liberty_(cropped).jpg"
       },
-      "date": "2025-01"
+      "date": "2025-01",
+      "country": {
+        "en": "United States",
+        "zh": "美國"
+      }
     },
     {
       "title": {
@@ -1972,8 +2008,8 @@
         "zh": "波士頓"
       },
       "subtitle": {
-        "en": "United States",
-        "zh": "美國"
+        "en": "Massachusetts",
+        "zh": "麻薩諸塞州"
       },
       "lat": 42.36,
       "lon": -71.06,
@@ -1982,7 +2018,11 @@
         "text": "Photo: Boston Public Garden — Gaby Azeem, CC0 (Wikimedia Commons)",
         "href": "https://commons.wikimedia.org/wiki/File:Boston_Common_Lake_April_2025.jpg"
       },
-      "date": "2025-01"
+      "date": "2025-01",
+      "country": {
+        "en": "United States",
+        "zh": "美國"
+      }
     },
     {
       "title": {

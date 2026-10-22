@@ -44,7 +44,7 @@ const regionOf = (lat: number, lon: number): Region =>
   lon < -30 ? 'americas' : lon < 45 ? 'europe' : lon < 62 ? 'mideast' : lat < -10 ? 'oceania' : 'asia';
 const COLOR: Record<Region, string> = { americas: '#e76f51', europe: '#9b5de5', mideast: '#f4a261', asia: '#e63946', oceania: '#2a9d8f' };
 const EMOJI: Record<string, string> = {
-  Hawaii: '🌺', Canada: '🍁', Portland: '🌲', 'Bay Area': '🌉', Seattle: '☕', 'Los Angeles': '🎬', 'San Diego': '🏖️', 'New York': '🗽', Boston: '🦞',
+  Honolulu: '🌺', Canada: '🍁', Portland: '🌲', 'San Francisco': '🌉', Seattle: '☕', 'Los Angeles': '🎬', 'San Diego': '🏖️', 'New York': '🗽', Boston: '🦞',
   Belgium: '🧇', Netherlands: '🌷', Switzerland: '🏔️', Germany: '🥨', Norway: '🌌', Denmark: '🧜', 'Czech Republic': '🏰', Vienna: '🎻', Sweden: '🦌', Finland: '🎅',
   Turkey: '🎈', Russia: '🪆', Dubai: '🏙️', Thailand: '🐘', Malaysia: '🌴', Singapore: '🦁', "Xi'an": '🏺', Macau: '⛪', 'Hong Kong': '🌃', Beijing: '🏯',
   Shandong: '⛰️', 'Hsinchu & Zhubei': '🌬️', Taipei: '🧋', Shanghai: '🌆', Seoul: '🎤', Okinawa: '🐠', Busan: '🌊', Osaka: '🐙', Kyoto: '⛩️', Tokyo: '🗼', Hokkaido: '❄️',
@@ -60,7 +60,7 @@ const places = items
     // When I went, e.g. '2025-01' → '2025.01'.
     const when = item.date ? item.date.replaceAll('-', '.') : '';
     const country = parts.filter((s) => s !== '家' && s !== 'Home').join(' · ');
-    const countryEn = partsEn.filter((s) => s !== 'Home').pop() || en;
+    const countryEn = (item.country && tr(item.country, 'en')) || partsEn.filter((s) => s !== 'Home').pop() || en;
     const lat = item.lat ?? 0;
     const lon = item.lon ?? 0;
     const region = regionOf(lat, lon);

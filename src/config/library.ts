@@ -20,6 +20,8 @@ export interface LibraryItem {
   review?: Text;
   /** Credit for a photo or cover that isn't yours. */
   imageCredit?: { text: string; href?: string };
+  /** Travel only: the country, when the subtitle names a state instead (e.g. California). */
+  country?: Text;
   /** Travel only: map position and whether it's home. */
   lat?: number;
   lon?: number;
