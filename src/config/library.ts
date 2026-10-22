@@ -31,6 +31,8 @@ export interface LibraryItem {
   /** e.g. '2024' or '2025-08'. */
   date?: string;
   image?: string;
+  /** Your own photos (uploaded in the admin). The first one is used as the cover. */
+  gallery?: string[];
   link?: string;
 }
 
@@ -52,3 +54,6 @@ export function groupItems(items: LibraryItem[], lang: 'en' | 'zh') {
   }
   return { ranked, groups };
 }
+
+/** The picture to show for an item: your own first photo, else the cover/photo. */
+export const coverOf = (item: LibraryItem): string | undefined => item.gallery?.[0] ?? item.image;

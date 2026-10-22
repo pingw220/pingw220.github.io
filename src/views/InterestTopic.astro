@@ -14,7 +14,8 @@ import Theater from '../components/interests/topics/Theater.astro';
 import TravelMap from '../components/interests/topics/TravelMap.astro';
 import { TOPICS, type Topic } from '../config/interests';
 import { LIBRARY, type LibraryItem } from '../config/library';
-import { getLang, localizePath, t } from '../i18n';
+import { getCollection } from 'astro:content';
+import { formatDate, getLang, localizePath, t, tr } from '../i18n';
 
 interface Props {
   id: Topic['id'];
@@ -27,6 +28,22 @@ const label = ui[`stall.${topic.key}`];
 const blurb = ui[`stall.${topic.key}.blurb`];
 const items: LibraryItem[] =
   topic.id === 'novels' ? LIBRARY.novels : topic.id === 'anime' ? LIBRARY.anime : topic.id === 'dramas' ? (LIBRARY.dramas ?? []) : topic.id === 'movies' ? (LIBRARY.movies ?? []) : topic.id === 'travel' ? LIBRARY.travel : topic.id === 'sports' ? (LIBRARY.sports ?? []) : [];
+// Travel journals: posts that name places from the travel list.
+const journalPosts = topic.id === 'travel' ? (await getCollection('posts', ({ data }) => !data.draft && data.places.length > 0)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()) : [];
+const journals = journalPosts.map((p) => ({
+  title: p.data.title,
+  description: p.data.description,
+  href: localizePath(`/posts/${p.id}`, lang),
+  date: formatDate(p.data.date, lang),
+  cover: p.data.cover,
+  places: p.data.places,
+}));
+const related = journals.flatMap((j) =>
+  j.places.flatMap((place) => {
+    const index = items.findIndex((it) => [tr(it.title, 'en'), tr(it.title, 'zh')].some((n) => n.toLowerCase() === place.toLowerCase()));
+    return index >= 0 ? [{ index, title: j.title, href: j.href }] : [];
+  }),
+);
 // Previous / next topic pages, for wandering from one to the next.
 const pages = TOPICS.filter((x) => !x.href);
 const at = pages.findIndex((x) => x.id === topic.id);
@@ -57,11 +74,11 @@ const hrefOf = (x: Topic) => localizePath(`/interests/${x.id}`, lang);
     {topic.id === 'anime' && <Theater {items} marquee={ui['int.theater.marquee']} />}
     {topic.id === 'dramas' && <Lounge {items} />}
     {topic.id === 'movies' && <Cinema {items} />}
-    {topic.id === 'travel' && <TravelMap {items} />}
+    {topic.id === 'travel' && <TravelMap {items} {journals} />}
     {topic.id === 'sports' && <Hall {items} />}
     {topic.id === 'guestbook' && <Guestbook variant="postcard" />}
 
     {items.length > 0 && <p class="mt-8 text-center text-xs text-muted">{ui['int.clickHint']}</p>}
   </div>
-  {items.length > 0 && <ItemDialog {items} />}
+  {items.length > 0 && <ItemDialog {items} {related} />}
 </BaseLayout>

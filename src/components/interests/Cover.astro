@@ -3,7 +3,7 @@
  * A cover for a book, poster, or photo: the image when there is one, otherwise a drawn
  * cover (a color from the palette, the title set vertically for Chinese).
  */
-import type { LibraryItem } from '../../config/library';
+import { coverOf, type LibraryItem } from '../../config/library';
 import { getLang, tr } from '../../i18n';
 
 interface Props {
@@ -36,8 +36,8 @@ const medal = rank === 1 ? 'bg-[#ffd166] text-[#3a2410]' : rank === 2 ? 'bg-[#e5
 
 <div class:list={['relative overflow-hidden rounded-lg shadow-sm ring-1 ring-black/5 transition duration-300 group-hover:-translate-y-1 group-hover:shadow-lg', aspect]}>
   {
-    item.image ? (
-      <img src={item.image} alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="h-full w-full object-cover" />
+    coverOf(item) ? (
+      <img src={coverOf(item)} alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="h-full w-full object-cover" />
     ) : (
       <div class="flex h-full w-full items-center justify-center p-3" style={`background: linear-gradient(160deg, ${bg}, #12102a); color: ${fg}`}>
         <span class="absolute inset-y-0 left-0 w-2 bg-black/25" aria-hidden="true" />

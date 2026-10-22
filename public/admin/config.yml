@@ -50,6 +50,12 @@ collections:
       - { name: tags, label: Tags, widget: list, required: false, default: [], hint: 'Used by the topic filter, e.g. latex, music, notes' }
       - { name: draft, label: Draft (hidden from the site), widget: boolean, default: false, required: false }
       - { name: cover, label: Cover image, widget: image, required: false }
+      - name: places
+        label: Travel journal for (places)
+        widget: list
+        required: false
+        default: []
+        hint: 'Makes this post a travel journal. Use the English place names from the travel list, e.g. Tokyo, Germany. It then shows on that place''s stamp.'
       - name: body
         label: Body
         widget: richtext
@@ -493,7 +499,7 @@ collections:
                       - { name: zh, label: 中文, widget: string, required: false }
 
       - name: library
-        label: Playground library (Novels · Anime · Dramas · Movies · Travel · Sports)
+        label: Interests library (Novels · Anime · Dramas · Movies · Travel · Sports)
         file: /src/data/library.json
         fields:
           - name: novels
@@ -527,6 +533,13 @@ collections:
               - name: image
                 label: Image (photo / cover)
                 widget: image
+                required: false
+                media_folder: /public/media/uploads
+                public_folder: /media/uploads
+              - name: gallery
+                label: My photos (your own; the first one becomes the cover)
+                widget: image
+                multiple: true
                 required: false
                 media_folder: /public/media/uploads
                 public_folder: /media/uploads
@@ -589,6 +602,13 @@ collections:
                 required: false
                 media_folder: /public/media/uploads
                 public_folder: /media/uploads
+              - name: gallery
+                label: My photos (your own; the first one becomes the cover)
+                widget: image
+                multiple: true
+                required: false
+                media_folder: /public/media/uploads
+                public_folder: /media/uploads
               - name: imageCredit
                 label: Image credit
                 widget: object
@@ -645,6 +665,13 @@ collections:
               - name: image
                 label: Image (photo / cover)
                 widget: image
+                required: false
+                media_folder: /public/media/uploads
+                public_folder: /media/uploads
+              - name: gallery
+                label: My photos (your own; the first one becomes the cover)
+                widget: image
+                multiple: true
                 required: false
                 media_folder: /public/media/uploads
                 public_folder: /media/uploads
@@ -707,6 +734,13 @@ collections:
                 required: false
                 media_folder: /public/media/uploads
                 public_folder: /media/uploads
+              - name: gallery
+                label: My photos (your own; the first one becomes the cover)
+                widget: image
+                multiple: true
+                required: false
+                media_folder: /public/media/uploads
+                public_folder: /media/uploads
               - name: imageCredit
                 label: Image credit
                 widget: object
@@ -766,6 +800,13 @@ collections:
                 required: false
                 media_folder: /public/media/uploads
                 public_folder: /media/uploads
+              - name: gallery
+                label: My photos (your own; the first one becomes the cover)
+                widget: image
+                multiple: true
+                required: false
+                media_folder: /public/media/uploads
+                public_folder: /media/uploads
               - name: imageCredit
                 label: Image credit
                 widget: object
@@ -808,6 +849,13 @@ collections:
               - name: image
                 label: Image (photo / cover)
                 widget: image
+                required: false
+                media_folder: /public/media/uploads
+                public_folder: /media/uploads
+              - name: gallery
+                label: My photos (your own; the first one becomes the cover)
+                widget: image
+                multiple: true
                 required: false
                 media_folder: /public/media/uploads
                 public_folder: /media/uploads

@@ -65,6 +65,8 @@ const posts = defineCollection({
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
     cover: optionalText,
+    /** Travel journal: the places it's about (English names from the travel list, e.g. Tokyo). */
+    places: z.array(z.string()).default([]),
   }),
 });
 

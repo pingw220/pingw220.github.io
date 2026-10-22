@@ -4,7 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import MusicSections from '../components/MusicSections.astro';
 import PostCard from '../components/PostCard.astro';
 import Guestbook from '../components/interests/Guestbook.astro';
-import { LIBRARY, type LibraryItem, type LibraryShelf } from '../config/library';
+import { coverOf, LIBRARY, type LibraryItem, type LibraryShelf } from '../config/library';
 import { TOPICS } from '../config/interests';
 import { MUSIC_SECTIONS } from '../config/music';
 import { SITE } from '../config/site';
@@ -57,7 +57,7 @@ const card = (item: (typeof LIBRARY)['novels'][number]) => ({
   note: item.note ? tr(item.note, lang) || undefined : undefined,
   date: item.date ? showDate(item.date) : undefined,
   link: item.link,
-  image: item.image,
+  image: item.gallery?.[0] ?? item.image,
   imageCredit: item.imageCredit,
   rating: item.rating,
   love: item.love,
@@ -148,7 +148,7 @@ const music = MUSIC_SECTIONS.flatMap((s) => s.performances);
 const blocks = TOPICS.map((topic) => {
   const list = shelfOf[topic.id] ?? [];
   const ranked = [...list].sort((a, b) => (a.rank ?? 99) - (b.rank ?? 99));
-  const previews = topic.id === 'music' ? music.slice(0, 3).map((p) => `https://i.ytimg.com/vi/${p.id}/mqdefault.jpg`) : ranked.filter((i) => i.image).slice(0, 3).map((i) => i.image!);
+  const previews = topic.id === 'music' ? music.slice(0, 3).map((p) => `https://i.ytimg.com/vi/${p.id}/mqdefault.jpg`) : ranked.map(coverOf).filter((src): src is string => !!src).slice(0, 3);
   return {
     ...topic,
     label: ui[`stall.${topic.key}`],
@@ -577,11 +577,19 @@ const description =
   }
   function image(src?: string) {
     if (!src) return null;
+    // The whole photo, never cropped, over a blurred copy of itself.
+    const frame = document.createElement('div');
+    frame.className = 'relative aspect-[4/3] w-full overflow-hidden rounded-t-3xl bg-black';
+    const blur = document.createElement('img');
+    blur.src = src;
+    blur.alt = '';
+    blur.className = 'absolute inset-0 h-full w-full scale-110 object-cover opacity-60 blur-xl';
     const img = document.createElement('img');
     img.src = src;
     img.alt = '';
-    img.className = 'aspect-[4/3] w-full rounded-t-3xl object-cover';
-    return img;
+    img.className = 'relative h-full w-full object-contain';
+    frame.append(blur, img);
+    return frame;
   }
   const meta = (...parts: (string | undefined)[]) => parts.filter(Boolean).join(' · ');
 

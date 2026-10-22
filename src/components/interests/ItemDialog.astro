@@ -8,17 +8,22 @@ import { getLang, t, tr } from '../../i18n';
 
 interface Props {
   items: LibraryItem[];
+  /** Posts that belong to an item (e.g. travel journals for a place). */
+  related?: { index: number; title: string; href: string }[];
 }
 
 const lang = getLang(Astro.url);
 const ui = t(lang);
-const items = Astro.props.items.map((item) => ({
+const related = Astro.props.related ?? [];
+const items = Astro.props.items.map((item, index) => ({
+  related: related.filter((r) => r.index === index).map(({ title, href }) => ({ title, href })),
   title: tr(item.title, lang),
   subtitle: [item.subtitle && tr(item.subtitle, lang), item.date].filter(Boolean).join(' · '),
   note: item.note ? tr(item.note, lang) : '',
   image: item.image ?? '',
   credit: item.imageCredit ?? null,
   link: item.link ?? '',
+  gallery: item.gallery ?? [],
   facts: [
     item.rank ? [ui['pg.card.rank'], `🏆 #${item.rank}`] : null,
     typeof item.rating === 'number' ? [ui['pg.card.rating'], `${'★'.repeat(Math.floor(item.rating))}${item.rating % 1 >= 0.5 ? '½' : ''} ${item.rating}/5`] : null,
@@ -33,6 +38,8 @@ const items = Astro.props.items.map((item) => ({
   class="item-dialog m-auto w-[min(36rem,calc(100vw-2rem))] overflow-hidden rounded-3xl border border-border bg-background p-0 text-foreground shadow-2xl backdrop:bg-black/50 backdrop:backdrop-blur-[2px]"
   data-items={JSON.stringify(items)}
   data-open-label={ui['pg.open']}
+  data-journal-label={ui['int.journals']}
+  data-photos-label={ui['int.myPhotos']}
 >
   <div class="dialog-media"></div>
   <div class="p-6">
@@ -47,13 +54,25 @@ const items = Astro.props.items.map((item) => ({
     </div>
     <p class="dialog-note mt-4 leading-relaxed text-foreground/85"></p>
     <dl class="dialog-facts mt-4 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-sm"></dl>
+    <div class="dialog-gallery mt-5"></div>
+    <div class="dialog-related mt-5"></div>
     <a class="dialog-credit mt-4 block text-xs text-muted underline underline-offset-2 hover:text-foreground" target="_blank" rel="noopener noreferrer"></a>
     <a class="dialog-link mt-4 inline-block text-sm text-accent-blue underline underline-offset-4 hover:text-foreground" target="_blank" rel="noopener noreferrer"></a>
   </div>
 </dialog>
 
 <script>
-  type Item = { title: string; subtitle: string; note: string; image: string; credit: { text: string; href?: string } | null; link: string; facts: [string, string][] };
+  type Item = {
+    title: string;
+    subtitle: string;
+    note: string;
+    image: string;
+    credit: { text: string; href?: string } | null;
+    link: string;
+    gallery: string[];
+    related: { title: string; href: string }[];
+    facts: [string, string][];
+  };
   const dialog = document.querySelector<HTMLDialogElement>('.item-dialog');
   if (dialog) {
     const items: Item[] = JSON.parse(dialog.dataset.items ?? '[]');
@@ -63,12 +82,21 @@ const items = Astro.props.items.map((item) => ({
       if (!it) return;
       const media = $('.dialog-media');
       media.replaceChildren();
-      if (it.image) {
+      const cover = it.gallery[0] ?? it.image;
+      if (cover) {
+        // The whole photo, never cropped, over a blurred copy of itself.
+        const frame = document.createElement('div');
+        frame.className = 'relative h-[min(46vh,22rem)] overflow-hidden bg-black';
+        const blur = document.createElement('img');
+        blur.src = cover;
+        blur.alt = '';
+        blur.className = 'absolute inset-0 h-full w-full scale-110 object-cover opacity-60 blur-xl';
         const img = document.createElement('img');
-        img.src = it.image;
+        img.src = cover;
         img.alt = '';
-        img.className = 'max-h-[50vh] w-full object-cover';
-        media.append(img);
+        img.className = 'relative h-full w-full object-contain';
+        frame.append(blur, img);
+        media.append(frame);
       }
       $('.dialog-title').textContent = it.title;
       $('.dialog-subtitle').textContent = it.subtitle;
@@ -88,8 +116,51 @@ const items = Astro.props.items.map((item) => ({
         }),
       );
       facts.hidden = !it.facts.length;
+      const gallery = $('.dialog-gallery');
+      gallery.replaceChildren();
+      if (it.gallery.length) {
+        const h = document.createElement('p');
+        h.className = 'mb-2 text-sm font-semibold';
+        h.textContent = `📷 ${dialog.dataset.photosLabel}`;
+        const row = document.createElement('div');
+        row.className = 'grid grid-cols-3 gap-2 sm:grid-cols-4';
+        for (const src of it.gallery) {
+          const a = document.createElement('a');
+          a.href = src;
+          a.target = '_blank';
+          a.rel = 'noopener';
+          const img = document.createElement('img');
+          img.src = src;
+          img.alt = '';
+          img.loading = 'lazy';
+          img.className = 'aspect-square w-full rounded-lg object-cover transition hover:opacity-80';
+          a.append(img);
+          row.append(a);
+        }
+        gallery.append(h, row);
+      }
+      const rel = $('.dialog-related');
+      rel.replaceChildren();
+      if (it.related.length) {
+        const h = document.createElement('p');
+        h.className = 'mb-2 text-sm font-semibold';
+        h.textContent = `📖 ${dialog.dataset.journalLabel}`;
+        const ul = document.createElement('ul');
+        ul.className = 'space-y-1 text-sm';
+        for (const r of it.related) {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = r.href;
+          a.className = 'text-accent-blue underline-offset-4 hover:underline';
+          a.textContent = `${r.title} →`;
+          li.append(a);
+          ul.append(li);
+        }
+        rel.append(h, ul);
+      }
       const credit = $<HTMLAnchorElement>('.dialog-credit');
-      credit.hidden = !it.credit;
+      // The credit is for the source photo; hide it when showing your own.
+      credit.hidden = !it.credit || it.gallery.length > 0;
       if (it.credit) {
         credit.textContent = it.credit.text;
         if (it.credit.href) credit.href = it.credit.href;

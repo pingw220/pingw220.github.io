@@ -60,6 +60,21 @@ commits to this GitHub repo, and the site rebuilds automatically (about 1–2 mi
 | Profile & pages → News | Home-page news | `src/data/news.json` |
 | Profile & pages → About page (CV) | Interests, education, experience, skills | `src/data/cv.json` |
 | Profile & pages → Music | Performance videos | `src/data/music.json` |
+| Profile & pages → Interests library | Novels, anime, dramas, movies, travel, sports | `src/data/library.json` |
+
+**Common tasks:**
+
+- **Add an anime / novel / drama / movie:** Profile & pages → Interests library → the right list →
+  *Add Item*. Fill the title (English + 中文); optionally a cover image or link, your **rank**
+  (1 = all-time favorite; leave empty if unranked), **category** (items are grouped by it, e.g.
+  戀愛 / Romance), rating, hearts, and your thoughts. Drag items to reorder.
+- **Travel:** same list → Travel. A new place needs a latitude/longitude (copy them from Google
+  Maps). Upload your own pictures under **My photos**; the first becomes the stamp's photo.
+- **Travel journal (遊記) or diary:** write a normal **Post**. For a journal, list the places under
+  **Travel journal for** (English names from the travel list, e.g. `Tokyo`); it appears on the
+  travel page and on those stamps. For a diary, add the tag `diary`.
+- **Update the CV:** Profile & pages → About page (CV) for the text, and Profile & pages → Profile
+  & bio → **CV (PDF)** to upload the new PDF.
 
 **Editor layout:** the editor is on the left and a live preview on the right (drag the divider to
 resize; scroll stays in sync). Posts and projects open in plain Markdown, like HackMD — switch to

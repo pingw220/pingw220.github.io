@@ -2,7 +2,7 @@
 /**
  * Sports as a hall of fame: a shiny trading card for each GOAT.
  */
-import { type LibraryItem } from '../../../config/library';
+import { coverOf, type LibraryItem } from '../../../config/library';
 import { getLang, tr } from '../../../i18n';
 
 interface Props {
@@ -31,7 +31,7 @@ const emojiOf = (item: LibraryItem) => SPORT.find(([re]) => re.test(tr(item.subt
               <span class="relative block overflow-hidden rounded-[14px] bg-[#1f2a55]">
                 <span class="absolute left-2 top-2 z-10 rounded-full bg-[#ffd166] px-2 py-0.5 text-[10px] font-black uppercase tracking-widest text-[#1f2a55] shadow">GOAT</span>
                 <span class="absolute right-2 top-2 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-xl shadow" aria-hidden="true">{emojiOf(item)}</span>
-                {item.image && <img src={item.image} alt="" loading="lazy" decoding="async" class="aspect-[3/4] w-full object-cover object-top" />}
+                {coverOf(item) && <img src={coverOf(item)} alt="" loading="lazy" decoding="async" class="aspect-[3/4] w-full object-cover object-top" />}
                 <span class="pointer-events-none absolute inset-0 bg-gradient-to-tr from-transparent via-white/25 to-transparent opacity-0 transition duration-500 group-hover:opacity-100" aria-hidden="true" />
                 <span class="block border-t-2 border-[#ffd166] bg-gradient-to-b from-[#1f2a55] to-[#141c3d] px-4 py-3">
                   <span class="block text-lg font-black leading-tight">{tr(item.title, lang)}</span>

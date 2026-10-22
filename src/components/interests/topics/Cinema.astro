@@ -3,7 +3,7 @@
  * Movies as cinema tickets: one ticket per film, poster on the left, a perforated stub with the
  * rank as the seat, all between two strips of film.
  */
-import { groupItems, type LibraryItem } from '../../../config/library';
+import { coverOf, groupItems, type LibraryItem } from '../../../config/library';
 import { getLang, t, tr } from '../../../i18n';
 
 interface Props {
@@ -29,7 +29,7 @@ const strip = 'h-6 bg-[#111] bg-[repeating-linear-gradient(90deg,transparent_0_1
             <button type="button" data-open={index} class="group flex w-full items-stretch text-left text-[#2a1a10] drop-shadow-[0_8px_14px_rgba(0,0,0,0.45)] transition hover:-translate-y-1 hover:-rotate-1">
               <span class="relative flex flex-1 gap-4 rounded-l-xl p-3" style={`background: ${TINTS[k % TINTS.length]}`}>
                 <span class="block w-20 shrink-0 overflow-hidden rounded-md bg-black/20 shadow sm:w-24">
-                  {item.image && <img src={item.image} alt="" loading="lazy" decoding="async" class="aspect-[2/3] w-full object-cover" />}
+                  {coverOf(item) && <img src={coverOf(item)} alt="" loading="lazy" decoding="async" class="aspect-[2/3] w-full object-cover" />}
                 </span>
                 <span class="flex min-w-0 flex-col justify-center">
                   <span class="text-[10px] font-bold uppercase tracking-[0.3em] opacity-70">Admit one · {ui['int.cinema.ticket']}</span>
