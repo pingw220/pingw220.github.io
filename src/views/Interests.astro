@@ -3,6 +3,10 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import MusicSections from '../components/MusicSections.astro';
 import PostCard from '../components/PostCard.astro';
+import Guestbook from '../components/interests/Guestbook.astro';
+import Shelf from '../components/interests/Shelf.astro';
+import Travel from '../components/interests/Travel.astro';
+import Cover from '../components/interests/Cover.astro';
 import { LIBRARY, type LibraryShelf } from '../config/library';
 import { MUSIC_SECTIONS } from '../config/music';
 import { SITE } from '../config/site';
@@ -140,22 +144,157 @@ const data: PlaygroundData = {
   },
 };
 
+// The page view: one section per stall, in the same order as the market.
+const SECTIONS = STALLS.map((s) => ({ ...s, id: s.panel === 'messages' ? 'guestbook' : s.panel, label: ui[`stall.${s.panel}`], blurb: ui[`stall.${s.panel}.blurb`] }));
+const counts: Record<string, number> = {
+  music: MUSIC_SECTIONS.reduce((n, s) => n + s.performances.length, 0),
+  posts: posts.length,
+  ...Object.fromEntries(shelves.map((k) => [k, (LIBRARY[k] ?? []).length])),
+};
+// A few performances up front; the rest are on the Music page.
+const highlights = MUSIC_SECTIONS.flatMap((s) => s.performances.slice(0, 2).map((p) => ({ ...p, section: tr(s.title, lang) }))).slice(0, 6);
+
 const description =
   lang === 'zh'
-    ? '王平的夜市遊樂場：跟著秋田犬 Joy 逛逛郵局、音樂工作室、書房、圖書館、動畫劇場、影集客廳、電影院、旅行飛機與運動名人堂，最後在盡頭放煙火。'
-    : 'Ping Wang’s night-market playground: walk around with Joy the Akita and step into a post office, a music studio, a writing room, a library, an anime theater, a TV lounge, a cinema, an airplane full of travels, and a hall of sports GOATs, then set off fireworks at the end of the lane.';
+    ? '王平的興趣：音樂、文章、小說、動畫、影集、電影、旅行與運動。也可以切換成互動 3D 夜市，跟著秋田犬 Joy 逛逛郵局、音樂工作室、書房、圖書館、動畫劇場、影集客廳、電影院、旅行飛機與運動名人堂，最後在盡頭放煙火。'
+    : 'Ping Wang’s interests: music, writing, novels, anime, TV, movies, travel, and sports. Or switch to the interactive 3D night market and walk around with Joy the Akita, stepping into a post office, a music studio, a writing room, a library, an anime theater, a TV lounge, a cinema, an airplane full of travels, and a hall of sports GOATs, then set off fireworks at the end of the lane.';
 ---
 
 <BaseLayout title={ui['nav.playground']} {description}>
-  <!-- 3D playground -->
+  <!-- Page view (default): a regular page with every stall as a section -->
+  <div class="interests-static">
+    <header class="relative overflow-hidden border-b border-border">
+      <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(155,93,229,0.16),transparent_60%),radial-gradient(ellipse_at_bottom_left,rgba(255,183,3,0.12),transparent_55%)]" aria-hidden="true"></div>
+      <div class="relative mx-auto max-w-5xl px-5 pb-10 pt-14 sm:pt-16">
+        <div class="flex flex-wrap items-start justify-between gap-6">
+          <div class="max-w-2xl">
+            <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">{ui['int.title']}</h1>
+            <p class="mt-3 text-lg leading-relaxed text-muted">{ui['int.subtitle']}</p>
+          </div>
+          <div class="mode-switch inline-flex rounded-full border border-border bg-card p-1 text-sm shadow-sm" role="group" aria-label={ui['int.mode']}>
+            <button type="button" data-mode="static" aria-pressed="true" class="rounded-full px-4 py-1.5 font-medium transition aria-pressed:bg-foreground aria-pressed:text-background">📄 {ui['int.static']}</button>
+            <button type="button" data-mode="interactive" aria-pressed="false" class="rounded-full px-4 py-1.5 font-medium text-muted transition hover:text-foreground aria-pressed:bg-foreground aria-pressed:text-background">🏮 {ui['int.interactive']}</button>
+          </div>
+        </div>
+        <p class="mode-note mt-3 hidden text-sm text-muted" data-nogl={ui['pg.fallback']}></p>
+        <!-- At a glance: one tile per section -->
+        <ul class="mt-10 grid grid-cols-3 gap-3 sm:grid-cols-5 lg:grid-cols-9">
+          {
+            SECTIONS.map((sec) => (
+              <li>
+                <a href={`#${sec.id}`} class="group flex h-full flex-col items-center rounded-2xl border border-border bg-card/80 px-2 py-4 text-center backdrop-blur transition hover:-translate-y-0.5 hover:shadow-md" style={`--c: ${sec.color}`}>
+                  <span class="text-2xl transition group-hover:scale-110" aria-hidden="true">{sec.emoji}</span>
+                  <span class="mt-2 text-xs font-medium leading-tight">{sec.label}</span>
+                  {counts[sec.panel] !== undefined && <span class="mt-1 font-mono text-[11px] text-muted">{counts[sec.panel]}</span>}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </header>
+
+    <div class="mx-auto max-w-5xl px-5 pb-24">
+      {
+        SECTIONS.map((sec) => (
+          <section id={sec.id} class="scroll-mt-24 border-b border-border/60 py-14 last:border-b-0" aria-labelledby={`h-${sec.id}`}>
+            <div class="mb-8 flex items-center gap-4">
+              <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-2xl" style={`background: ${sec.color}22; box-shadow: inset 0 0 0 1px ${sec.color}55`} aria-hidden="true">
+                {sec.emoji}
+              </span>
+              <div>
+                <h2 id={`h-${sec.id}`} class="text-2xl font-bold tracking-tight">{sec.label}</h2>
+                <p class="text-sm text-muted">{sec.blurb}</p>
+              </div>
+            </div>
+
+            {sec.panel === 'messages' && (
+              <div class="max-w-2xl rounded-2xl border border-border bg-card p-5 sm:p-6">
+                <Guestbook />
+              </div>
+            )}
+
+            {sec.panel === 'music' && (
+              <>
+                <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                  {highlights.map((v) => (
+                    <li>
+                      <button type="button" data-item={`video:${v.id}`} class="group block w-full overflow-hidden rounded-xl border border-border bg-card text-left transition hover:-translate-y-0.5 hover:shadow-md">
+                        <span class="relative block aspect-video bg-black">
+                          <img src={`https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`} alt="" loading="lazy" class="h-full w-full object-cover opacity-90 transition group-hover:opacity-100" />
+                          <span class="absolute inset-0 flex items-center justify-center" aria-hidden="true">
+                            <span class="flex h-12 w-12 items-center justify-center rounded-full bg-black/60 text-white transition group-hover:scale-110">▶</span>
+                          </span>
+                        </span>
+                        <span class="block p-3">
+                          <span class="block text-sm font-semibold leading-snug group-hover:text-accent-violet">{tr(v.title, lang)}</span>
+                          <span class="mt-0.5 block text-xs text-muted">{v.section}</span>
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+                <a href={localizePath('/music', lang)} class="mt-6 inline-block text-sm font-medium text-accent-blue underline-offset-4 hover:underline">
+                  {ui['int.allMusic'].replace('{n}', String(counts.music))} →
+                </a>
+              </>
+            )}
+
+            {sec.panel === 'posts' &&
+              (posts.length ? (
+                <div class="space-y-4">{posts.map((post) => <PostCard {post} />)}</div>
+              ) : (
+                <p class="rounded-2xl border border-dashed border-border p-8 text-center text-sm text-muted">🌙 {ui['posts.empty']}</p>
+              ))}
+
+            {sec.panel === 'novels' && <Shelf items={LIBRARY.novels} prefix="book" shape="book" emoji="📖" />}
+            {sec.panel === 'anime' && <Shelf items={LIBRARY.anime} prefix="anime" emoji="🎞️" />}
+            {sec.panel === 'dramas' && <Shelf items={LIBRARY.dramas ?? []} prefix="drama" emoji="📺" />}
+            {sec.panel === 'movies' && <Shelf items={LIBRARY.movies ?? []} prefix="movie" emoji="🎬" />}
+            {sec.panel === 'travel' && <Travel items={LIBRARY.travel} />}
+
+            {sec.panel === 'sports' && (
+              <ul class="grid grid-cols-2 gap-5 sm:grid-cols-4">
+                {(LIBRARY.sports ?? []).map((item, index) => (
+                  <li>
+                    <button type="button" data-item={`athlete:${index}`} class="group block w-full text-left">
+                      <span class="relative block">
+                        <Cover {item} {index} shape="book" />
+                        <span class="pointer-events-none absolute inset-x-0 bottom-0 rounded-b-lg bg-gradient-to-t from-black/80 to-transparent px-3 pb-3 pt-10 text-white">
+                          <span class="block text-xs font-semibold uppercase tracking-widest text-[#ffd166]">🐐 GOAT</span>
+                          <span class="block text-lg font-bold leading-tight">{tr(item.title, lang)}</span>
+                          {item.subtitle && <span class="block text-xs text-white/80">{tr(item.subtitle, lang)}</span>}
+                        </span>
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        ))
+      }
+      <p class="mt-6 rounded-2xl border border-border bg-card p-5 text-center text-sm text-muted">
+        🏮 {ui['int.tryInteractive']}{' '}
+        <button type="button" data-mode="interactive" class="font-medium text-accent-violet underline-offset-4 hover:underline">{ui['int.interactive']} →</button>
+      </p>
+    </div>
+  </div>
+
+  <!-- Interactive mode: the 3D night market -->
   <section
-    class="market relative h-[calc(100svh-61px)] min-h-[520px] overflow-hidden bg-[#0b0d2e] text-[#fdf4e3]"
+    class="market relative hidden h-[calc(100svh-61px)] min-h-[520px] overflow-hidden bg-[#0b0d2e] text-[#fdf4e3]"
     data-market
     data-playground={JSON.stringify(data)}
     data-panels={JSON.stringify(Object.fromEntries(STALLS.map((s) => [s.world, s.panel])))}
     aria-label={ui['pg.title']}
   >
     <div class="market-host absolute inset-0 outline-none" tabindex="0" aria-label={ui['pg.helpKeys']}></div>
+
+    <div class="mode-switch absolute right-3 top-3 z-10 inline-flex rounded-full border border-white/15 bg-[#0b0d2e]/70 p-1 text-sm backdrop-blur sm:right-5 sm:top-5" role="group" aria-label={ui['int.mode']}>
+      <button type="button" data-mode="static" aria-pressed="false" class="rounded-full px-3.5 py-1.5 text-[#fdf4e3]/80 transition hover:text-white aria-pressed:bg-[#fff3dc] aria-pressed:text-[#4a2c1a]">📄 {ui['int.static']}</button>
+      <button type="button" data-mode="interactive" aria-pressed="true" class="rounded-full px-3.5 py-1.5 text-[#fdf4e3]/80 transition hover:text-white aria-pressed:bg-[#fff3dc] aria-pressed:text-[#4a2c1a]">🏮 {ui['int.interactive']}</button>
+    </div>
 
     <p class="market-loading pointer-events-none absolute inset-0 flex items-center justify-center text-sm tracking-wide text-[#fdf4e3]/80">
       {ui['pg.loading']}
@@ -212,35 +351,6 @@ const description =
     </nav>
   </section>
 
-  <!-- List of stalls when 3D isn't available (or reduced motion is preferred) -->
-  <section class="market-fallback mx-auto hidden max-w-4xl px-5 py-14" aria-label={ui['pg.stalls']}>
-    <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">🏮 {ui['pg.title']}</h1>
-    <p class="mt-3 text-muted">{ui['pg.subtitle']}</p>
-    <p class="market-fallback-reason mt-4 rounded-lg border border-border bg-card/60 p-4 text-sm text-muted" data-nogl={ui['pg.fallback']} data-reduced={ui['pg.reducedMotion']}></p>
-    <button type="button" class="market-show3d mt-3 hidden text-sm text-accent-blue underline underline-offset-4 hover:text-foreground">
-      {ui['pg.show3d']}
-    </button>
-    <ul class="mt-8 grid gap-4 sm:grid-cols-2">
-      {
-        stalls.map((s) => (
-          <li>
-            <button
-              type="button"
-              data-panel-open={s.panel}
-              class="card-hover flex w-full items-start gap-4 rounded-xl border border-border bg-card p-5 text-left"
-              style={`border-left: 4px solid ${s.color}`}
-            >
-              <span class="text-3xl" aria-hidden="true">{s.emoji}</span>
-              <span>
-                <span class="block font-semibold text-foreground">{s.label}</span>
-                <span class="mt-1 block text-sm text-muted">{s.blurb}</span>
-              </span>
-            </button>
-          </li>
-        ))
-      }
-    </ul>
-  </section>
 
   <!-- Overlays: a backdrop, the per-stall list panels, and a card for single items -->
   <div class="market-backdrop fixed inset-0 z-[60] hidden bg-black/40 backdrop-blur-[2px]"></div>
@@ -275,28 +385,7 @@ const description =
           )}
           {s.panel === 'messages' && (
             <>
-              <form class="msg-form space-y-3">
-                <label class="block text-sm">
-                  <span class="text-muted">{ui['pg.msg.name']}</span>
-                  <input name="name" maxlength="40" autocomplete="nickname" class="mt-1 w-full rounded-lg border border-border bg-card px-3 py-2 text-foreground" />
-                </label>
-                <label class="block text-sm">
-                  <span class="text-muted">{ui['pg.msg.message']}</span>
-                  <textarea name="message" required maxlength="800" rows="5" class="mt-1 w-full rounded-lg border border-border bg-card px-3 py-2 text-foreground"></textarea>
-                </label>
-                {/* Honeypot: hidden from people, tempting to bots. */}
-                <input name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
-                <fieldset class="space-y-1.5 text-sm">
-                  <label class="flex items-center gap-2"><input type="radio" name="visibility" value="private" checked /> 🔒 {ui['pg.msg.private']}</label>
-                  <label class="flex items-center gap-2"><input type="radio" name="visibility" value="public" /> 📌 {ui['pg.msg.public']}</label>
-                </fieldset>
-                <div class="flex items-center gap-3">
-                  <button type="submit" class="rounded-full bg-accent-violet px-5 py-2 text-sm font-semibold text-background transition hover:brightness-110">💌 {ui['pg.msg.send']}</button>
-                  <p class="msg-status text-sm text-muted" role="status"></p>
-                </div>
-              </form>
-              <h3 class="mt-10 text-lg font-semibold">{ui['pg.msg.publicList']}</h3>
-              <ul class="msg-list mt-3 space-y-3"></ul>
+              <Guestbook />
             </>
           )}
           {s.panel === 'posts' &&
@@ -398,9 +487,8 @@ const description =
   const help = root.querySelector<HTMLElement>('.market-help')!;
   const marketBar = root.querySelector<HTMLElement>('.market-bar')!;
   const worldBar = root.querySelector<HTMLElement>('.world-bar')!;
-  const fallback = document.querySelector<HTMLElement>('.market-fallback')!;
-  const fallbackReason = fallback.querySelector<HTMLElement>('.market-fallback-reason')!;
-  const show3d = fallback.querySelector<HTMLButtonElement>('.market-show3d')!;
+  const staticView = document.querySelector<HTMLElement>('.interests-static')!;
+  const modeNote = document.querySelector<HTMLElement>('.mode-note')!;
   const backdrop = document.querySelector<HTMLElement>('.market-backdrop')!;
   const itemCard = document.querySelector<HTMLElement>('.item-card')!;
   const data: PlaygroundData = JSON.parse(root.dataset.playground ?? '{}');
@@ -437,9 +525,11 @@ const description =
     open.querySelectorAll('iframe').forEach((f) => f.remove()); // stop any playing video
     backdrop.classList.add('hidden');
     open = null;
-    engine?.setPaused(false);
-    if (engine && !touch) lookHint.classList.remove('hidden');
-    if (restoreFocus) (lastFocus && document.contains(lastFocus) ? lastFocus : host).focus();
+    if (mode === 'interactive') {
+      engine?.setPaused(false);
+      if (engine && !touch) lookHint.classList.remove('hidden');
+    }
+    if (restoreFocus) (lastFocus && document.contains(lastFocus) ? lastFocus : mode === 'interactive' ? host : document.body).focus({ preventScroll: true });
   }
   const openPanel = (panel: string) => {
     const el = document.querySelector<HTMLElement>(`.market-panel[data-panel="${panel}"]`);
@@ -569,7 +659,7 @@ const description =
     titleEl.textContent = inMarket ? `🏮 ${S.title}` : `${stall?.emoji ?? ''} ${S[`world.${world}`]}`;
     subtitleEl.textContent = inMarket ? S.subtitle : S[`world.${world}.hint`];
     help.textContent = inMarket ? (touch ? S.helpTouch : S.helpKeys) : touch ? S.helpTouchWorld : S.helpKeysWorld;
-    const hash = inMarket ? '' : `#${world}`;
+    const hash = inMarket ? '#play' : `#play-${world}`;
     if (location.hash !== hash) history.replaceState(null, '', `${location.pathname}${location.search}${hash}`);
   }
 
@@ -615,9 +705,17 @@ const description =
     host.focus();
   });
   worldBar.querySelector('.world-list')!.addEventListener('click', () => openPanel(panelFor[current]));
+  /** `#play` is the market, `#play-library` a world; anything else is the page view. */
+  const worldFromHash = (): WorldId | null => {
+    const m = location.hash.match(/^#play(?:-([a-z]+))?$/);
+    if (!m) return null;
+    const w = (m[1] ?? 'market') as WorldId;
+    return WORLDS.includes(w) ? w : 'market';
+  };
   window.addEventListener('hashchange', () => {
-    const w = location.hash.slice(1) as WorldId;
-    if (engine && WORLDS.includes(w) && w !== current) {
+    const w = worldFromHash();
+    if (w && mode !== 'interactive') setMode('interactive');
+    if (w && engine && w !== current) {
       if (w !== 'market') lastStall = w;
       engine.enter(w);
     }
@@ -626,12 +724,14 @@ const description =
   // ── Guestbook ───────────────────────────────────────────────────────────
   type Message = { id: number; name: string; message: string; date: string };
   let messages: Message[] = [];
-  const msgList = document.querySelector<HTMLElement>('.msg-list');
+  const msgLists = [...document.querySelectorAll<HTMLElement>('.msg-list')];
   const api = (data.messagesApi || '').replace(/\/$/, '');
   function renderMessages() {
     (window as { playgroundMessages?: Message[] }).playgroundMessages = messages;
     window.dispatchEvent(new CustomEvent('playground:messages', { detail: messages }));
-    if (!msgList) return;
+    for (const list of msgLists) fillMessages(list);
+  }
+  function fillMessages(msgList: HTMLElement) {
     if (!messages.length) {
       const li = document.createElement('li');
       li.className = 'rounded-xl border border-dashed border-border p-4 text-sm text-muted';
@@ -665,7 +765,7 @@ const description =
     } catch {}
     renderMessages();
   }
-  document.querySelector<HTMLFormElement>('.msg-form')?.addEventListener('submit', async (e) => {
+  document.querySelectorAll<HTMLFormElement>('.msg-form').forEach((f) => f.addEventListener('submit', async (e) => {
     e.preventDefault();
     const form = e.currentTarget as HTMLFormElement;
     const status = form.querySelector<HTMLElement>('.msg-status')!;
@@ -689,8 +789,21 @@ const description =
       status.textContent = S.msgError;
     }
     button.disabled = false;
-  });
+  }));
   loadMessages();
+
+  // ── Page view: every cover, poster, pin, and video opens the same detail card ──
+  const openFrom = (el: Element | null) => {
+    const target = el?.closest<HTMLElement>('[data-item]');
+    if (!target || !staticView.contains(target)) return false;
+    openItem({ id: target.dataset.item! } as Interactable);
+    return true;
+  };
+  staticView.addEventListener('click', (e) => openFrom(e.target as Element));
+  staticView.addEventListener('keydown', (e) => {
+    const el = e.target as HTMLElement;
+    if ((e.key === 'Enter' || e.key === ' ') && el.matches('[data-item]:not(button)') && openFrom(el)) e.preventDefault();
+  });
 
   // ── Start ───────────────────────────────────────────────────────────────
   function hasWebGL() {
@@ -701,15 +814,10 @@ const description =
       return false;
     }
   }
-  function showFallback(reason: 'nogl' | 'reduced') {
-    root.classList.add('hidden');
-    fallback.classList.remove('hidden');
-    fallbackReason.textContent = (reason === 'nogl' ? fallbackReason.dataset.nogl : fallbackReason.dataset.reduced) ?? '';
-    show3d.classList.toggle('hidden', reason !== 'reduced');
-  }
+  let starting = false;
   async function start3d() {
-    root.classList.remove('hidden');
-    fallback.classList.add('hidden');
+    if (engine || starting) return;
+    starting = true;
     try {
       const [{ startEngine }, { marketWorld }, { studioWorld }, { writingWorld }, { libraryWorld }, { theaterWorld }, { dramasWorld, moviesWorld }, { flightWorld }, { sportsWorld }, { postOfficeWorld }] =
         await Promise.all([
@@ -724,8 +832,7 @@ const description =
           import('../scripts/playground/worlds/sports'),
           import('../scripts/playground/worlds/postoffice'),
         ]);
-      const fromHash = location.hash.slice(1) as WorldId;
-      const first = WORLDS.includes(fromHash) ? fromHash : 'market';
+      const first = worldFromHash() ?? 'market';
       if (first !== 'market') lastStall = first;
       engine = startEngine(
         host,
@@ -760,14 +867,61 @@ const description =
         greeting.classList.remove('hidden');
         setTimeout(() => greeting.classList.add('hidden'), 5000);
       }
+      if (mode !== 'interactive') engine.setPaused(true);
     } catch (err) {
       console.error(err);
-      showFallback('nogl');
+      modeNote.textContent = modeNote.dataset.nogl ?? '';
+      modeNote.classList.remove('hidden');
+      setMode('static');
+    }
+    starting = false;
+  }
+
+  // ── Mode: the page view (default) or the interactive 3D market ─────────────
+  type Mode = 'static' | 'interactive';
+  const MODE_KEY = 'interests-mode';
+  let mode: Mode = 'static';
+  function setMode(next: Mode, remember = false) {
+    if (next === 'interactive' && !hasWebGL()) {
+      modeNote.textContent = modeNote.dataset.nogl ?? '';
+      modeNote.classList.remove('hidden');
+      next = 'static';
+    }
+    mode = next;
+    if (remember) {
+      try {
+        localStorage.setItem(MODE_KEY, next);
+      } catch {}
+    }
+    const interactive = next === 'interactive';
+    if (open) hide(false);
+    staticView.classList.toggle('hidden', interactive);
+    root.classList.toggle('hidden', !interactive);
+    document.querySelectorAll<HTMLButtonElement>('.mode-switch [data-mode]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === next)));
+    if (interactive) {
+      window.scrollTo({ top: 0 });
+      if (!location.hash.startsWith('#play')) history.replaceState(null, '', `${location.pathname}${location.search}#play`);
+      if (engine) {
+        engine.setPaused(false);
+        onWorldChange(current);
+        window.dispatchEvent(new Event('resize')); // the view was hidden; resize to fit
+        host.focus({ preventScroll: true });
+        if (!touch) lookHint.classList.remove('hidden');
+      } else start3d();
+    } else {
+      engine?.setPaused(true);
+      engine?.releaseLook();
+      lookHint.classList.add('hidden');
+      crosshair.classList.add('hidden');
+      prompt.classList.add('hidden');
+      if (location.hash.startsWith('#play')) history.replaceState(null, '', `${location.pathname}${location.search}`);
     }
   }
-  show3d.addEventListener('click', start3d);
+  document.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((b) => b.addEventListener('click', () => setMode(b.dataset.mode as Mode, true)));
 
-  if (!hasWebGL()) showFallback('nogl');
-  else if (matchMedia('(prefers-reduced-motion: reduce)').matches) showFallback('reduced');
-  else start3d();
+  let saved: string | null = null;
+  try {
+    saved = localStorage.getItem(MODE_KEY);
+  } catch {}
+  setMode(worldFromHash() || saved === 'interactive' ? 'interactive' : 'static');
 </script>

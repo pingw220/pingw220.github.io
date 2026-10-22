@@ -1,5 +1,20 @@
 ---
-import Playground from '../../views/Playground.astro';
+// The Playground moved to Interests. Old links (and their #world hashes) land on the 3D view.
+const target = '/zh/interests/';
 ---
 
-<Playground />
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <link rel="canonical" href={target} />
+    <script is:inline define:vars={{ target }}>
+      const h = location.hash.slice(1);
+      location.replace(target + (h ? '#play-' + h : ''));
+    </script>
+    <title>Interests</title>
+  </head>
+  <body><a href={target}>Interests</a></body>
+</html>

@@ -81,10 +81,18 @@ YouTube and embed the link instead.
 The admin configuration is `public/admin/config.yml`; the embeds are handled by
 `src/lib/rehype-media.mjs`.
 
-## Playground (/playground)
+## Interests (/interests)
 
-A small 3D night market (three.js) where visitors walk around with Joy, a little Akita. Each stall
-leads into its own world (also linkable directly, e.g. `/playground#library`):
+The Interests page has two views, switched with the **Page / Interactive 3D** toggle at the top
+(the choice is remembered per browser; `/playground` links redirect here):
+
+- **Page** (default): a regular page with one section per topic: the guestbook, music highlights,
+  posts, the ranked novel/anime/drama/movie shelves, a travel map with boarding-pass cards by time
+  zone, and the sports GOATs. Every item opens the same detail card as in 3D. Code:
+  `src/components/interests/` (`Shelf`, `Cover`, `Travel`, `Guestbook`).
+- **Interactive 3D**: a small night market (three.js) where visitors walk around with Joy, a little
+  Akita. It only loads when chosen. Each stall leads into its own world (linkable directly, e.g.
+  `/interests#play-library`):
 
 | Stall | World | What's inside |
 | --- | --- | --- |
@@ -120,7 +128,7 @@ choose **Public** (pinned on the board and listed under the form) or **Private**
 Read and delete everything at **/admin/inbox.html** with your admin key (the Worker's `ADMIN_KEY`
 secret). See `visitor-api/README.md`.
 
-**Code.** `src/views/Playground.astro` (page, panels, item cards, message form) and
+**Code.** `src/views/Interests.astro` (page, panels, item cards, message form) and
 `src/scripts/playground/`: `engine.ts` (movement, mouse-look camera, aiming, transitions),
 `worlds/*.ts` (one file per world; `gallery.ts` is the shared poster room behind the anime,
 drama, and movie worlds), `stall.ts`, `mascot.ts` (Joy), `fireworks.ts`, and

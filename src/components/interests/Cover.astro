@@ -1,0 +1,64 @@
+---
+/**
+ * A cover for a book, poster, or photo: the image when there is one, otherwise a drawn
+ * cover (a color from the palette, the title set vertically for Chinese).
+ */
+import type { LibraryItem } from '../../config/library';
+import { getLang, tr } from '../../i18n';
+
+interface Props {
+  item: LibraryItem;
+  index: number;
+  /** 'book' 2:3, 'poster' ~0.7, 'photo' 4:3. */
+  shape?: 'book' | 'poster' | 'photo';
+  rank?: number;
+  size?: 'lg' | 'sm';
+}
+
+const { item, index, shape = 'poster', rank, size = 'sm' } = Astro.props;
+const lang = getLang(Astro.url);
+const title = tr(item.title, lang);
+const cjk = /[㐀-鿿]/.test(title);
+const PALETTE = [
+  ['#8c2f39', '#f4d58d'],
+  ['#2f5d8a', '#ffd8a8'],
+  ['#3f7a5a', '#fff3c4'],
+  ['#7b4fa0', '#ffd6e8'],
+  ['#b5651d', '#fff1dc'],
+  ['#1f6f78', '#d8f3dc'],
+  ['#a23b72', '#ffe5ec'],
+  ['#5c3c92', '#e9d8fd'],
+];
+const [bg, fg] = PALETTE[index % PALETTE.length];
+const aspect = shape === 'book' ? 'aspect-[2/3]' : shape === 'photo' ? 'aspect-[4/3]' : 'aspect-[5/7]';
+const medal = rank === 1 ? 'bg-[#ffd166] text-[#3a2410]' : rank === 2 ? 'bg-[#e5e7eb] text-[#1f2937]' : rank === 3 ? 'bg-[#e09f5a] text-[#2a1606]' : 'bg-accent-violet text-background';
+---
+
+<div class:list={['relative overflow-hidden rounded-lg shadow-sm ring-1 ring-black/5 transition duration-300 group-hover:-translate-y-1 group-hover:shadow-lg', aspect]}>
+  {
+    item.image ? (
+      <img src={item.image} alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="h-full w-full object-cover" />
+    ) : (
+      <div class="flex h-full w-full items-center justify-center p-3" style={`background: linear-gradient(160deg, ${bg}, #12102a); color: ${fg}`}>
+        <span class="absolute inset-y-0 left-0 w-2 bg-black/25" aria-hidden="true" />
+        <span class="absolute inset-2 rounded border border-current opacity-40" aria-hidden="true" />
+        <span
+          class:list={['relative text-center font-bold leading-snug', size === 'lg' ? 'text-xl' : 'text-sm']}
+          style={cjk ? 'writing-mode: vertical-rl; letter-spacing: 0.15em' : undefined}
+        >
+          {title}
+        </span>
+      </div>
+    )
+  }
+  {
+    rank && (
+      <span
+        class:list={['absolute left-2 top-2 flex items-center justify-center rounded-full font-black shadow-md ring-2 ring-white/70', medal, size === 'lg' ? 'h-10 w-10 text-lg' : 'h-7 w-7 text-xs']}
+        aria-label={`#${rank}`}
+      >
+        {rank}
+      </span>
+    )
+  }
+</div>

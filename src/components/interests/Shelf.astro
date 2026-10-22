@@ -1,0 +1,77 @@
+---
+/**
+ * One shelf of the Interests page: the ranked all-time favorites in a row of big covers,
+ * then every category as its own small group. Each item opens the detail card.
+ */
+import Cover from './Cover.astro';
+import type { LibraryItem } from '../../config/library';
+import { getLang, t, tr } from '../../i18n';
+
+interface Props {
+  items: LibraryItem[];
+  /** Item ids are `${prefix}:<index>`, the same as in the 3D worlds. */
+  prefix: string;
+  shape?: 'book' | 'poster';
+  emoji: string;
+}
+
+const { items, prefix, shape = 'poster', emoji } = Astro.props;
+const lang = getLang(Astro.url);
+const ui = t(lang);
+const indexed = items.map((item, index) => ({ item, index }));
+const ranked = indexed.filter(({ item }) => item.rank).sort((a, b) => a.item.rank! - b.item.rank!);
+const groups: { title: string; list: typeof indexed }[] = [];
+for (const entry of indexed) {
+  if (entry.item.rank) continue;
+  const title = entry.item.category ? tr(entry.item.category, lang) : '';
+  let g = groups.find((x) => x.title === title);
+  if (!g) groups.push((g = { title, list: [] }));
+  g.list.push(entry);
+}
+---
+
+{
+  ranked.length > 0 && (
+    <div class="rounded-2xl border border-[#ffd166]/50 bg-gradient-to-b from-[#ffd166]/15 to-transparent p-4 sm:p-6">
+      <h4 class="mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-[#b7791f] dark:text-[#ffd166]">
+        🏆 {ui['pg.allTimeTop'].replace('{n}', String(ranked.length))}
+      </h4>
+      <ol class:list={['grid gap-4', ranked.length >= 6 ? 'grid-cols-3 sm:grid-cols-6' : 'grid-cols-3 sm:grid-cols-5']}>
+        {ranked.map(({ item, index }) => (
+          <li>
+            <button type="button" data-item={`${prefix}:${index}`} class="group block w-full text-left">
+              <Cover {item} {index} {shape} rank={item.rank} size="lg" />
+              <span class="mt-2 block text-sm font-semibold leading-snug group-hover:text-accent-violet">{tr(item.title, lang)}</span>
+              {item.subtitle && <span class="block text-xs text-muted">{tr(item.subtitle, lang)}</span>}
+            </button>
+          </li>
+        ))}
+      </ol>
+    </div>
+  )
+}
+
+{
+  groups.map((g) => (
+    <div class="mt-8">
+      {g.title && (
+        <h4 class="mb-3 flex items-baseline gap-2 text-base font-semibold">
+          {g.title}
+          <span class="text-sm font-normal text-muted">
+            {g.list.length} {emoji}
+          </span>
+        </h4>
+      )}
+      <ul class="grid grid-cols-3 gap-x-3 gap-y-5 sm:grid-cols-5 lg:grid-cols-7">
+        {g.list.map(({ item, index }) => (
+          <li>
+            <button type="button" data-item={`${prefix}:${index}`} class="group block w-full text-left">
+              <Cover {item} {index} {shape} />
+              <span class="mt-1.5 line-clamp-2 block text-xs font-medium leading-snug group-hover:text-accent-violet">{tr(item.title, lang)}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ))
+}

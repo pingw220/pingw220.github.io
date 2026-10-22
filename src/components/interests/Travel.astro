@@ -1,0 +1,110 @@
+---
+/**
+ * Travel on the Interests page: a world map with a pin per place (houses for home), and
+ * boarding-pass cards grouped by time zone. Each opens the detail card.
+ */
+import { feature } from 'topojson-client';
+import type { GeometryCollection, Topology } from 'topojson-specification';
+import landTopo from 'world-atlas/land-110m.json';
+import type { LibraryItem } from '../../config/library';
+import { getLang, t, tr } from '../../i18n';
+
+interface Props {
+  items: LibraryItem[];
+}
+
+const { items } = Astro.props;
+const lang = getLang(Astro.url);
+const ui = t(lang);
+
+// Equirectangular land outline, cropped to 80°N–58°S.
+const TOP = 10;
+const HEIGHT = 138;
+const topo = landTopo as unknown as Topology<{ land: GeometryCollection }>;
+const land = feature(topo, topo.objects.land) as unknown as { features: { geometry: { type: string; coordinates: number[][][] | number[][][][] } }[] };
+const pt = ([lon, lat]: number[]) => `${(lon + 180).toFixed(1)} ${(90 - lat - TOP).toFixed(1)}`;
+const d = land.features
+  .flatMap((f) => (f.geometry.type === 'Polygon' ? [f.geometry.coordinates as number[][][]] : (f.geometry.coordinates as number[][][][])))
+  .flatMap((poly) =>
+    poly.map((ring) =>
+      ring
+        // Lift the pen where a ring wraps around the 180° meridian, so it doesn't streak across the map.
+        .map((p, i) => (i === 0 || Math.abs(p[0] - ring[i - 1][0]) > 180 ? 'M' : 'L') + pt(p))
+        .join(''),
+    ),
+  )
+  .join('');
+
+const places = items.map((item, index) => ({ item, index, tz: tr(item.subtitle ?? '', 'en').match(/UTC([+−-]\d+)/)?.[0] ?? '' }));
+const zones: { tz: string; list: typeof places }[] = [];
+for (const p of places) {
+  let z = zones.find((x) => x.tz === p.tz);
+  if (!z) zones.push((z = { tz: p.tz, list: [] }));
+  z.list.push(p);
+}
+const place = (item: LibraryItem) => tr(item.subtitle ?? '', lang).split(' · ').filter((s) => !s.startsWith('UTC'));
+---
+
+<figure class="overflow-hidden rounded-2xl border border-border bg-[#dff0f7] dark:bg-[#132036]">
+  <svg viewBox={`0 0 360 ${HEIGHT}`} class="block h-auto w-full" role="img" aria-label={ui['int.mapLabel']}>
+    <g stroke="currentColor" class="text-white/50 dark:text-white/10" stroke-width="0.15">
+      {[-60, -30, 0, 30, 60].map((lat) => <line x1="0" x2="360" y1={90 - lat - TOP} y2={90 - lat - TOP} />)}
+      {[-120, -60, 0, 60, 120].map((lon) => <line y1="0" y2={HEIGHT} x1={lon + 180} x2={lon + 180} />)}
+    </g>
+    <path d={d} class="fill-[#b9dcaa] stroke-[#8fbf7f] dark:fill-[#2c4a45] dark:stroke-[#3f6b5f]" stroke-width="0.25" stroke-linejoin="round" />
+    {
+      places.map(({ item, index }) => {
+        const x = (item.lon ?? 0) + 180;
+        const y = 90 - (item.lat ?? 0) - TOP;
+        return (
+          <g data-item={`place:${index}`} tabindex="0" role="button" aria-label={tr(item.title, lang)} class="map-pin cursor-pointer outline-none">
+            <title>{tr(item.title, lang)}</title>
+            <circle cx={x} cy={y} r="3.2" fill="transparent" />
+            {item.home ? (
+              <path d={`M${x - 1.6} ${y + 1.2}V${y - 0.3}L${x} ${y - 1.8}L${x + 1.6} ${y - 0.3}V${y + 1.2}Z`} fill="#2a9d8f" stroke="white" stroke-width="0.35" />
+            ) : (
+              <circle cx={x} cy={y} r="1.15" fill="#e63946" stroke="white" stroke-width="0.35" />
+            )}
+          </g>
+        );
+      })
+    }
+  </svg>
+  <figcaption class="flex flex-wrap gap-x-5 gap-y-1 border-t border-border bg-card/80 px-4 py-2 text-xs text-muted">
+    <span><span class="mr-1 inline-block h-2.5 w-2.5 rounded-sm bg-[#2a9d8f] align-middle" /> {ui['int.home']}</span>
+    <span><span class="mr-1 inline-block h-2.5 w-2.5 rounded-full bg-[#e63946] align-middle" /> {ui['int.visited']} · {places.length}</span>
+  </figcaption>
+</figure>
+
+<h4 class="mb-1 mt-10 text-base font-semibold">🕰️ {ui['int.byTimezone']}</h4>
+<p class="mb-5 text-sm text-muted">{ui['int.byTimezoneHint']}</p>
+<ol class="space-y-6">
+  {
+    zones.map((z) => (
+      <li class="grid gap-3 sm:grid-cols-[5.5rem_1fr]">
+        <div class="font-mono text-sm font-semibold text-accent-blue sm:pt-2">{z.tz}</div>
+        <ul class="flex gap-3 overflow-x-auto pb-2 [scrollbar-width:thin]">
+          {z.list.map(({ item, index }) => (
+            <li class="w-44 shrink-0">
+              <button type="button" data-item={`place:${index}`} class="group block w-full overflow-hidden rounded-xl border border-border bg-card text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+                <div class="relative aspect-[4/3] bg-muted/20">
+                  {item.image && <img src={item.image} alt="" loading="lazy" decoding="async" class="h-full w-full object-cover" />}
+                  {item.home && <span class="absolute right-2 top-2 rounded-full bg-[#2a9d8f] px-2 py-0.5 text-[10px] font-bold text-white">🏠 {ui['int.home']}</span>}
+                </div>
+                <div class="relative border-t border-dashed border-border px-3 py-2">
+                  <span class="absolute -left-1.5 -top-1.5 h-3 w-3 rounded-full bg-background" aria-hidden="true" />
+                  <span class="absolute -right-1.5 -top-1.5 h-3 w-3 rounded-full bg-background" aria-hidden="true" />
+                  <span class="block truncate text-sm font-semibold group-hover:text-accent-violet">{tr(item.title, lang)}</span>
+                  <span class="flex items-center justify-between gap-2 text-[11px] text-muted">
+                    <span class="truncate">{place(item).join(' · ')}</span>
+                    <span aria-hidden="true">✈</span>
+                  </span>
+                </div>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </li>
+    ))
+  }
+</ol>

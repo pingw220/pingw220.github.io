@@ -46,5 +46,5 @@ export const NAV_LINKS = [
   { href: '/about', key: 'nav.about' },
   { href: '/research', key: 'nav.research' },
   // Posts and Music live inside the Playground (their pages still exist at /posts and /music).
-  { href: '/playground', key: 'nav.playground' },
+  { href: '/interests', key: 'nav.playground' },
 ] as const;

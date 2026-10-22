@@ -1,0 +1,29 @@
+---
+/** The guestbook form and the list of public messages (filled in by the page script). */
+import { getLang, t } from '../../i18n';
+
+const ui = t(getLang(Astro.url));
+---
+
+<form class="msg-form space-y-3">
+  <label class="block text-sm">
+    <span class="text-muted">{ui['pg.msg.name']}</span>
+    <input name="name" maxlength="40" autocomplete="nickname" class="mt-1 w-full rounded-lg border border-border bg-card px-3 py-2 text-foreground" />
+  </label>
+  <label class="block text-sm">
+    <span class="text-muted">{ui['pg.msg.message']}</span>
+    <textarea name="message" required maxlength="800" rows="5" class="mt-1 w-full rounded-lg border border-border bg-card px-3 py-2 text-foreground"></textarea>
+  </label>
+  {/* Honeypot: hidden from people, tempting to bots. */}
+  <input name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+  <fieldset class="space-y-1.5 text-sm">
+    <label class="flex items-center gap-2"><input type="radio" name="visibility" value="private" checked /> 🔒 {ui['pg.msg.private']}</label>
+    <label class="flex items-center gap-2"><input type="radio" name="visibility" value="public" /> 📌 {ui['pg.msg.public']}</label>
+  </fieldset>
+  <div class="flex items-center gap-3">
+    <button type="submit" class="rounded-full bg-accent-violet px-5 py-2 text-sm font-semibold text-background transition hover:brightness-110">💌 {ui['pg.msg.send']}</button>
+    <p class="msg-status text-sm text-muted" role="status"></p>
+  </div>
+</form>
+<h3 class="mt-10 text-lg font-semibold">{ui['pg.msg.publicList']}</h3>
+<ul class="msg-list mt-3 space-y-3"></ul>
