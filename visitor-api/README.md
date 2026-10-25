@@ -55,17 +55,21 @@ Visitors can leave a message from the Playground's post office, marked **public*
 | Endpoint | Who | What |
 | --- | --- | --- |
 | `POST /messages` | anyone (from the site) | `{ name, message, public }`; name ≤ 40 chars, message ≤ 800, at most 5 per visitor per day |
-| `GET /messages` | anyone | the latest 50 **public** messages |
+| `GET /messages` | anyone | the latest 50 **public**, not hidden messages |
 | `GET /inbox` | `Authorization: Bearer <ADMIN_KEY>` | every message, public and private |
-| `DELETE /messages/:id` | `Authorization: Bearer <ADMIN_KEY>` | removes a message |
+| `PATCH /messages/:id` | `Authorization: Bearer <ADMIN_KEY>` | `{ hidden: true/false }` hides a message from the board (or shows it again) |
+| `DELETE /messages/:id` | `Authorization: Bearer <ADMIN_KEY>` | removes a message for good |
 
 Read them at `https://pingw220.github.io/admin/inbox.html` (enter the admin key once; it's
 remembered in that browser). Only a salted daily hash of the sender is kept, for the rate limit.
+After 10 wrong admin keys in a day, a visitor is locked out of the admin endpoints until the next
+UTC day. To change the key: `npx wrangler secret put ADMIN_KEY`.
 
 Databases created before messages existed need a one-time migration:
 
 ```sh
 npx wrangler d1 execute visitor-map --remote --file=migrations-0002-messages.sql
+npx wrangler d1 execute visitor-map --remote --file=migrations-0003-hide-and-lockout.sql
 ```
 
 ## Checking it

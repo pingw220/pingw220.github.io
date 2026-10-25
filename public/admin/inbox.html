@@ -110,6 +110,17 @@
       .badge.private {
         color: var(--accent);
       }
+      .badge.hidden {
+        color: var(--muted);
+        border-style: dashed;
+      }
+      .msg.is-hidden {
+        opacity: 0.6;
+      }
+      .actions {
+        display: flex;
+        gap: 0.4rem;
+      }
       .body {
         white-space: pre-wrap;
         margin: 0.5rem 0 0.25rem;
@@ -129,7 +140,7 @@
   <body>
     <main>
       <h1>📮 Inbox</h1>
-      <p class="muted">Messages left at the Playground’s post office. Private messages are only shown here.</p>
+      <p class="muted">Messages left at the post office. Private messages are only shown here. <b>Hide</b> takes a public message off the board but keeps it here; <b>Delete</b> removes it for good.</p>
       <form id="key-form">
         <input id="key" type="password" autocomplete="off" placeholder="Admin key" aria-label="Admin key" />
         <button type="submit">Open inbox</button>
@@ -164,6 +175,7 @@
         const res = await fetch(`${API}/inbox`, { headers: { Authorization: `Bearer ${key}` } }).catch(() => null);
         if (!res) return status('Could not reach the server.');
         if (res.status === 401) return status('That key was not accepted.');
+        if (res.status === 429) return status('Too many wrong keys today. Try again tomorrow.');
         const { messages } = await res.json();
         status(messages.length ? `${messages.length} message${messages.length === 1 ? '' : 's'}` : 'No messages yet.');
         for (const m of messages) {
@@ -181,6 +193,27 @@
           const when = document.createElement('span');
           when.textContent = new Date(m.date).toLocaleString();
           meta.append(who, badge, when);
+          const hiddenBadge = document.createElement('span');
+          hiddenBadge.className = 'badge hidden';
+          hiddenBadge.textContent = 'Hidden';
+          const setHidden = (h) => {
+            m.hidden = h ? 1 : 0;
+            card.classList.toggle('is-hidden', h);
+            hiddenBadge.hidden = !h;
+            hide.textContent = h ? 'Unhide' : 'Hide';
+          };
+          meta.append(hiddenBadge);
+          const hide = document.createElement('button');
+          hide.className = 'ghost';
+          hide.addEventListener('click', async () => {
+            const next = !m.hidden;
+            const r = await fetch(`${API}/messages/${m.id}`, {
+              method: 'PATCH',
+              headers: { Authorization: `Bearer ${getKey()}`, 'Content-Type': 'application/json' },
+              body: JSON.stringify({ hidden: next }),
+            });
+            if (r.ok) setHidden(next);
+          });
           const del = document.createElement('button');
           del.className = 'danger';
           del.textContent = 'Delete';
@@ -189,7 +222,11 @@
             const r = await fetch(`${API}/messages/${m.id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${getKey()}` } });
             if (r.ok) card.remove();
           });
-          row.append(meta, del);
+          const actions = document.createElement('div');
+          actions.className = 'actions';
+          actions.append(hide, del);
+          row.append(meta, actions);
+          setHidden(Boolean(m.hidden));
           const body = document.createElement('p');
           body.className = 'body';
           body.textContent = m.message;

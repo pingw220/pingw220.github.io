@@ -13,8 +13,10 @@
  * Guestbook (the Playground's post office):
  *   POST   /messages      { name?, message, public, website? } → leave a message
  *   GET    /messages      → public messages, newest first
- *   GET    /inbox         → every message, incl. private (Authorization: Bearer ADMIN_KEY)
- *   DELETE /messages/:id  → delete a message (Authorization: Bearer ADMIN_KEY)
+ *   GET    /inbox         → every message, incl. private and hidden (Authorization: Bearer ADMIN_KEY)
+ *   PATCH  /messages/:id  { hidden } → hide or unhide a message on the board (admin)
+ *   DELETE /messages/:id  → delete a message (admin)
+ *   After 10 wrong admin keys in a day, a visitor is locked out until the next day.
  *
  * Response: { since: ISO date | null, cities: [{ city, country, lat, lon, visits, views }] }
  *   visits = visitors (each counted at most once per day); views = every page view.
@@ -38,14 +40,17 @@ export default {
       }
       if (pathname === '/messages' && request.method === 'POST') return json(await postMessage(request, env), cors);
       if (pathname === '/messages' && request.method === 'GET') return json(await publicMessages(env), cors);
-      if (pathname === '/inbox' && request.method === 'GET') {
-        if (!isAdmin(request, env)) return json({ error: 'unauthorized' }, cors, 'no-store', 401);
-        return json(await allMessages(env), cors);
-      }
-      const del = pathname.match(/^\/messages\/(\d+)$/);
-      if (del && request.method === 'DELETE') {
-        if (!isAdmin(request, env)) return json({ error: 'unauthorized' }, cors, 'no-store', 401);
-        await env.DB.prepare('DELETE FROM messages WHERE id = ?').bind(Number(del[1])).run();
+      const one = pathname.match(/^\/messages\/(\d+)$/);
+      if ((pathname === '/inbox' && request.method === 'GET') || (one && ['PATCH', 'DELETE'].includes(request.method))) {
+        const denied = await checkAdmin(request, env);
+        if (denied) return json({ error: denied }, cors, 'no-store', denied === 'locked' ? 429 : 401);
+        if (pathname === '/inbox') return json(await allMessages(env), cors);
+        const id = Number(one[1]);
+        if (request.method === 'DELETE') await env.DB.prepare('DELETE FROM messages WHERE id = ?').bind(id).run();
+        else {
+          const body = await request.json().catch(() => ({}));
+          await env.DB.prepare('UPDATE messages SET hidden = ? WHERE id = ?').bind(body.hidden ? 1 : 0, id).run();
+        }
         return json({ ok: true }, cors);
       }
       return new Response('Not found', { status: 404, headers: cors });
@@ -121,21 +126,34 @@ async function postMessage(request, env) {
 
 async function publicMessages(env) {
   const rows = await env.DB.prepare(
-    "SELECT id, name, message, strftime('%Y-%m-%dT%H:%M:%SZ', created_at) AS date FROM messages WHERE public = 1 ORDER BY id DESC LIMIT 50",
+    "SELECT id, name, message, strftime('%Y-%m-%dT%H:%M:%SZ', created_at) AS date FROM messages WHERE public = 1 AND hidden = 0 ORDER BY id DESC LIMIT 50",
   ).all();
   return { messages: rows.results };
 }
 
 async function allMessages(env) {
   const rows = await env.DB.prepare(
-    "SELECT id, name, message, public, strftime('%Y-%m-%dT%H:%M:%SZ', created_at) AS date FROM messages ORDER BY id DESC LIMIT 500",
+    "SELECT id, name, message, public, hidden, strftime('%Y-%m-%dT%H:%M:%SZ', created_at) AS date FROM messages ORDER BY id DESC LIMIT 500",
   ).all();
   return { messages: rows.results };
 }
 
-function isAdmin(request, env) {
+const MAX_AUTH_FAILURES = 10; // per visitor per day
+
+/** null if the request carries the admin key; otherwise 'unauthorized' or 'locked'. */
+async function checkAdmin(request, env) {
+  const day = new Date().toISOString().slice(0, 10);
+  const ip = request.headers.get('CF-Connecting-IP') ?? '';
+  const who = await sha256(`${env.HASH_SALT ?? ''}|auth|${day}|${ip}`);
+  const row = await env.DB.prepare('SELECT n FROM auth_failures WHERE who = ? AND day = ?').bind(who, day).first();
+  if ((row?.n ?? 0) >= MAX_AUTH_FAILURES) return 'locked';
   const auth = request.headers.get('Authorization') ?? '';
-  return Boolean(env.ADMIN_KEY) && auth === `Bearer ${env.ADMIN_KEY}`;
+  if (env.ADMIN_KEY && auth === `Bearer ${env.ADMIN_KEY}`) return null;
+  await env.DB.batch([
+    env.DB.prepare('INSERT INTO auth_failures (who, day, n) VALUES (?, ?, 1) ON CONFLICT (who, day) DO UPDATE SET n = n + 1').bind(who, day),
+    env.DB.prepare('DELETE FROM auth_failures WHERE day < ?').bind(day),
+  ]);
+  return 'unauthorized';
 }
 
 async function readStats(env) {
@@ -168,7 +186,7 @@ function corsHeaders(request, env) {
   const origin = request.headers.get('Origin');
   return {
     'Access-Control-Allow-Origin': isAllowedOrigin(origin, env) ? origin : 'null',
-    'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     Vary: 'Origin',
   };
