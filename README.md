@@ -73,8 +73,12 @@ commits to this GitHub repo, and the site rebuilds automatically (about 1–2 mi
 - **Travel journal (遊記) or diary:** write a normal **Post**. For a journal, list the places under
   **Travel journal for** (English names from the travel list, e.g. `Tokyo`); it appears on the
   travel page and on those stamps. For a diary, add the tag `diary`.
-- **Update the CV:** Profile & pages → About page (CV) for the text, and Profile & pages → Profile
-  & bio → **CV (PDF)** to upload the new PDF.
+- **Update the CV:** the PDF updates itself. Edit `main.tex` in the private
+  [Ping-Wang-CV](https://github.com/pingw220/Ping-Wang-CV) repo (or Overleaf, synced to it); its
+  GitHub Action compiles it and commits the PDF here as `public/cv/ping-wang-cv.pdf`, which
+  redeploys the site. This needs the `SITE_DEPLOY_TOKEN` secret in that repo (a fine-grained token
+  for this repo with Contents: Read and write; renew it when it expires). The text on the About page
+  is separate: Profile & pages → About page (CV).
 
 **Editor layout:** the editor is on the left and a live preview on the right (drag the divider to
 resize; scroll stays in sync). Posts and projects open in plain Markdown, like HackMD — switch to
