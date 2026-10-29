@@ -47,4 +47,4 @@ Compared with Sheet Sage on the same audio, scored the same way:
 - **Chords:** major/minor WCSR on GuitarSet rises from **0.673 → 0.904**.
 - **Lyrics:** median onset error of **24 ms** per Mandarin syllable and **33 ms** per English word on GTSinger.
 
-Details are in the accompanying ISMIR 2026 late-breaking demo paper.
+Details are in the accompanying [ISMIR 2026 late-breaking demo paper](https://ismir2026program.ismir.net/lbd_621.html) (with a poster and [video](https://www.youtube.com/watch?v=_hfVEY70KRo)).

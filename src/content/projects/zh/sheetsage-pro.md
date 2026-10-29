@@ -46,4 +46,4 @@ SheetSage-Pro 不使用單一的大型模型，而是為每個子任務串接一
 - **和弦：** GuitarSet 上大小調 WCSR 由 **0.673 → 0.904**。
 - **歌詞：** 在 GTSinger 上，中文每個音節的起始時間誤差中位數為 **24 ms**，英文每個單字為 **33 ms**。
 
-詳細內容請見隨附的 ISMIR 2026 late-breaking demo 論文。
+詳細內容請見隨附的 [ISMIR 2026 late-breaking demo 論文](https://ismir2026program.ismir.net/lbd_621.html)（另有海報與[影片](https://www.youtube.com/watch?v=_hfVEY70KRo)）。
