@@ -79,55 +79,6 @@
   "research": [
     {
       "org": {
-        "en": "Music and AI Lab, National Taiwan University",
-        "zh": "臺灣大學 Music and AI Lab"
-      },
-      "orgHref": "https://affige.github.io/lab.html",
-      "place": {
-        "en": "Taipei, Taiwan",
-        "zh": "臺灣臺北"
-      },
-      "title": {
-        "en": "Student Researcher",
-        "zh": "學生研究員"
-      },
-      "advisor": {
-        "name": {
-          "en": "Prof. Yi-Hsuan Yang",
-          "zh": "楊奕軒教授"
-        },
-        "href": "https://affige.github.io/"
-      },
-      "dates": {
-        "en": "May 2026 – Present",
-        "zh": "2026 年 5 月 – 至今"
-      },
-      "points": [
-        {
-          "title": {
-            "en": "SheetSage-Pro",
-            "zh": "SheetSage-Pro"
-          },
-          "text": {
-            "en": "A bilingual, lyric-aligned audio-to-lead-sheet transcription pipeline that extracts melody, chords, beats, meter, and musical structure from full-song audio, with beat tracking, pitch correction, and rhythm quantization evaluated to improve quality. Accepted for presentation at ISMIR 2026 Late-Breaking/Demo.",
-            "zh": "雙語、歌詞對齊的音訊轉主旋律譜（lead sheet）採譜流程，從整首歌曲擷取旋律、和弦、拍點、拍號與段落結構，並評估拍點追蹤、音高校正與節奏量化以提升採譜品質。已獲 ISMIR 2026 Late-Breaking/Demo 接受發表。"
-          },
-          "href": "/projects/sheetsage-pro"
-        },
-        {
-          "title": {
-            "en": "Lyrics-to-Song Generation with MIDI-LLM and MIDI-SAG",
-            "zh": "以 MIDI-LLM 與 MIDI-SAG 進行歌詞生成歌曲"
-          },
-          "text": {
-            "en": "An end-to-end, lyrics-conditioned song generation pipeline that connects symbolic lead-sheet generation with arrangement and audio synthesis. Fine-tuning language models to generate melody, chords, rhythm, and lyric-aligned symbolic representations, including syllable-level lyric pointers, phonetic information, rests, breaths, and many-to-many lyric–note alignment for controllable generation.",
-            "zh": "端到端、以歌詞為條件的歌曲生成流程，串接符號主旋律譜生成、編曲與音訊合成。微調語言模型以生成旋律、和弦、節奏與歌詞對齊的符號表示，包含音節層級的歌詞指標、發音資訊、休止、換氣，以及多對多的歌詞與音符對齊，以實現可控生成。"
-          }
-        }
-      ]
-    },
-    {
-      "org": {
         "en": "Noah’s ARK, University of Washington",
         "zh": "華盛頓大學 Noah’s ARK"
       },
@@ -158,8 +109,8 @@
             "zh": "A Dual Evaluation for Music Transcription"
           },
           "text": {
-            "en": "A dual evaluation framework for notation accuracy and performance fidelity in automatic music transcription: 24 pipelines (eight audio-to-MIDI models × three MIDI-to-score systems) on 230 piano performances, an audio-only listening study with 106 participants and 3,180 pairwise judgments, and a comparison of human preferences with notation-based, signal-processing, and learned audio similarity metrics.",
-            "zh": "同時評估自動採譜「樂譜正確性」與「演奏擬真度」的雙重評估框架：在 230 段鋼琴演奏上評估 24 種流程（8 個音訊轉 MIDI 模型 × 3 個 MIDI 轉樂譜系統），設計並分析 106 位受試者、3,180 筆成對比較的純音訊聽測，並比較人類偏好與基於樂譜、訊號處理及學習式音訊相似度的指標。"
+            "en": "A dual evaluation of notation accuracy and playback fidelity across 24 transcription pipelines (eight audio-to-MIDI models × three MIDI-to-score converters) on 230 piano performances. Designed an IRB-exempt, reference-anchored ABX listening study over all 276 system pairs, with randomized A/B order and recruitment sized by a power analysis (106 participants, 3,180 judgments), aggregated with a Bradley–Terry model; CLEWS agreed best with listeners (Spearman ρ = 0.971) at the lowest cost.",
+            "zh": "在 230 段鋼琴演奏上，從樂譜正確性與播放擬真度雙重評估 24 種採譜流程（8 個音訊轉 MIDI 模型 × 3 個 MIDI 轉樂譜系統）。設計經 IRB 核定豁免、以參考錄音為錨點的 ABX 聽測，涵蓋全部 276 組系統配對，隨機化 A/B 順序，並以模擬檢定力分析決定招募人數（106 位受試者、3,180 筆判斷），再以 Bradley–Terry 模型彙整；CLEWS 與聽眾判斷最一致（Spearman ρ = 0.971），成本也最低。"
           },
           "href": "/projects/amt-dual-eval"
         },
@@ -169,10 +120,59 @@
             "zh": "Rubric-Based Optimization for Text-to-Music Generation"
           },
           "text": {
-            "en": "Structured audio-language-model rubric rewards for text-to-music post-training: preference pairs for DPO on MusicGen-small and ACE-Step v1, and scalar rewards with DiffusionNFT on ACE-Step. Rubric rewards gave broad gains on independent perceptual and objective metrics, while specialized rewards worked better for precise musical attributes.",
-            "zh": "以音訊語言模型的結構化評分標準（rubric）作為文字生成音樂的後訓練獎勵：為 MusicGen-small 與 ACE-Step v1 建構 DPO 偏好資料對，並在 ACE-Step 上以 DiffusionNFT 使用純量獎勵。Rubric 獎勵在獨立的感知與客觀指標上帶來全面提升，而針對精確音樂屬性時，專門的獎勵效果更好。"
+            "en": "Rubric rewards from pretrained audio-language models for text-to-music post-training: candidates for the same prompt are ranked by rubric score into preference pairs for DPO on MusicGen-small and ACE-Step v1, and the scores serve directly as rewards for online RL with DiffusionNFT on ACE-Step. Rubric rewards improve CLAP, SongEval, and Audiobox-Aesthetics together, while single-metric rewards cause trade-offs.",
+            "zh": "以預訓練音訊語言模型的評分標準（rubric）作為文字生成音樂的後訓練獎勵：同一提示詞產生的候選依 rubric 分數排序成偏好資料對，用於 MusicGen-small 與 ACE-Step v1 的 DPO；分數也直接作為 ACE-Step 上 DiffusionNFT 線上強化學習的獎勵。Rubric 獎勵能同時提升 CLAP、SongEval 與 Audiobox-Aesthetics，而只用單一指標當獎勵則會造成指標間的取捨。"
           },
           "href": "/projects/music-rl"
+        }
+      ]
+    },
+    {
+      "org": {
+        "en": "Music and AI Lab, National Taiwan University",
+        "zh": "臺灣大學 Music and AI Lab"
+      },
+      "orgHref": "https://affige.github.io/lab.html",
+      "place": {
+        "en": "Taipei, Taiwan",
+        "zh": "臺灣臺北"
+      },
+      "title": {
+        "en": "Student Researcher",
+        "zh": "學生研究員"
+      },
+      "advisor": {
+        "name": {
+          "en": "Prof. Yi-Hsuan Yang",
+          "zh": "楊奕軒教授"
+        },
+        "href": "https://affige.github.io/"
+      },
+      "dates": {
+        "en": "May 2026 – Present",
+        "zh": "2026 年 5 月 – 至今"
+      },
+      "points": [
+        {
+          "title": {
+            "en": "SheetSage-Pro",
+            "zh": "SheetSage-Pro"
+          },
+          "text": {
+            "en": "A bilingual (Mandarin/English), lyric-aligned audio-to-lead-sheet system that integrates pretrained models for separation, beat and downbeat tracking, structure, melody, chords, and lyric alignment. Against the original Sheet Sage, scored with the same code, it raises note F1@50 ms on GTSinger from 0.080 to 0.295 and chord WCSR on GuitarSet from 0.621 to 0.904. Accepted for presentation at ISMIR 2026 Late-Breaking/Demo.",
+            "zh": "雙語（中文／英文）、歌詞對齊的音訊轉主旋律譜系統，整合預訓練模型進行音源分離、拍點與強拍追蹤、段落結構、旋律、和弦與歌詞對齊。以相同程式碼評分，相較原版 Sheet Sage，GTSinger 上的音符 F1@50 ms 從 0.080 提升到 0.295，GuitarSet 上的和弦 WCSR 從 0.621 提升到 0.904。已獲 ISMIR 2026 Late-Breaking/Demo 接受發表。"
+          },
+          "href": "/projects/sheetsage-pro"
+        },
+        {
+          "title": {
+            "en": "Lyrics-to-Song Generation with MIDI-LLM and MIDI-SAG",
+            "zh": "以 MIDI-LLM 與 MIDI-SAG 進行歌詞生成歌曲"
+          },
+          "text": {
+            "en": "An end-to-end, lyrics-conditioned song generation pipeline that connects symbolic lead-sheet generation with arrangement and audio synthesis. Fine-tuning language models to generate melody, chords, rhythm, and lyric-aligned symbolic representations, including syllable-level lyric pointers, phonetic information, rests, breaths, and many-to-many lyric–note alignment for controllable generation.",
+            "zh": "端到端、以歌詞為條件的歌曲生成流程，串接符號主旋律譜生成、編曲與音訊合成。微調語言模型以生成旋律、和弦、節奏與歌詞對齊的符號表示，包含音節層級的歌詞指標、發音資訊、休止、換氣，以及多對多的歌詞與音符對齊，以實現可控生成。"
+          }
         }
       ]
     },
@@ -228,7 +228,14 @@
           },
           "href": "/projects/cough-audio"
         }
-      ]
+      ],
+      "advisor": {
+        "name": {
+          "en": "Prof. Shwetak Patel",
+          "zh": "Shwetak Patel 教授"
+        },
+        "href": "https://homes.cs.washington.edu/~shwetak/"
+      }
     }
   ],
   "industry": [
