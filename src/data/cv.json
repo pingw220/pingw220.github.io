@@ -1,28 +1,28 @@
 {
   "interests": [
     {
-      "en": "Human-Aligned Generative Models",
-      "zh": "與人類對齊的生成模型"
+      "en": "Human-Aligned and Self-Improving AI and Human–AI Co-Evolution",
+      "zh": "與人類對齊、能自我改進的 AI 與人機共同演化"
     },
     {
-      "en": "Preference-Based Post-Training",
-      "zh": "基於偏好的後訓練"
+      "en": "Reinforcement Learning and Generative Model Post-Training",
+      "zh": "強化學習與生成模型後訓練"
     },
     {
-      "en": "Multimodal Learning and Evaluation",
-      "zh": "多模態學習與評估"
+      "en": "Preference Learning, Reward Modeling, and Adaptive Evaluation",
+      "zh": "偏好學習、獎勵建模與自適應評估"
     },
     {
-      "en": "Reinforcement Learning",
-      "zh": "強化學習"
+      "en": "Multi-Agent Reinforcement Learning, Social Learning, and Human–AI Coordination",
+      "zh": "多智能體強化學習、社會學習與人機協作"
     },
     {
-      "en": "Music and Audio Generation",
-      "zh": "音樂與音訊生成"
+      "en": "Adaptive Learning Environments and World Models",
+      "zh": "自適應學習環境與世界模型"
     },
     {
-      "en": "Music Information Retrieval",
-      "zh": "音樂資訊檢索"
+      "en": "Multimodal Generative Modeling and AI for Music",
+      "zh": "多模態生成建模與音樂 AI"
     }
   ],
   "education": [
@@ -51,8 +51,8 @@
             "zh": "相關課程"
           },
           "text": {
-            "en": "Machine Learning, Natural Language Processing, Data Structures and Algorithms, Distributed Systems, Operating Systems, and Computer Networks.",
-            "zh": "機器學習、自然語言處理、資料結構與演算法、分散式系統、作業系統、計算機網路。"
+            "en": "Machine Learning, Natural Language Processing, Social Reinforcement Learning, Probabilistic Graphical Models, Computer Graphics, Data Structures and Algorithms, Distributed Systems, Operating Systems, and Computer Networks.",
+            "zh": "機器學習、自然語言處理、社會強化學習、機率圖模型、電腦圖學、資料結構與演算法、分散式系統、作業系統、計算機網路。"
           }
         }
       ]
