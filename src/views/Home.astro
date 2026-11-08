@@ -4,6 +4,7 @@ import SectionHeading from '../components/SectionHeading.astro';
 import PublicationItem from '../components/PublicationItem.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import ProfileLinks from '../components/ProfileLinks.astro';
+import ResearchInterests from '../components/ResearchInterests.astro';
 import GlobalReach from '../components/GlobalReach.astro';
 import { SITE } from '../config/site';
 import { renderMarkdown } from '../i18n/markdown';
@@ -59,6 +60,9 @@ const portrait = { src: SITE.portrait, alt: `${ui.portrait} ${SITE.name}`.replac
         class="hidden w-60 rounded-2xl border border-border object-cover shadow-lg shadow-black/20 md:mt-2 md:block"
       />
     </section>
+
+    <!-- Research interests -->
+    <ResearchInterests />
 
     <!-- News -->
     <section aria-labelledby="news">

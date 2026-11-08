@@ -1,28 +1,68 @@
 {
   "interests": [
     {
-      "en": "Human-Aligned and Self-Improving AI and Human–AI Co-Evolution",
-      "zh": "與人類對齊、能自我改進的 AI 與人機共同演化"
+      "en": "Human-Aligned AI",
+      "zh": "與人類對齊的 AI"
     },
     {
-      "en": "Reinforcement Learning and Generative Model Post-Training",
-      "zh": "強化學習與生成模型後訓練"
+      "en": "Self-Improving AI",
+      "zh": "自我改進的 AI"
     },
     {
-      "en": "Preference Learning, Reward Modeling, and Adaptive Evaluation",
-      "zh": "偏好學習、獎勵建模與自適應評估"
+      "en": "Human–AI Co-Evolution",
+      "zh": "人機共同演化"
     },
     {
-      "en": "Multi-Agent Reinforcement Learning, Social Learning, and Human–AI Coordination",
-      "zh": "多智能體強化學習、社會學習與人機協作"
+      "en": "Reinforcement Learning",
+      "zh": "強化學習"
     },
     {
-      "en": "Adaptive Learning Environments and World Models",
-      "zh": "自適應學習環境與世界模型"
+      "en": "Generative Model Post-Training",
+      "zh": "生成模型後訓練"
     },
     {
-      "en": "Multimodal Generative Modeling and AI for Music",
-      "zh": "多模態生成建模與音樂 AI"
+      "en": "Preference Learning",
+      "zh": "偏好學習"
+    },
+    {
+      "en": "Reward Modeling",
+      "zh": "獎勵建模"
+    },
+    {
+      "en": "Adaptive Evaluation",
+      "zh": "自適應評估"
+    },
+    {
+      "en": "Multi-Agent Reinforcement Learning",
+      "zh": "多智能體強化學習"
+    },
+    {
+      "en": "Social Learning",
+      "zh": "社會學習"
+    },
+    {
+      "en": "Human–AI Coordination",
+      "zh": "人機協作"
+    },
+    {
+      "en": "Adaptive Learning Environments",
+      "zh": "自適應學習環境"
+    },
+    {
+      "en": "World Models",
+      "zh": "世界模型"
+    },
+    {
+      "en": "Multimodal Generative Modeling",
+      "zh": "多模態生成建模"
+    },
+    {
+      "en": "AI for Music",
+      "zh": "音樂 AI"
+    },
+    {
+      "en": "Music Information Retrieval (MIR)",
+      "zh": "音樂資訊檢索（MIR）"
     }
   ],
   "education": [
@@ -159,8 +199,8 @@
             "zh": "SheetSage-Pro"
           },
           "text": {
-            "en": "A bilingual (Mandarin/English), lyric-aligned audio-to-lead-sheet system that integrates pretrained models for separation, beat and downbeat tracking, structure, melody, chords, and lyric alignment. Against the original Sheet Sage, scored with the same code, it raises note F1@50 ms on GTSinger from 0.080 to 0.295 and chord WCSR on GuitarSet from 0.621 to 0.904. Accepted for presentation at ISMIR 2026 Late-Breaking/Demo.",
-            "zh": "雙語（中文／英文）、歌詞對齊的音訊轉主旋律譜系統，整合預訓練模型進行音源分離、拍點與強拍追蹤、段落結構、旋律、和弦與歌詞對齊。以相同程式碼評分，相較原版 Sheet Sage，GTSinger 上的音符 F1@50 ms 從 0.080 提升到 0.295，GuitarSet 上的和弦 WCSR 從 0.621 提升到 0.904。已獲 ISMIR 2026 Late-Breaking/Demo 接受發表。"
+            "en": "Conceived and led the project; designed the architecture and implemented the full system. A bilingual (Mandarin/English), lyric-aligned audio-to-lead-sheet system that integrates pretrained models for separation, beat and downbeat tracking, structure, melody, chords, and lyric alignment. Against the original Sheet Sage, scored with the same code, it raises note F1@50 ms on GTSinger from 0.080 to 0.295 and chord WCSR on GuitarSet from 0.621 to 0.904. Accepted for presentation at ISMIR 2026 Late-Breaking/Demo.",
+            "zh": "提出構想並主導專案，設計系統架構並實作完整系統。雙語（中文／英文）、歌詞對齊的音訊轉主旋律譜系統，整合預訓練模型進行音源分離、拍點與強拍追蹤、段落結構、旋律、和弦與歌詞對齊。以相同程式碼評分，相較原版 Sheet Sage，GTSinger 上的音符 F1@50 ms 從 0.080 提升到 0.295，GuitarSet 上的和弦 WCSR 從 0.621 提升到 0.904。已獲 ISMIR 2026 Late-Breaking/Demo 接受發表。"
           },
           "href": "/projects/sheetsage-pro"
         },
@@ -170,8 +210,8 @@
             "zh": "以 MIDI-LLM 與 MIDI-SAG 進行歌詞生成歌曲"
           },
           "text": {
-            "en": "An end-to-end, lyrics-conditioned song generation pipeline that connects symbolic lead-sheet generation with arrangement and audio synthesis. Fine-tuning language models to generate melody, chords, rhythm, and lyric-aligned symbolic representations, including syllable-level lyric pointers, phonetic information, rests, breaths, and many-to-many lyric–note alignment for controllable generation.",
-            "zh": "端到端、以歌詞為條件的歌曲生成流程，串接符號主旋律譜生成、編曲與音訊合成。微調語言模型以生成旋律、和弦、節奏與歌詞對齊的符號表示，包含音節層級的歌詞指標、發音資訊、休止、換氣，以及多對多的歌詞與音符對齊，以實現可控生成。"
+            "en": "An end-to-end, lyrics-conditioned song generation pipeline that connects symbolic lead-sheet generation with arrangement and audio synthesis. Fine-tuning Qwen with LoRA supervised fine-tuning (SFT) to generate melody, chords, rhythm, and lyric-aligned symbolic representations, including syllable-level lyric pointers, phonetic information, rests, breaths, and many-to-many lyric–note alignment for controllable generation.",
+            "zh": "端到端、以歌詞為條件的歌曲生成流程，串接符號主旋律譜生成、編曲與音訊合成。以 LoRA 監督式微調（SFT）微調 Qwen，以生成旋律、和弦、節奏與歌詞對齊的符號表示，包含音節層級的歌詞指標、發音資訊、休止、換氣，以及多對多的歌詞與音符對齊，以實現可控生成。"
           }
         }
       ]

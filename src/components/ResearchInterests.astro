@@ -1,0 +1,23 @@
+---
+/**
+ * Research interests as a row of chips (from src/data/cv.json, edited in the admin).
+ * Shown on the home, About, and Research pages.
+ */
+import SectionHeading from './SectionHeading.astro';
+import { RESEARCH_INTERESTS } from '../config/cv';
+import { getLang, t, tr } from '../i18n';
+
+interface Props {
+  class?: string;
+}
+
+const lang = getLang(Astro.url);
+const ui = t(lang);
+---
+
+<section class={Astro.props.class} aria-labelledby="interests">
+  <SectionHeading id="interests" title={ui['about.interests']} />
+  <ul class="flex flex-wrap gap-2">
+    {RESEARCH_INTERESTS.map((interest) => <li class="rounded-full border border-border bg-card/60 px-3 py-1 text-sm text-foreground/85">{tr(interest, lang)}</li>)}
+  </ul>
+</section>

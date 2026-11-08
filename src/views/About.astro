@@ -2,13 +2,13 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import ProfileLinks from '../components/ProfileLinks.astro';
+import ResearchInterests from '../components/ResearchInterests.astro';
 import { SITE } from '../config/site';
 import { renderMarkdown } from '../i18n/markdown';
 import {
   EDUCATION,
   INDUSTRY_EXPERIENCE,
   RESEARCH_EXPERIENCE,
-  RESEARCH_INTERESTS,
   SKILLS,
   type Entry,
 } from '../config/cv';
@@ -51,16 +51,7 @@ const description =
     </div>
 
     <!-- Research interests -->
-    <section class="mt-16" aria-labelledby="interests">
-      <SectionHeading id="interests" title={ui['about.interests']} />
-      <ul class="flex flex-wrap gap-2">
-        {
-          RESEARCH_INTERESTS.map((interest) => (
-            <li class="rounded-full border border-border bg-card/60 px-3 py-1 text-sm text-foreground/85">{tr(interest, lang)}</li>
-          ))
-        }
-      </ul>
-    </section>
+    <ResearchInterests class="mt-16" />
 
     <!-- Education & experience -->
     {
