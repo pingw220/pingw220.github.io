@@ -6,7 +6,9 @@ import ResearchInterests from '../components/ResearchInterests.astro';
 import { SITE } from '../config/site';
 import { renderMarkdown } from '../i18n/markdown';
 import {
+  ACTIVITIES,
   EDUCATION,
+  HONORS,
   INDUSTRY_EXPERIENCE,
   RESEARCH_EXPERIENCE,
   SKILLS,
@@ -21,6 +23,8 @@ const sections: { id: string; title: string; entries: Entry[] }[] = [
   { id: 'education', title: ui['about.education'], entries: EDUCATION },
   { id: 'research', title: ui['about.research'], entries: RESEARCH_EXPERIENCE },
   { id: 'industry', title: ui['about.industry'], entries: INDUSTRY_EXPERIENCE },
+  { id: 'honors', title: ui['about.honors'], entries: HONORS },
+  { id: 'activities', title: ui['about.activities'], entries: ACTIVITIES },
 ];
 
 const description =

@@ -428,6 +428,132 @@ collections:
                       - { name: en, label: English, widget: text }
                       - { name: zh, label: 中文, widget: text }
                   - { name: href, label: Link (e.g. /projects/sheetsage-pro), widget: string, required: false }
+          - name: honors
+            label: Honors & awards
+            label_singular: Entry
+            widget: list
+            summary: '{{fields.org.en}}'
+            fields:
+              - name: org
+                label: Organization
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - { name: orgHref, label: Organization link, widget: string, required: false }
+              - name: place
+                label: Place
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - name: title
+                label: Title / degree
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - name: advisor
+                label: Advisor
+                widget: object
+                required: false
+                fields:
+                  - name: name
+                    label: Name
+                    widget: object
+                    fields:
+                      - { name: en, label: English, widget: string }
+                      - { name: zh, label: 中文, widget: string }
+                  - { name: href, label: Advisor link, widget: string }
+              - name: dates
+                label: Dates
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - name: points
+                label: Highlights
+                label_singular: Highlight
+                widget: list
+                required: false
+                summary: '{{fields.title.en}}'
+                fields:
+                  - name: title
+                    label: Title
+                    widget: object
+                    fields:
+                      - { name: en, label: English, widget: string }
+                      - { name: zh, label: 中文, widget: string }
+                  - name: text
+                    label: Text
+                    widget: object
+                    fields:
+                      - { name: en, label: English, widget: text }
+                      - { name: zh, label: 中文, widget: text }
+                  - { name: href, label: Link (e.g. /projects/sheetsage-pro), widget: string, required: false }
+          - name: activities
+            label: Activities
+            label_singular: Entry
+            widget: list
+            summary: '{{fields.org.en}}'
+            fields:
+              - name: org
+                label: Organization
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - { name: orgHref, label: Organization link, widget: string, required: false }
+              - name: place
+                label: Place
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - name: title
+                label: Title / degree
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - name: advisor
+                label: Advisor
+                widget: object
+                required: false
+                fields:
+                  - name: name
+                    label: Name
+                    widget: object
+                    fields:
+                      - { name: en, label: English, widget: string }
+                      - { name: zh, label: 中文, widget: string }
+                  - { name: href, label: Advisor link, widget: string }
+              - name: dates
+                label: Dates
+                widget: object
+                fields:
+                  - { name: en, label: English, widget: string }
+                  - { name: zh, label: 中文, widget: string }
+              - name: points
+                label: Highlights
+                label_singular: Highlight
+                widget: list
+                required: false
+                summary: '{{fields.title.en}}'
+                fields:
+                  - name: title
+                    label: Title
+                    widget: object
+                    fields:
+                      - { name: en, label: English, widget: string }
+                      - { name: zh, label: 中文, widget: string }
+                  - name: text
+                    label: Text
+                    widget: object
+                    fields:
+                      - { name: en, label: English, widget: text }
+                      - { name: zh, label: 中文, widget: text }
+                  - { name: href, label: Link (e.g. /projects/sheetsage-pro), widget: string, required: false }
           - name: skills
             label: Skills
             label_singular: Skill group

@@ -19,4 +19,6 @@ export const RESEARCH_INTERESTS: Text[] = data.interests;
 export const EDUCATION: Entry[] = data.education;
 export const RESEARCH_EXPERIENCE: Entry[] = data.research;
 export const INDUSTRY_EXPERIENCE: Entry[] = data.industry;
+export const HONORS: Entry[] = data.honors ?? [];
+export const ACTIVITIES: Entry[] = data.activities ?? [];
 export const SKILLS: { area: Text; items: Text }[] = data.skills;

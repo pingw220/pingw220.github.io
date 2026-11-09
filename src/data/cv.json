@@ -380,6 +380,82 @@
       ]
     }
   ],
+  "honors": [
+    {
+      "org": {
+        "en": "Award of Excellence, National Student Competition of Music",
+        "zh": "全國學生音樂比賽 優等"
+      },
+      "place": {
+        "en": "Taiwan",
+        "zh": "臺灣"
+      },
+      "title": {
+        "en": "Cello Solo (High School, Non-Music Major Division)",
+        "zh": "大提琴獨奏（高中非音樂班組）"
+      },
+      "dates": {
+        "en": "2019, 2022",
+        "zh": "2019、2022"
+      }
+    },
+    {
+      "org": {
+        "en": "Gold Award, 6th Singapore Raffles International Music Competition",
+        "zh": "第六屆新加坡萊佛士國際音樂大賽 金獎"
+      },
+      "place": {
+        "en": "Singapore",
+        "zh": "新加坡"
+      },
+      "title": {
+        "en": "Cello Solo",
+        "zh": "大提琴獨奏"
+      },
+      "dates": {
+        "en": "2019",
+        "zh": "2019"
+      }
+    }
+  ],
+  "activities": [
+    {
+      "org": {
+        "en": "University of Washington Husky Table Tennis Club",
+        "zh": "華盛頓大學 Husky 桌球社"
+      },
+      "place": {
+        "en": "Seattle, WA",
+        "zh": "美國西雅圖"
+      },
+      "title": {
+        "en": "Marketing Officer",
+        "zh": "行銷幹部"
+      },
+      "dates": {
+        "en": "2023 – Present",
+        "zh": "2023 – 至今"
+      }
+    },
+    {
+      "org": {
+        "en": "UW Campus Philharmonia Orchestras",
+        "zh": "華盛頓大學 Campus Philharmonia 管弦樂團"
+      },
+      "place": {
+        "en": "Seattle, WA",
+        "zh": "美國西雅圖"
+      },
+      "title": {
+        "en": "Cellist",
+        "zh": "大提琴手"
+      },
+      "dates": {
+        "en": "2023 – Present",
+        "zh": "2023 – 至今"
+      }
+    }
+  ],
   "skills": [
     {
       "area": {

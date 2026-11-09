@@ -1,10 +1,16 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import MusicSections from '../components/MusicSections.astro';
-import { getLang, t } from '../i18n';
+import { ACTIVITIES, HONORS } from '../config/cv';
+import { getLang, t, tr } from '../i18n';
 
 const lang = getLang(Astro.url);
 const ui = t(lang);
+// Cello honors and the orchestra Ping plays in (from the About page data).
+const highlights = [
+  ...HONORS.map((h) => ({ emoji: '🏆', ...h })),
+  ...ACTIVITIES.filter((a) => /orchestra|philharmon/i.test(tr(a.org, 'en'))).map((a) => ({ emoji: '🎻', ...a })),
+];
 
 const description =
   lang === 'zh'
@@ -16,6 +22,23 @@ const description =
   <div class="mx-auto max-w-5xl px-5 py-14 sm:py-20">
     <h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{ui['music.title']}</h1>
     <p class="mt-3 max-w-2xl leading-relaxed text-muted">{ui['music.intro']}</p>
+
+    {
+      highlights.length > 0 && (
+        <ul class="mt-8 grid gap-3 sm:grid-cols-3" aria-label={ui['about.honors']}>
+          {highlights.map((h) => (
+            <li class="flex gap-3 rounded-xl border border-border bg-card/60 p-4">
+              <span class="text-2xl" aria-hidden="true">{h.emoji}</span>
+              <span class="text-sm leading-snug">
+                <span class="block font-semibold text-foreground">{tr(h.org, lang)}</span>
+                <span class="block text-muted">{tr(h.title, lang)}</span>
+                <span class="mt-1 block font-mono text-xs text-muted">{tr(h.dates, lang)}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      )
+    }
 
     <MusicSections />
   </div>
